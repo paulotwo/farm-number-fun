@@ -28,19 +28,34 @@ const WILD_ANIMALS: Record<string, { emoji: string; name: string }> = {
   cobra: { emoji: "🐍", name: "cobra" },
 };
 
+const AQUATIC_ANIMALS: Record<string, { emoji: string; name: string }> = {
+  peixe: { emoji: "🐟", name: "peixe" },
+  golfinho: { emoji: "🐬", name: "golfinho" },
+  polvo: { emoji: "🐙", name: "polvo" },
+  caranguejo: { emoji: "🦀", name: "caranguejo" },
+  tartaruga: { emoji: "🐢", name: "tartaruga" },
+  baleia: { emoji: "🐳", name: "baleia" },
+  tubarao: { emoji: "🦈", name: "tubarão" },
+  lula: { emoji: "🦑", name: "lula" },
+};
+
 const ALL_ANIMALS: Record<string, { emoji: string; name: string }> = {
   ...DOMESTIC_ANIMALS,
   ...WILD_ANIMALS,
+  ...AQUATIC_ANIMALS,
 };
 
-export type AnimalMode = "domestic" | "wild";
+export type AnimalMode = "domestic" | "wild" | "aquatic";
 
 export const getAnimalData = (key: string) => ALL_ANIMALS[key];
 export const DOMESTIC_KEYS = Object.keys(DOMESTIC_ANIMALS);
 export const WILD_KEYS = Object.keys(WILD_ANIMALS);
+export const AQUATIC_KEYS = Object.keys(AQUATIC_ANIMALS);
 
 export function getAnimalKeys(mode: AnimalMode) {
-  return mode === "domestic" ? DOMESTIC_KEYS : WILD_KEYS;
+  if (mode === "domestic") return DOMESTIC_KEYS;
+  if (mode === "wild") return WILD_KEYS;
+  return AQUATIC_KEYS;
 }
 
 const AnimalEmoji = ({ animal, index, total }: AnimalEmojiProps) => {

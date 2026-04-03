@@ -176,6 +176,13 @@ const FarmGame = () => {
             >
               {t.ui.wildButton}
             </button>
+            <button
+              onClick={() => handleStart("aquatic")}
+              className="px-8 py-5 bg-[hsl(200_80%_55%)] text-white text-xl md:text-2xl font-extrabold rounded-3xl shadow-2xl hover:scale-110 transition-transform animate-float border-4 border-border"
+              style={{ animationDelay: "0.6s" }}
+            >
+              {t.ui.aquaticButton}
+            </button>
           </div>
         </div>
       </div>
@@ -206,7 +213,7 @@ const FarmGame = () => {
             className="text-3xl md:text-5xl font-extrabold text-primary-foreground drop-shadow-lg"
             style={{ textShadow: "2px 2px 8px rgba(0,0,0,0.5)" }}
           >
-            {mode === "wild" ? t.ui.wildTitle : t.ui.gameTitle}
+            {mode === "wild" ? t.ui.wildTitle : mode === "aquatic" ? t.ui.aquaticTitle : t.ui.gameTitle}
           </h1>
           <div className="mt-2 flex gap-4 justify-center">
             <span className="bg-card/90 backdrop-blur px-4 py-1 rounded-full text-sm font-bold text-foreground shadow">
