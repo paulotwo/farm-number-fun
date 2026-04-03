@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(cp:*)",
-      "Bash(npm run:*)"
+      "Bash(npm run:*)",
+      "Bash(npx tsc:*)"
     ]
   }
 }

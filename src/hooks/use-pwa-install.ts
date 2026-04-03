@@ -5,15 +5,34 @@ interface BeforeInstallPromptEvent extends Event {
   userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
 }
 
+const DISMISSED_KEY = "pwa-install-dismissed";
+
+function isIosDevice() {
+  return /iphone|ipad|ipod/i.test(navigator.userAgent);
+}
+
+function isInStandaloneMode() {
+  return (
+    window.matchMedia("(display-mode: standalone)").matches ||
+    (navigator as Navigator & { standalone?: boolean }).standalone === true
+  );
+}
+
 export function usePwaInstall() {
   const [promptEvent, setPromptEvent] = useState<BeforeInstallPromptEvent | null>(null);
+  const [dismissed, setDismissed] = useState(() => {
+    try {
+      return localStorage.getItem(DISMISSED_KEY) === "1";
+    } catch {
+      return false;
+    }
+  });
 
-  const isStandalone =
-    window.matchMedia("(display-mode: standalone)").matches ||
-    (navigator as Navigator & { standalone?: boolean }).standalone === true;
+  const standalone = isInStandaloneMode();
+  const ios = isIosDevice();
 
   useEffect(() => {
-    if (isStandalone) return;
+    if (standalone || ios) return;
 
     const handler = (e: Event) => {
       e.preventDefault();
@@ -22,7 +41,7 @@ export function usePwaInstall() {
 
     window.addEventListener("beforeinstallprompt", handler);
     return () => window.removeEventListener("beforeinstallprompt", handler);
-  }, [isStandalone]);
+  }, [standalone, ios]);
 
   const install = async () => {
     if (!promptEvent) return;
@@ -31,7 +50,18 @@ export function usePwaInstall() {
     if (outcome === "accepted") setPromptEvent(null);
   };
 
-  const dismiss = () => setPromptEvent(null);
+  const dismiss = () => {
+    try {
+      localStorage.setItem(DISMISSED_KEY, "1");
+    } catch {
+      // ignore
+    }
+    setDismissed(true);
+    setPromptEvent(null);
+  };
 
-  return { canInstall: !isStandalone && !!promptEvent, install, dismiss };
+  const showIosBanner = !standalone && ios && !dismissed;
+  const canInstall = !standalone && !dismissed && !!promptEvent;
+
+  return { canInstall, install, dismiss, showIosBanner };
 }

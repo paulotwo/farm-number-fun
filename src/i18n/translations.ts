@@ -14,6 +14,7 @@ export interface Translations {
     tryAgain: string;
     languageLabel: string;
     pwaInstallMessage: string;
+    pwaInstallIosMessage: string;
     pwaInstallButton: string;
   };
   animalNames: Record<string, string>;
@@ -37,6 +38,7 @@ export const translations: Record<Locale, Translations> = {
       tryAgain: "Tenta de novo!",
       languageLabel: "Idioma",
       pwaInstallMessage: "Instala a app para jogar sem internet!",
+      pwaInstallIosMessage: "Para instalar, toca em ⬆️ Compartilhar e depois em «Adicionar ao Ecrã de Início».",
       pwaInstallButton: "Instalar",
     },
     animalNames: {
@@ -79,6 +81,7 @@ export const translations: Record<Locale, Translations> = {
       tryAgain: "Try again!",
       languageLabel: "Language",
       pwaInstallMessage: "Install the app to play offline!",
+      pwaInstallIosMessage: "To install, tap ⬆️ Share and then «Add to Home Screen».",
       pwaInstallButton: "Install",
     },
     animalNames: {
@@ -119,6 +122,7 @@ export const translations: Record<Locale, Translations> = {
       tryAgain: "¡Inténtalo de nuevo!",
       languageLabel: "Idioma",
       pwaInstallMessage: "¡Instala la app para jugar sin internet!",
+      pwaInstallIosMessage: "Para instalar, toca ⬆️ Compartir y luego «Agregar a inicio».",
       pwaInstallButton: "Instalar",
     },
     animalNames: {
@@ -163,6 +167,7 @@ export const translations: Record<Locale, Translations> = {
       tryAgain: "Essaie encore !",
       languageLabel: "Langue",
       pwaInstallMessage: "Installe l'appli pour jouer sans internet !",
+      pwaInstallIosMessage: "Pour installer, appuie sur ⬆️ Partager puis «Sur l'écran d'accueil».",
       pwaInstallButton: "Installer",
     },
     animalNames: {
@@ -207,6 +212,7 @@ export const translations: Record<Locale, Translations> = {
       tryAgain: "Riprova!",
       languageLabel: "Lingua",
       pwaInstallMessage: "Installa l'app per giocare senza internet!",
+      pwaInstallIosMessage: "Per installare, tocca ⬆️ Condividi e poi «Aggiungi alla schermata Home».",
       pwaInstallButton: "Installa",
     },
     animalNames: {
@@ -251,6 +257,7 @@ export const translations: Record<Locale, Translations> = {
       tryAgain: "Versuch es noch mal!",
       languageLabel: "Sprache",
       pwaInstallMessage: "Installiere die App, um offline zu spielen!",
+      pwaInstallIosMessage: "Zum Installieren auf ⬆️ Teilen tippen und dann «Zum Home-Bildschirm».",
       pwaInstallButton: "Installieren",
     },
     animalNames: {
