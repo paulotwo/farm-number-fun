@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect, useMemo } from "react";
-import AnimalEmoji, { ANIMAL_KEYS, getAnimalData } from "./AnimalEmoji";
+import AnimalEmoji, { getAnimalData, getAnimalKeys, type AnimalMode } from "./AnimalEmoji";
 import NumberOption from "./NumberOption";
 import farmBg from "@/assets/farm-bg.jpg";
 import {
@@ -11,13 +11,15 @@ import {
   speak,
   preloadVoices,
 } from "@/lib/sounds";
+import { requestFullscreen } from "@/lib/fullscreen";
 
 type Phase = "showing" | "choosing" | "correct" | "transition";
 type OptionState = "idle" | "correct" | "wrong";
 
-function generateRound(prevAnimal?: string) {
+function generateRound(mode: AnimalMode, prevAnimal?: string) {
   const count = Math.floor(Math.random() * 5) + 1;
-  const available = ANIMAL_KEYS.filter((a) => a !== prevAnimal);
+  const keys = getAnimalKeys(mode);
+  const available = keys.filter((a) => a !== prevAnimal);
   const animal = available[Math.floor(Math.random() * available.length)];
 
   const options = new Set<number>([count]);
@@ -34,6 +36,9 @@ const PLURAL: Record<string, string> = {
   galinha: "galinhas", vaca: "vacas", porco: "porcos",
   ovelha: "ovelhas", cavalo: "cavalos", pato: "patos",
   coelho: "coelhos", gato: "gatos",
+  leao: "leões", elefante: "elefantes", girafa: "girafas",
+  macaco: "macacos", zebra: "zebras", urso: "ursos",
+  tigre: "tigres", cobra: "cobras",
 };
 
 function narrateText(count: number, animal: string) {
@@ -41,14 +46,25 @@ function narrateText(count: number, animal: string) {
   if (!data) return "";
   const name = count === 1 ? data.name : (PLURAL[animal] || data.name + "s");
   const numWord = ["", "uma", "duas", "três", "quatro", "cinco"][count] || String(count);
-  const femAnimals = ["galinha", "vaca", "ovelha"];
+  const femAnimals = ["galinha", "vaca", "ovelha", "girafa", "zebra", "cobra"];
   const numWordM = ["", "um", "dois", "três", "quatro", "cinco"][count] || String(count);
   const word = femAnimals.includes(animal) ? numWord : numWordM;
   return `Olha! Temos ${word} ${name}!`;
 }
 
+function celebrationText(count: number) {
+  if (count === 1) return `🎉 Isso! É ${count}! Muito bem!`;
+  return `🎉 Isso! São ${count}! Muito bem!`;
+}
+
+function celebrationSpeech(count: number) {
+  if (count === 1) return `Isso! É ${count}! Muito bem!`;
+  return `Isso! São ${count}! Muito bem!`;
+}
+
 const FarmGame = () => {
-  const [round, setRound] = useState(() => generateRound());
+  const [mode, setMode] = useState<AnimalMode | null>(null);
+  const [round, setRound] = useState(() => generateRound("domestic"));
   const [phase, setPhase] = useState<Phase>("showing");
   const [optionStates, setOptionStates] = useState<OptionState[]>(["idle", "idle", "idle"]);
   const [score, setScore] = useState(0);
@@ -56,16 +72,15 @@ const FarmGame = () => {
   const [showAnimals, setShowAnimals] = useState(false);
   const [started, setStarted] = useState(false);
 
-  // Preload speech voices on mount
-  useEffect(() => {
-    preloadVoices();
-  }, []);
+  useEffect(() => { preloadVoices(); }, []);
 
   const narration = useMemo(() => narrateText(round.count, round.animal), [round]);
 
-  // Start game on first interaction (needed for AudioContext)
-  const handleStart = useCallback(() => {
+  const handleStart = useCallback((selectedMode: AnimalMode) => {
+    setMode(selectedMode);
+    setRound(generateRound(selectedMode));
     setStarted(true);
+    requestFullscreen();
   }, []);
 
   // Show animals with pop sounds
@@ -73,7 +88,6 @@ const FarmGame = () => {
     if (!started) return;
     const timer = setTimeout(() => {
       setShowAnimals(true);
-      // Play pop sounds for each animal appearing
       for (let i = 0; i < round.count; i++) {
         playPopSound(i * 300);
       }
@@ -81,52 +95,43 @@ const FarmGame = () => {
     return () => clearTimeout(timer);
   }, [round, started]);
 
-  // Speak the narration when animals are shown, then transition to choosing
+  // Speak narration then transition to choosing
   useEffect(() => {
     if (!started || phase !== "showing" || !showAnimals) return;
-
     const speakDelay = setTimeout(() => {
-      speak(narration, () => {
-        // After speech ends, go to choosing phase
-        setPhase("choosing");
-      });
-      // Fallback: if speech doesn't fire onEnd, transition after a timeout
+      speak(narration, () => setPhase("choosing"));
       const fallback = setTimeout(() => setPhase("choosing"), 4000);
       return () => clearTimeout(fallback);
     }, round.count * 300 + 400);
-
     return () => clearTimeout(speakDelay);
   }, [phase, showAnimals, narration, round.count, started]);
 
   const handleChoice = useCallback((n: number) => {
-    if (phase !== "choosing") return;
+    if (phase !== "choosing" || !mode) return;
     playClickSound();
 
     if (n === round.count) {
-      // Correct!
       playCorrectSound();
       setOptionStates(round.options.map((o) => (o === n ? "correct" : "idle")));
       setPhase("correct");
       setScore((s) => s + 1);
 
-      // Speak celebration after a short delay
       setTimeout(() => {
         playCelebrateSound();
-        speak(`Isso! São ${round.count}! Muito bem!`);
+        speak(celebrationSpeech(round.count));
       }, 300);
 
       setTimeout(() => {
         setPhase("transition");
         setTimeout(() => {
           setShowAnimals(false);
-          setRound(generateRound(round.animal));
+          setRound(generateRound(mode, round.animal));
           setOptionStates(["idle", "idle", "idle"]);
           setPhase("showing");
           setRoundNum((r) => r + 1);
         }, 400);
       }, 2500);
     } else {
-      // Wrong
       playWrongSound();
       const idx = round.options.indexOf(n);
       setOptionStates((prev) => prev.map((s, i) => (i === idx ? "wrong" : s)));
@@ -135,9 +140,9 @@ const FarmGame = () => {
         setOptionStates((prev) => prev.map((s, i) => (i === idx ? "idle" : s)));
       }, 600);
     }
-  }, [phase, round]);
+  }, [phase, round, mode]);
 
-  // Welcome screen — needed to unlock AudioContext
+  // Welcome screen with mode selection
   if (!started) {
     return (
       <div
@@ -149,7 +154,7 @@ const FarmGame = () => {
         }}
       >
         <div className="absolute inset-0 bg-foreground/20" />
-        <div className="relative z-10 text-center flex flex-col items-center gap-6">
+        <div className="relative z-10 text-center flex flex-col items-center gap-6 px-4">
           <h1
             className="text-4xl md:text-6xl font-extrabold text-primary-foreground drop-shadow-lg"
             style={{ textShadow: "2px 3px 8px rgba(0,0,0,0.5)" }}
@@ -162,12 +167,27 @@ const FarmGame = () => {
           >
             Conta os animais e descobre o número!
           </p>
-          <button
-            onClick={handleStart}
-            className="mt-4 px-10 py-5 bg-secondary text-foreground text-2xl md:text-3xl font-extrabold rounded-3xl shadow-2xl hover:scale-110 transition-transform animate-float border-4 border-border"
+          <p
+            className="text-base md:text-xl text-primary-foreground font-semibold"
+            style={{ textShadow: "1px 2px 4px rgba(0,0,0,0.5)" }}
           >
-            🚜 Começar!
-          </button>
+            Escolhe os teus animais:
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4">
+            <button
+              onClick={() => handleStart("domestic")}
+              className="px-8 py-5 bg-secondary text-foreground text-xl md:text-2xl font-extrabold rounded-3xl shadow-2xl hover:scale-110 transition-transform animate-float border-4 border-border"
+            >
+              🐔 Animais da Fazenda
+            </button>
+            <button
+              onClick={() => handleStart("wild")}
+              className="px-8 py-5 bg-accent text-accent-foreground text-xl md:text-2xl font-extrabold rounded-3xl shadow-2xl hover:scale-110 transition-transform animate-float border-4 border-border"
+              style={{ animationDelay: "0.3s" }}
+            >
+              🦁 Animais Selvagens
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -189,7 +209,7 @@ const FarmGame = () => {
           className="text-3xl md:text-5xl font-extrabold text-primary-foreground drop-shadow-lg"
           style={{ textShadow: "2px 2px 8px rgba(0,0,0,0.5)" }}
         >
-          🌻 A Fazenda dos Números 🌻
+          {mode === "wild" ? "🌿 Animais Selvagens 🌿" : "🌻 A Fazenda dos Números 🌻"}
         </h1>
         <div className="mt-2 flex gap-4 justify-center">
           <span className="bg-card/90 backdrop-blur px-4 py-1 rounded-full text-sm font-bold text-foreground shadow">
@@ -208,9 +228,7 @@ const FarmGame = () => {
       >
         <div className="bg-card/95 backdrop-blur-sm rounded-3xl px-6 py-3 shadow-xl max-w-md text-center animate-bounce-in">
           <p className="text-lg md:text-2xl font-bold text-foreground">
-            {phase === "correct"
-              ? `🎉 Isso! São ${round.count}! Muito bem!`
-              : narration}
+            {phase === "correct" ? celebrationText(round.count) : narration}
           </p>
         </div>
 
