@@ -34,11 +34,16 @@ interface I18nContextType {
 const I18nContext = createContext<I18nContextType | null>(null);
 
 export const I18nProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [locale, setLocaleState] = useState<Locale>(detectLocale);
+  const [locale, setLocaleState] = useState<Locale>(() => {
+    const detected = detectLocale();
+    document.documentElement.lang = SPEECH_LANGS[detected];
+    return detected;
+  });
 
   const setLocale = useCallback((l: Locale) => {
     setLocaleState(l);
     localStorage.setItem(STORAGE_KEY, l);
+    document.documentElement.lang = SPEECH_LANGS[l];
   }, []);
 
   const value = useMemo(() => ({

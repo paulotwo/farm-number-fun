@@ -1,22 +1,27 @@
 {
   "name": "A Fazenda dos Números",
   "short_name": "Fazenda",
-  "description": "Jogo educativo para crianças: correspondência entre quantidade e número na fazenda!",
+  "description": "Jogo educativo gratuito para crianças: conta os animais da fazenda e descobre o número certo!",
+  "lang": "pt-BR",
+  "dir": "ltr",
   "start_url": "/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#e8f5e0",
   "theme_color": "#4a9e5c",
+  "categories": ["education", "games", "kids"],
   "icons": [
     {
       "src": "/icon-192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
       "src": "/icon-512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }
