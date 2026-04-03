@@ -39,6 +39,14 @@ export default {
           DEFAULT: "hsl(var(--accent))",
           foreground: "hsl(var(--accent-foreground))",
         },
+        farm: {
+          sky: "hsl(var(--farm-sky))",
+          grass: "hsl(var(--farm-grass))",
+          barn: "hsl(var(--farm-barn))",
+          sun: "hsl(var(--farm-sun))",
+          correct: "hsl(var(--farm-correct))",
+          wrong: "hsl(var(--farm-wrong))",
+        },
         popover: {
           DEFAULT: "hsl(var(--popover))",
           foreground: "hsl(var(--popover-foreground))",
