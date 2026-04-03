@@ -83,6 +83,16 @@ const FarmGame = () => {
     requestFullscreen();
   }, []);
 
+  const handleGoHome = useCallback(() => {
+    setStarted(false);
+    setMode(null);
+    setScore(0);
+    setRoundNum(1);
+    setPhase("showing");
+    setOptionStates(["idle", "idle", "idle"]);
+    setShowAnimals(false);
+  }, []);
+
   // Show animals with pop sounds
   useEffect(() => {
     if (!started) return;
@@ -204,21 +214,31 @@ const FarmGame = () => {
     >
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-foreground/20" />
 
-      <header className="relative z-10 text-center pt-6 pb-2">
-        <h1
-          className="text-3xl md:text-5xl font-extrabold text-primary-foreground drop-shadow-lg"
-          style={{ textShadow: "2px 2px 8px rgba(0,0,0,0.5)" }}
+      <header className="relative z-10 w-full flex items-start pt-6 pb-2 px-4">
+        <button
+          onClick={handleGoHome}
+          className="rounded-lg bg-muted px-3 py-2 text-lg transition-transform active:scale-95"
+          title="Voltar ao início"
         >
-          {mode === "wild" ? "🌿 Animais Selvagens 🌿" : "🌻 A Fazenda dos Números 🌻"}
-        </h1>
-        <div className="mt-2 flex gap-4 justify-center">
-          <span className="bg-card/90 backdrop-blur px-4 py-1 rounded-full text-sm font-bold text-foreground shadow">
-            ⭐ Pontos: {score}
-          </span>
-          <span className="bg-card/90 backdrop-blur px-4 py-1 rounded-full text-sm font-bold text-foreground shadow">
-            🎯 Rodada: {roundNum}
-          </span>
+          🏠
+        </button>
+        <div className="flex-1 text-center">
+          <h1
+            className="text-3xl md:text-5xl font-extrabold text-primary-foreground drop-shadow-lg"
+            style={{ textShadow: "2px 2px 8px rgba(0,0,0,0.5)" }}
+          >
+            {mode === "wild" ? "🌿 Animais Selvagens 🌿" : "🌻 A Fazenda dos Números 🌻"}
+          </h1>
+          <div className="mt-2 flex gap-4 justify-center">
+            <span className="bg-card/90 backdrop-blur px-4 py-1 rounded-full text-sm font-bold text-foreground shadow">
+              ⭐ Pontos: {score}
+            </span>
+            <span className="bg-card/90 backdrop-blur px-4 py-1 rounded-full text-sm font-bold text-foreground shadow">
+              🎯 Rodada: {roundNum}
+            </span>
+          </div>
         </div>
+        <div className="w-[52px]" /> {/* spacer para balancear o botão */}
       </header>
 
       <main
