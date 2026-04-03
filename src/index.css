@@ -8,35 +8,42 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 120 30% 95%;
+    --foreground: 30 50% 15%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 45 60% 96%;
+    --card-foreground: 30 50% 15%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 45 60% 96%;
+    --popover-foreground: 30 50% 15%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 140 45% 40%;
+    --primary-foreground: 45 100% 97%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 35 80% 55%;
+    --secondary-foreground: 30 50% 15%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 120 15% 88%;
+    --muted-foreground: 30 20% 45%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 200 70% 55%;
+    --accent-foreground: 200 90% 98%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 75% 55%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 30 30% 80%;
+    --input: 30 30% 80%;
+    --ring: 140 45% 40%;
 
-    --radius: 0.5rem;
+    --radius: 1rem;
+
+    --farm-sky: 200 80% 70%;
+    --farm-grass: 120 50% 45%;
+    --farm-barn: 0 65% 45%;
+    --farm-sun: 45 95% 60%;
+    --farm-correct: 140 60% 50%;
+    --farm-wrong: 0 70% 55%;
 
     --sidebar-background: 0 0% 98%;
 
@@ -101,5 +108,6 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+    font-family: 'Fredoka', sans-serif;
   }
 }
