@@ -1,7 +1,9 @@
 import { useState, useCallback, useEffect, useMemo } from "react";
 import AnimalEmoji, { getAnimalData, getAnimalKeys, type AnimalMode } from "./AnimalEmoji";
 import NumberOption from "./NumberOption";
+import LanguageSelector from "./LanguageSelector";
 import farmBg from "@/assets/farm-bg.jpg";
+import { useI18n } from "@/i18n";
 import {
   playCorrectSound,
   playWrongSound,
@@ -32,37 +34,8 @@ function generateRound(mode: AnimalMode, prevAnimal?: string) {
   return { count, animal, options: shuffled };
 }
 
-const PLURAL: Record<string, string> = {
-  galinha: "galinhas", vaca: "vacas", porco: "porcos",
-  ovelha: "ovelhas", cavalo: "cavalos", pato: "patos",
-  coelho: "coelhos", gato: "gatos",
-  leao: "leões", elefante: "elefantes", girafa: "girafas",
-  macaco: "macacos", zebra: "zebras", urso: "ursos",
-  tigre: "tigres", cobra: "cobras",
-};
-
-function narrateText(count: number, animal: string) {
-  const data = getAnimalData(animal);
-  if (!data) return "";
-  const name = count === 1 ? data.name : (PLURAL[animal] || data.name + "s");
-  const numWord = ["", "uma", "duas", "três", "quatro", "cinco"][count] || String(count);
-  const femAnimals = ["galinha", "vaca", "ovelha", "girafa", "zebra", "cobra"];
-  const numWordM = ["", "um", "dois", "três", "quatro", "cinco"][count] || String(count);
-  const word = femAnimals.includes(animal) ? numWord : numWordM;
-  return `Olha! Temos ${word} ${name}!`;
-}
-
-function celebrationText(count: number) {
-  if (count === 1) return `🎉 Isso! É ${count}! Muito bem!`;
-  return `🎉 Isso! São ${count}! Muito bem!`;
-}
-
-function celebrationSpeech(count: number) {
-  if (count === 1) return `Isso! É ${count}! Muito bem!`;
-  return `Isso! São ${count}! Muito bem!`;
-}
-
 const FarmGame = () => {
+  const { t, speechLang } = useI18n();
   const [mode, setMode] = useState<AnimalMode | null>(null);
   const [round, setRound] = useState(() => generateRound("domestic"));
   const [phase, setPhase] = useState<Phase>("showing");
@@ -74,7 +47,10 @@ const FarmGame = () => {
 
   useEffect(() => { preloadVoices(); }, []);
 
-  const narration = useMemo(() => narrateText(round.count, round.animal), [round]);
+  const narration = useMemo(
+    () => t.narrateText(round.count, round.animal),
+    [round, t]
+  );
 
   const handleStart = useCallback((selectedMode: AnimalMode) => {
     setMode(selectedMode);
@@ -109,12 +85,12 @@ const FarmGame = () => {
   useEffect(() => {
     if (!started || phase !== "showing" || !showAnimals) return;
     const speakDelay = setTimeout(() => {
-      speak(narration, () => setPhase("choosing"));
+      speak(narration, speechLang, () => setPhase("choosing"));
       const fallback = setTimeout(() => setPhase("choosing"), 4000);
       return () => clearTimeout(fallback);
     }, round.count * 300 + 400);
     return () => clearTimeout(speakDelay);
-  }, [phase, showAnimals, narration, round.count, started]);
+  }, [phase, showAnimals, narration, round.count, started, speechLang]);
 
   const handleChoice = useCallback((n: number) => {
     if (phase !== "choosing" || !mode) return;
@@ -128,7 +104,7 @@ const FarmGame = () => {
 
       setTimeout(() => {
         playCelebrateSound();
-        speak(celebrationSpeech(round.count));
+        speak(t.celebrationSpeech(round.count), speechLang);
       }, 300);
 
       setTimeout(() => {
@@ -145,12 +121,12 @@ const FarmGame = () => {
       playWrongSound();
       const idx = round.options.indexOf(n);
       setOptionStates((prev) => prev.map((s, i) => (i === idx ? "wrong" : s)));
-      speak("Tenta de novo!");
+      speak(t.ui.tryAgain, speechLang);
       setTimeout(() => {
         setOptionStates((prev) => prev.map((s, i) => (i === idx ? "idle" : s)));
       }, 600);
     }
-  }, [phase, round, mode]);
+  }, [phase, round, mode, t, speechLang]);
 
   // Welcome screen with mode selection
   if (!started) {
@@ -164,38 +140,41 @@ const FarmGame = () => {
         }}
       >
         <div className="absolute inset-0 bg-foreground/20" />
+        <div className="absolute top-4 right-4 z-20">
+          <LanguageSelector />
+        </div>
         <div className="relative z-10 text-center flex flex-col items-center gap-6 px-4">
           <h1
             className="text-4xl md:text-6xl font-extrabold text-primary-foreground drop-shadow-lg"
             style={{ textShadow: "2px 3px 8px rgba(0,0,0,0.5)" }}
           >
-            🌻 A Fazenda dos Números 🌻
+            {t.ui.gameTitle}
           </h1>
           <p
             className="text-lg md:text-2xl text-primary-foreground font-bold"
             style={{ textShadow: "1px 2px 4px rgba(0,0,0,0.5)" }}
           >
-            Conta os animais e descobre o número!
+            {t.ui.subtitle}
           </p>
           <p
             className="text-base md:text-xl text-primary-foreground font-semibold"
             style={{ textShadow: "1px 2px 4px rgba(0,0,0,0.5)" }}
           >
-            Escolhe os teus animais:
+            {t.ui.chooseMode}
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
             <button
               onClick={() => handleStart("domestic")}
               className="px-8 py-5 bg-secondary text-foreground text-xl md:text-2xl font-extrabold rounded-3xl shadow-2xl hover:scale-110 transition-transform animate-float border-4 border-border"
             >
-              🐔 Animais da Fazenda
+              {t.ui.domesticButton}
             </button>
             <button
               onClick={() => handleStart("wild")}
               className="px-8 py-5 bg-accent text-accent-foreground text-xl md:text-2xl font-extrabold rounded-3xl shadow-2xl hover:scale-110 transition-transform animate-float border-4 border-border"
               style={{ animationDelay: "0.3s" }}
             >
-              🦁 Animais Selvagens
+              {t.ui.wildButton}
             </button>
           </div>
         </div>
@@ -227,18 +206,18 @@ const FarmGame = () => {
             className="text-3xl md:text-5xl font-extrabold text-primary-foreground drop-shadow-lg"
             style={{ textShadow: "2px 2px 8px rgba(0,0,0,0.5)" }}
           >
-            {mode === "wild" ? "🌿 Animais Selvagens 🌿" : "🌻 A Fazenda dos Números 🌻"}
+            {mode === "wild" ? t.ui.wildTitle : t.ui.gameTitle}
           </h1>
           <div className="mt-2 flex gap-4 justify-center">
             <span className="bg-card/90 backdrop-blur px-4 py-1 rounded-full text-sm font-bold text-foreground shadow">
-              ⭐ Pontos: {score}
+              {t.ui.scoreLabel} {score}
             </span>
             <span className="bg-card/90 backdrop-blur px-4 py-1 rounded-full text-sm font-bold text-foreground shadow">
-              🎯 Rodada: {roundNum}
+              {t.ui.roundLabel} {roundNum}
             </span>
           </div>
         </div>
-        <div className="w-[52px]" /> {/* spacer para balancear o botão */}
+        <LanguageSelector />
       </header>
 
       <main
@@ -248,7 +227,7 @@ const FarmGame = () => {
       >
         <div className="bg-card/95 backdrop-blur-sm rounded-3xl px-6 py-3 shadow-xl max-w-md text-center animate-bounce-in">
           <p className="text-lg md:text-2xl font-bold text-foreground">
-            {phase === "correct" ? celebrationText(round.count) : narration}
+            {phase === "correct" ? t.celebrationText(round.count) : narration}
           </p>
         </div>
 
@@ -290,7 +269,7 @@ const FarmGame = () => {
 
         {phase === "showing" && (
           <p className="text-muted-foreground text-sm animate-pulse font-medium bg-card/80 backdrop-blur rounded-full px-4 py-2">
-            Contando os animais...
+            {t.ui.countingHint}
           </p>
         )}
       </main>

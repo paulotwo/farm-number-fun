@@ -100,33 +100,38 @@ export function playClickSound() {
   osc.stop(now + 0.05);
 }
 
-/** Speak text using Web Speech API in Portuguese */
-export function speak(text: string, onEnd?: () => void) {
+/** Speak text using Web Speech API */
+export function speak(text: string, langOrCallback?: string | (() => void), onEnd?: () => void) {
   if (!("speechSynthesis" in window)) {
-    onEnd?.();
+    if (typeof langOrCallback === "function") langOrCallback();
+    else onEnd?.();
     return;
   }
+
+  const lang = typeof langOrCallback === "string" ? langOrCallback : "pt-BR";
+  const callback = typeof langOrCallback === "function" ? langOrCallback : onEnd;
 
   // Cancel any ongoing speech
   window.speechSynthesis.cancel();
 
   const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = "pt-BR";
+  utterance.lang = lang;
   utterance.rate = 0.85;
   utterance.pitch = 1.3; // Slightly higher pitch for a friendly children's voice
 
-  // Try to find a Portuguese voice
+  // Try to find a voice matching the requested language
   const voices = window.speechSynthesis.getVoices();
-  const ptVoice = voices.find(
-    (v) => v.lang.startsWith("pt") && v.name.toLowerCase().includes("female")
-  ) || voices.find((v) => v.lang.startsWith("pt"));
-  
-  if (ptVoice) {
-    utterance.voice = ptVoice;
+  const langPrefix = lang.split("-")[0];
+  const matchedVoice = voices.find(
+    (v) => v.lang.startsWith(langPrefix) && v.name.toLowerCase().includes("female")
+  ) || voices.find((v) => v.lang.startsWith(langPrefix));
+
+  if (matchedVoice) {
+    utterance.voice = matchedVoice;
   }
 
-  if (onEnd) {
-    utterance.onend = () => onEnd();
+  if (callback) {
+    utterance.onend = () => callback();
   }
 
   window.speechSynthesis.speak(utterance);

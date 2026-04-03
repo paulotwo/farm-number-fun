@@ -1,3 +1,5 @@
+import { useI18n } from "@/i18n";
+
 interface AnimalEmojiProps {
   animal: string;
   index: number;
@@ -43,14 +45,17 @@ export function getAnimalKeys(mode: AnimalMode) {
 
 const AnimalEmoji = ({ animal, index, total }: AnimalEmojiProps) => {
   const data = ALL_ANIMALS[animal];
+  const { t } = useI18n();
   if (!data) return null;
+
+  const translatedName = t.animalNames[animal] ?? data.name;
 
   return (
     <span
       className="inline-block text-6xl md:text-8xl animate-pop-in cursor-default select-none hover:animate-wiggle"
       style={{ animationDelay: `${index * 300}ms`, opacity: 0 }}
       role="img"
-      aria-label={`${data.name} ${index + 1} de ${total}`}
+      aria-label={`${translatedName} ${index + 1}`}
     >
       {data.emoji}
     </span>
