@@ -4,7 +4,7 @@ interface AnimalEmojiProps {
   total: number;
 }
 
-const ANIMAL_MAP: Record<string, { emoji: string; name: string }> = {
+const DOMESTIC_ANIMALS: Record<string, { emoji: string; name: string }> = {
   galinha: { emoji: "🐔", name: "galinha" },
   vaca: { emoji: "🐄", name: "vaca" },
   porco: { emoji: "🐷", name: "porco" },
@@ -15,11 +15,34 @@ const ANIMAL_MAP: Record<string, { emoji: string; name: string }> = {
   gato: { emoji: "🐱", name: "gato" },
 };
 
-export const getAnimalData = (key: string) => ANIMAL_MAP[key];
-export const ANIMAL_KEYS = Object.keys(ANIMAL_MAP);
+const WILD_ANIMALS: Record<string, { emoji: string; name: string }> = {
+  leao: { emoji: "🦁", name: "leão" },
+  elefante: { emoji: "🐘", name: "elefante" },
+  girafa: { emoji: "🦒", name: "girafa" },
+  macaco: { emoji: "🐒", name: "macaco" },
+  zebra: { emoji: "🦓", name: "zebra" },
+  urso: { emoji: "🐻", name: "urso" },
+  tigre: { emoji: "🐯", name: "tigre" },
+  cobra: { emoji: "🐍", name: "cobra" },
+};
+
+const ALL_ANIMALS: Record<string, { emoji: string; name: string }> = {
+  ...DOMESTIC_ANIMALS,
+  ...WILD_ANIMALS,
+};
+
+export type AnimalMode = "domestic" | "wild";
+
+export const getAnimalData = (key: string) => ALL_ANIMALS[key];
+export const DOMESTIC_KEYS = Object.keys(DOMESTIC_ANIMALS);
+export const WILD_KEYS = Object.keys(WILD_ANIMALS);
+
+export function getAnimalKeys(mode: AnimalMode) {
+  return mode === "domestic" ? DOMESTIC_KEYS : WILD_KEYS;
+}
 
 const AnimalEmoji = ({ animal, index, total }: AnimalEmojiProps) => {
-  const data = ANIMAL_MAP[animal];
+  const data = ALL_ANIMALS[animal];
   if (!data) return null;
 
   return (
