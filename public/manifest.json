@@ -1,14 +1,14 @@
 {
-  "name": "A Fazenda dos Números",
-  "short_name": "Fazenda",
-  "description": "Jogo educativo gratuito para crianças: conta os animais da fazenda e descobre o número certo!",
+  "name": "O Mundo dos Números",
+  "short_name": "Números",
+  "description": "Jogo educativo gratuito para crianças: conta animais da fazenda, selva e oceano e descobre os números de 1 a 9!",
   "lang": "pt-BR",
   "dir": "ltr",
   "start_url": "/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#e8f5e0",
-  "theme_color": "#4a9e5c",
+  "theme_color": "#3a7d44",
   "categories": ["education", "games", "kids"],
   "icons": [
     {
