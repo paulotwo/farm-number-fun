@@ -4,20 +4,32 @@ export interface Translations {
   ui: {
     gameTitle: string;
     wildTitle: string;
+    aquaticTitle: string;
+    domesticTitle: string;
     subtitle: string;
     chooseMode: string;
     domesticButton: string;
     wildButton: string;
     aquaticButton: string;
-    aquaticTitle: string;
     scoreLabel: string;
     roundLabel: string;
+    phaseLabel: string;
+    phase1Name: string;
+    phase2Name: string;
     countingHint: string;
     tryAgain: string;
     languageLabel: string;
     pwaInstallMessage: string;
     pwaInstallIosMessage: string;
     pwaInstallButton: string;
+    phaseCompleteSpeech: string;
+    phaseFailSpeech: string;
+    gameCompleteSpeech: string;
+    phaseCompleteText: string;
+    phaseFailText: string;
+    gameCompleteText: string;
+    continueButton: string;
+    playAgainButton: string;
   };
   animalNames: Record<string, string>;
   narrateText: (count: number, animalName: string) => string;
@@ -28,22 +40,34 @@ export interface Translations {
 export const translations: Record<Locale, Translations> = {
   pt: {
     ui: {
-      gameTitle: "🌻 A Fazenda dos Números 🌻",
-      wildTitle: "🌿 Animais Selvagens 🌿",
-      aquaticTitle: "🌊 Animais Aquáticos 🌊",
+      gameTitle: "🔢 O Mundo dos Números 🌍",
+      domesticTitle: "🌻 A Fazenda dos Números 🌻",
+      wildTitle: "🌿 Selva dos Números 🌿",
+      aquaticTitle: "🌊 Oceano dos Números 🌊",
       subtitle: "Conta os animais e descobre o número!",
       chooseMode: "Escolhe os teus animais:",
       domesticButton: "🐔 Animais da Fazenda",
       wildButton: "🦁 Animais Selvagens",
-      aquaticButton: "🐬 Animais Aquáticos",
+      aquaticButton: "🐙 Animais Aquáticos",
       scoreLabel: "⭐ Pontos:",
-      roundLabel: "🎯 Rodada:",
+      roundLabel: "🎯 Número:",
+      phaseLabel: "📖 Fase:",
+      phase1Name: "Números em Ordem",
+      phase2Name: "Números Misturados",
       countingHint: "Contando os animais...",
       tryAgain: "Tenta de novo!",
       languageLabel: "Idioma",
       pwaInstallMessage: "Instala a app para jogar sem internet!",
       pwaInstallIosMessage: "Para instalar, toca em ⬆️ Compartilhar e depois em «Adicionar ao Ecrã de Início».",
       pwaInstallButton: "Instalar",
+      phaseCompleteSpeech: "Muito bem! Passaste a fase! Vamos para a próxima!",
+      phaseFailSpeech: "Ops! Não faz mal, vamos tentar de novo desde o início!",
+      gameCompleteSpeech: "Parabéns! Completaste tudo! És um génio dos números!",
+      phaseCompleteText: "🎉 Fase completa! 🎉",
+      phaseFailText: "😊 Vamos tentar de novo!",
+      gameCompleteText: "🏆 Parabéns! Completaste tudo! 🏆",
+      continueButton: "Próxima fase ➡️",
+      playAgainButton: "Jogar de novo 🔄",
     },
     animalNames: {
       galinha: "galinha", vaca: "vaca", porco: "porco", ovelha: "ovelha",
@@ -63,9 +87,9 @@ export const translations: Record<Locale, Translations> = {
         tartaruga: "tartarugas", baleia: "baleias", tubarao: "tubarões", lula: "lulas",
       };
       const femAnimals = ["galinha", "vaca", "ovelha", "girafa", "zebra", "cobra", "tartaruga", "baleia", "lula"];
-      const numWordF = ["", "uma", "duas", "três", "quatro", "cinco"][count] ?? String(count);
-      const numWordM = ["", "um", "dois", "três", "quatro", "cinco"][count] ?? String(count);
-      const word = femAnimals.includes(animalName) ? numWordF : numWordM;
+      const numWordF = ["", "uma", "duas", "três", "quatro", "cinco", "seis", "sete", "oito", "nove"];
+      const numWordM = ["", "um", "dois", "três", "quatro", "cinco", "seis", "sete", "oito", "nove"];
+      const word = femAnimals.includes(animalName) ? (numWordF[count] ?? String(count)) : (numWordM[count] ?? String(count));
       const name = count === 1 ? animalName : (plurals[animalName] ?? animalName + "s");
       return `Olha! Temos ${word} ${name}!`;
     },
@@ -77,22 +101,34 @@ export const translations: Record<Locale, Translations> = {
 
   en: {
     ui: {
-      gameTitle: "🌻 The Number Farm 🌻",
-      wildTitle: "🌿 Wild Animals 🌿",
-      aquaticTitle: "🌊 Aquatic Animals 🌊",
+      gameTitle: "🔢 The Number World 🌍",
+      domesticTitle: "🌻 The Number Farm 🌻",
+      wildTitle: "🌿 Jungle Numbers 🌿",
+      aquaticTitle: "🌊 Ocean Numbers 🌊",
       subtitle: "Count the animals and find the number!",
       chooseMode: "Choose your animals:",
       domesticButton: "🐔 Farm Animals",
       wildButton: "🦁 Wild Animals",
-      aquaticButton: "🐬 Aquatic Animals",
+      aquaticButton: "🐙 Aquatic Animals",
       scoreLabel: "⭐ Score:",
-      roundLabel: "🎯 Round:",
+      roundLabel: "🎯 Number:",
+      phaseLabel: "📖 Phase:",
+      phase1Name: "Numbers in Order",
+      phase2Name: "Mixed Numbers",
       countingHint: "Counting the animals...",
       tryAgain: "Try again!",
       languageLabel: "Language",
       pwaInstallMessage: "Install the app to play offline!",
       pwaInstallIosMessage: "To install, tap ⬆️ Share and then «Add to Home Screen».",
       pwaInstallButton: "Install",
+      phaseCompleteSpeech: "Well done! You passed the phase! Let's go to the next one!",
+      phaseFailSpeech: "Oops! That's okay, let's try again from the start!",
+      gameCompleteSpeech: "Congratulations! You completed everything! You're a number genius!",
+      phaseCompleteText: "🎉 Phase complete! 🎉",
+      phaseFailText: "😊 Let's try again!",
+      gameCompleteText: "🏆 Congratulations! You did it! 🏆",
+      continueButton: "Next phase ➡️",
+      playAgainButton: "Play again 🔄",
     },
     animalNames: {
       galinha: "chicken", vaca: "cow", porco: "pig", ovelha: "sheep",
@@ -111,11 +147,17 @@ export const translations: Record<Locale, Translations> = {
         peixe: "fish", golfinho: "dolphins", polvo: "octopuses", caranguejo: "crabs",
         tartaruga: "turtles", baleia: "whales", tubarao: "sharks", lula: "squids",
       };
-      const numWords = ["", "one", "two", "three", "four", "five"];
+      const singulars: Record<string, string> = {
+        galinha: "chicken", vaca: "cow", porco: "pig", ovelha: "sheep",
+        cavalo: "horse", pato: "duck", coelho: "rabbit", gato: "cat",
+        leao: "lion", elefante: "elephant", girafa: "giraffe", macaco: "monkey",
+        zebra: "zebra", urso: "bear", tigre: "tiger", cobra: "snake",
+        peixe: "fish", golfinho: "dolphin", polvo: "octopus", caranguejo: "crab",
+        tartaruga: "turtle", baleia: "whale", tubarao: "shark", lula: "squid",
+      };
+      const numWords = ["", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
       const word = numWords[count] ?? String(count);
-      const name = count === 1
-        ? ({ galinha: "chicken", vaca: "cow", porco: "pig", ovelha: "sheep", cavalo: "horse", pato: "duck", coelho: "rabbit", gato: "cat", leao: "lion", elefante: "elephant", girafa: "giraffe", macaco: "monkey", zebra: "zebra", urso: "bear", tigre: "tiger", cobra: "snake", peixe: "fish", golfinho: "dolphin", polvo: "octopus", caranguejo: "crab", tartaruga: "turtle", baleia: "whale", tubarao: "shark", lula: "squid" }[animalName] ?? animalName)
-        : (plurals[animalName] ?? animalName + "s");
+      const name = count === 1 ? (singulars[animalName] ?? animalName) : (plurals[animalName] ?? animalName + "s");
       return `Look! We have ${word} ${name}!`;
     },
     celebrationText: (count) => `🎉 Yes! It's ${count}! Well done!`,
@@ -124,22 +166,34 @@ export const translations: Record<Locale, Translations> = {
 
   es: {
     ui: {
-      gameTitle: "🌻 La Granja de los Números 🌻",
-      wildTitle: "🌿 Animales Salvajes 🌿",
-      aquaticTitle: "🌊 Animales Acuáticos 🌊",
+      gameTitle: "🔢 El Mundo de los Números 🌍",
+      domesticTitle: "🌻 La Granja de los Números 🌻",
+      wildTitle: "🌿 Selva de los Números 🌿",
+      aquaticTitle: "🌊 Océano de los Números 🌊",
       subtitle: "¡Cuenta los animales y descubre el número!",
       chooseMode: "Elige tus animales:",
       domesticButton: "🐔 Animales de Granja",
       wildButton: "🦁 Animales Salvajes",
-      aquaticButton: "🐬 Animales Acuáticos",
+      aquaticButton: "🐙 Animales Acuáticos",
       scoreLabel: "⭐ Puntos:",
-      roundLabel: "🎯 Ronda:",
+      roundLabel: "🎯 Número:",
+      phaseLabel: "📖 Fase:",
+      phase1Name: "Números en Orden",
+      phase2Name: "Números Mezclados",
       countingHint: "Contando los animales...",
       tryAgain: "¡Inténtalo de nuevo!",
       languageLabel: "Idioma",
       pwaInstallMessage: "¡Instala la app para jugar sin internet!",
       pwaInstallIosMessage: "Para instalar, toca ⬆️ Compartir y luego «Agregar a inicio».",
       pwaInstallButton: "Instalar",
+      phaseCompleteSpeech: "¡Muy bien! ¡Pasaste la fase! ¡Vamos a la siguiente!",
+      phaseFailSpeech: "¡Ups! ¡No pasa nada, intentemos de nuevo desde el inicio!",
+      gameCompleteSpeech: "¡Felicidades! ¡Completaste todo! ¡Eres un genio de los números!",
+      phaseCompleteText: "🎉 ¡Fase completa! 🎉",
+      phaseFailText: "😊 ¡Intentemos de nuevo!",
+      gameCompleteText: "🏆 ¡Felicidades! ¡Lo lograste! 🏆",
+      continueButton: "Siguiente fase ➡️",
+      playAgainButton: "Jugar de nuevo 🔄",
     },
     animalNames: {
       galinha: "gallina", vaca: "vaca", porco: "cerdo", ovelha: "oveja",
@@ -166,7 +220,7 @@ export const translations: Record<Locale, Translations> = {
         peixe: "pez", golfinho: "delfín", polvo: "pulpo", caranguejo: "cangrejo",
         tartaruga: "tortuga", baleia: "ballena", tubarao: "tiburón", lula: "calamar",
       };
-      const numWords = ["", "uno", "dos", "tres", "cuatro", "cinco"];
+      const numWords = ["", "uno", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho", "nueve"];
       const word = numWords[count] ?? String(count);
       const name = count === 1 ? (singulars[animalName] ?? animalName) : (plurals[animalName] ?? animalName + "s");
       return `¡Mira! ¡Tenemos ${word} ${name}!`;
@@ -177,22 +231,34 @@ export const translations: Record<Locale, Translations> = {
 
   fr: {
     ui: {
-      gameTitle: "🌻 La Ferme des Chiffres 🌻",
-      wildTitle: "🌿 Animaux Sauvages 🌿",
-      aquaticTitle: "🌊 Animaux Aquatiques 🌊",
+      gameTitle: "🔢 Le Monde des Chiffres 🌍",
+      domesticTitle: "🌻 La Ferme des Chiffres 🌻",
+      wildTitle: "🌿 Jungle des Chiffres 🌿",
+      aquaticTitle: "🌊 Océan des Chiffres 🌊",
       subtitle: "Compte les animaux et trouve le chiffre !",
       chooseMode: "Choisis tes animaux :",
       domesticButton: "🐔 Animaux de Ferme",
       wildButton: "🦁 Animaux Sauvages",
-      aquaticButton: "🐬 Animaux Aquatiques",
+      aquaticButton: "🐙 Animaux Aquatiques",
       scoreLabel: "⭐ Points :",
-      roundLabel: "🎯 Tour :",
+      roundLabel: "🎯 Numéro :",
+      phaseLabel: "📖 Phase :",
+      phase1Name: "Chiffres en Ordre",
+      phase2Name: "Chiffres Mélangés",
       countingHint: "On compte les animaux...",
       tryAgain: "Essaie encore !",
       languageLabel: "Langue",
       pwaInstallMessage: "Installe l'appli pour jouer sans internet !",
       pwaInstallIosMessage: "Pour installer, appuie sur ⬆️ Partager puis «Sur l'écran d'accueil».",
       pwaInstallButton: "Installer",
+      phaseCompleteSpeech: "Bravo ! Tu as réussi la phase ! Passons à la suivante !",
+      phaseFailSpeech: "Oups ! Ce n'est pas grave, recommençons depuis le début !",
+      gameCompleteSpeech: "Félicitations ! Tu as tout réussi ! Tu es un génie des chiffres !",
+      phaseCompleteText: "🎉 Phase réussie ! 🎉",
+      phaseFailText: "😊 On recommence !",
+      gameCompleteText: "🏆 Félicitations ! Tu as réussi ! 🏆",
+      continueButton: "Phase suivante ➡️",
+      playAgainButton: "Rejouer 🔄",
     },
     animalNames: {
       galinha: "poule", vaca: "vache", porco: "cochon", ovelha: "mouton",
@@ -219,7 +285,7 @@ export const translations: Record<Locale, Translations> = {
         peixe: "poisson", golfinho: "dauphin", polvo: "pieuvre", caranguejo: "crabe",
         tartaruga: "tortue", baleia: "baleine", tubarao: "requin", lula: "calmar",
       };
-      const numWords = ["", "un", "deux", "trois", "quatre", "cinq"];
+      const numWords = ["", "un", "deux", "trois", "quatre", "cinq", "six", "sept", "huit", "neuf"];
       const word = numWords[count] ?? String(count);
       const name = count === 1 ? (singulars[animalName] ?? animalName) : (plurals[animalName] ?? animalName + "s");
       return `Regarde ! On a ${word} ${name} !`;
@@ -230,22 +296,34 @@ export const translations: Record<Locale, Translations> = {
 
   it: {
     ui: {
-      gameTitle: "🌻 La Fattoria dei Numeri 🌻",
-      wildTitle: "🌿 Animali Selvatici 🌿",
-      aquaticTitle: "🌊 Animali Acquatici 🌊",
+      gameTitle: "🔢 Il Mondo dei Numeri 🌍",
+      domesticTitle: "🌻 La Fattoria dei Numeri 🌻",
+      wildTitle: "🌿 Giungla dei Numeri 🌿",
+      aquaticTitle: "🌊 Oceano dei Numeri 🌊",
       subtitle: "Conta gli animali e scopri il numero!",
       chooseMode: "Scegli i tuoi animali:",
       domesticButton: "🐔 Animali da Fattoria",
       wildButton: "🦁 Animali Selvatici",
-      aquaticButton: "🐬 Animali Acquatici",
+      aquaticButton: "🐙 Animali Acquatici",
       scoreLabel: "⭐ Punti:",
-      roundLabel: "🎯 Round:",
+      roundLabel: "🎯 Numero:",
+      phaseLabel: "📖 Fase:",
+      phase1Name: "Numeri in Ordine",
+      phase2Name: "Numeri Mescolati",
       countingHint: "Contiamo gli animali...",
       tryAgain: "Riprova!",
       languageLabel: "Lingua",
       pwaInstallMessage: "Installa l'app per giocare senza internet!",
       pwaInstallIosMessage: "Per installare, tocca ⬆️ Condividi e poi «Aggiungi alla schermata Home».",
       pwaInstallButton: "Installa",
+      phaseCompleteSpeech: "Bravo! Hai superato la fase! Passiamo alla prossima!",
+      phaseFailSpeech: "Ops! Non fa niente, riproviamo dall'inizio!",
+      gameCompleteSpeech: "Complimenti! Hai completato tutto! Sei un genio dei numeri!",
+      phaseCompleteText: "🎉 Fase completata! 🎉",
+      phaseFailText: "😊 Riproviamo!",
+      gameCompleteText: "🏆 Complimenti! Ce l'hai fatta! 🏆",
+      continueButton: "Fase successiva ➡️",
+      playAgainButton: "Gioca ancora 🔄",
     },
     animalNames: {
       galinha: "gallina", vaca: "mucca", porco: "maiale", ovelha: "pecora",
@@ -272,7 +350,7 @@ export const translations: Record<Locale, Translations> = {
         peixe: "pesce", golfinho: "delfino", polvo: "polpo", caranguejo: "granchio",
         tartaruga: "tartaruga", baleia: "balena", tubarao: "squalo", lula: "calamaro",
       };
-      const numWords = ["", "uno", "due", "tre", "quattro", "cinque"];
+      const numWords = ["", "uno", "due", "tre", "quattro", "cinque", "sei", "sette", "otto", "nove"];
       const word = numWords[count] ?? String(count);
       const name = count === 1 ? (singulars[animalName] ?? animalName) : (plurals[animalName] ?? animalName + "s");
       return `Guarda! Abbiamo ${word} ${name}!`;
@@ -283,22 +361,34 @@ export const translations: Record<Locale, Translations> = {
 
   de: {
     ui: {
-      gameTitle: "🌻 Der Zahlenbauernhof 🌻",
-      wildTitle: "🌿 Wilde Tiere 🌿",
-      aquaticTitle: "🌊 Wassertiere 🌊",
+      gameTitle: "🔢 Die Welt der Zahlen 🌍",
+      domesticTitle: "🌻 Der Zahlenbauernhof 🌻",
+      wildTitle: "🌿 Dschungel der Zahlen 🌿",
+      aquaticTitle: "🌊 Ozean der Zahlen 🌊",
       subtitle: "Zähle die Tiere und finde die Zahl!",
       chooseMode: "Wähle deine Tiere:",
       domesticButton: "🐔 Bauernhoftiere",
       wildButton: "🦁 Wilde Tiere",
-      aquaticButton: "🐬 Wassertiere",
+      aquaticButton: "🐙 Wassertiere",
       scoreLabel: "⭐ Punkte:",
-      roundLabel: "🎯 Runde:",
+      roundLabel: "🎯 Nummer:",
+      phaseLabel: "📖 Phase:",
+      phase1Name: "Zahlen der Reihe nach",
+      phase2Name: "Gemischte Zahlen",
       countingHint: "Wir zählen die Tiere...",
       tryAgain: "Versuch es noch mal!",
       languageLabel: "Sprache",
       pwaInstallMessage: "Installiere die App, um offline zu spielen!",
       pwaInstallIosMessage: "Zum Installieren auf ⬆️ Teilen tippen und dann «Zum Home-Bildschirm».",
       pwaInstallButton: "Installieren",
+      phaseCompleteSpeech: "Super! Du hast die Phase geschafft! Weiter zur nächsten!",
+      phaseFailSpeech: "Ups! Macht nichts, versuchen wir es nochmal von vorne!",
+      gameCompleteSpeech: "Herzlichen Glückwunsch! Du hast alles geschafft! Du bist ein Zahlengenie!",
+      phaseCompleteText: "🎉 Phase geschafft! 🎉",
+      phaseFailText: "😊 Nochmal versuchen!",
+      gameCompleteText: "🏆 Herzlichen Glückwunsch! Geschafft! 🏆",
+      continueButton: "Nächste Phase ➡️",
+      playAgainButton: "Nochmal spielen 🔄",
     },
     animalNames: {
       galinha: "Huhn", vaca: "Kuh", porco: "Schwein", ovelha: "Schaf",
@@ -325,11 +415,11 @@ export const translations: Record<Locale, Translations> = {
         peixe: "einen Fisch", golfinho: "einen Delphin", polvo: "einen Kraken", caranguejo: "eine Krabbe",
         tartaruga: "eine Schildkröte", baleia: "einen Wal", tubarao: "einen Hai", lula: "einen Tintenfisch",
       };
-      const numWords = ["", "", "zwei", "drei", "vier", "fünf"];
-      const word = numWords[count] ?? String(count);
+      const numWords = ["", "", "zwei", "drei", "vier", "fünf", "sechs", "sieben", "acht", "neun"];
       if (count === 1) {
         return `Schau! Wir haben ${singulars[animalName] ?? animalName}!`;
       }
+      const word = numWords[count] ?? String(count);
       return `Schau! Wir haben ${word} ${plurals[animalName] ?? animalName + "s"}!`;
     },
     celebrationText: (count) => `🎉 Ja! Es ist die ${count}! Super!`,
