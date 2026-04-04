@@ -67,7 +67,7 @@ const AnimalEmoji = ({ animal, index, total }: AnimalEmojiProps) => {
 
   return (
     <span
-      className="inline-block text-6xl md:text-8xl animate-pop-in cursor-default select-none hover:animate-wiggle"
+      className="inline-block text-6xl md:text-8xl animate-pop-in cursor-default select-none"
       style={{ animationDelay: `${index * 300}ms`, opacity: 0 }}
       role="img"
       aria-label={`${translatedName} ${index + 1}`}

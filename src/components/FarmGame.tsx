@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useMemo, useRef } from "react";
+import { useState, useCallback, useEffect, useMemo } from "react";
 import AnimalEmoji, { getAnimalKeys, type AnimalMode } from "./AnimalEmoji";
 import NumberOption from "./NumberOption";
 import WelcomeScreen from "./game/WelcomeScreen";
@@ -20,7 +20,7 @@ import {
 import { requestFullscreen } from "@/lib/fullscreen";
 
 type RoundPhase = "showing" | "choosing" | "correct" | "transition";
-type TransitionType = "none" | "phase-complete" | "phase-fail" | "game-complete";
+type TransitionType = "none" | "phase-complete" | "game-complete";
 type OptionState = "idle" | "correct" | "wrong";
 
 const MODE_BG: Record<AnimalMode, string> = {
@@ -69,7 +69,6 @@ const FarmGame = () => {
   const [transition, setTransition] = useState<TransitionType>("none");
   const [phaseHits, setPhaseHits] = useState(0);
   const [phaseMisses, setPhaseMisses] = useState(0);
-  const phaseMissesRef = useRef(0);
 
   useEffect(() => { preloadVoices(); }, []);
 
@@ -92,7 +91,6 @@ const FarmGame = () => {
     setTransition("none");
     setPhaseHits(0);
     setPhaseMisses(0);
-    phaseMissesRef.current = 0;
   }, []);
 
   const handleStart = useCallback((selectedMode: AnimalMode) => {
@@ -113,7 +111,6 @@ const FarmGame = () => {
     setTransition("none");
     setPhaseHits(0);
     setPhaseMisses(0);
-    phaseMissesRef.current = 0;
   }, []);
 
   // Show animals with pop sounds
@@ -158,11 +155,11 @@ const FarmGame = () => {
 
       setTimeout(() => {
         if (currentIndex >= 8) {
-          // Last number in phase — check for any mistakes during the phase
+          // Last number in phase — always advance
           if (gamePhase === 1) {
-            setTransition(phaseMissesRef.current > 0 ? "phase-fail" : "phase-complete");
+            setTransition("phase-complete");
           } else {
-            setTransition(phaseMissesRef.current > 0 ? "phase-fail" : "game-complete");
+            setTransition("game-complete");
           }
         } else {
           // Next round
@@ -182,8 +179,7 @@ const FarmGame = () => {
       if (optionStates[clickedIdx] === "wrong") return; // ignore re-click on already-wrong option
       playClickSound();
       playWrongSound();
-      phaseMissesRef.current += 1;
-      setPhaseMisses(phaseMissesRef.current);
+      setPhaseMisses((m) => m + 1);
       setOptionStates((prev) => prev.map((s, i) => (i === clickedIdx ? "wrong" : s)));
       speak(t.ui.tryAgain, speechLang);
       // roundPhase stays "choosing" — child picks again
@@ -194,8 +190,6 @@ const FarmGame = () => {
     if (!mode) return;
     if (transition === "phase-complete") {
       startPhase(2, mode);
-    } else if (transition === "phase-fail") {
-      startPhase(gamePhase, mode);
     } else if (transition === "game-complete") {
       handleGoHome();
     }
@@ -310,7 +304,7 @@ const FarmGame = () => {
       {/* Phase transition overlay */}
       {transition !== "none" && (
         <PhaseTransition
-          type={transition as "phase-complete" | "phase-fail" | "game-complete"}
+          type={transition as "phase-complete" | "game-complete"}
           mode={mode!}
           gamePhase={gamePhase}
           onDone={handleTransitionDone}
