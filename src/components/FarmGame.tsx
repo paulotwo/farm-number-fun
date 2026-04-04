@@ -67,6 +67,8 @@ const FarmGame = () => {
   const [optionStates, setOptionStates] = useState<OptionState[]>(["idle", "idle", "idle"]);
   const [showAnimals, setShowAnimals] = useState(false);
   const [transition, setTransition] = useState<TransitionType>("none");
+  const [phaseHits, setPhaseHits] = useState(0);
+  const [phaseMisses, setPhaseMisses] = useState(0);
 
   useEffect(() => { preloadVoices(); }, []);
 
@@ -79,7 +81,13 @@ const FarmGame = () => {
 
   const startPhase = useCallback((phase: 1 | 2, m: AnimalMode) => {
     const seq = phase === 1 ? [...SEQUENTIAL] : shuffleArray(SEQUENTIAL);
-    setGamePhase(phase);
+    setGamePhase((prev) => {
+      if (phase !== prev) {
+        setPhaseHits(0);
+        setPhaseMisses(0);
+      }
+      return phase;
+    });
     setPhaseSequence(seq);
     setCurrentIndex(0);
     setRound(generateRound(m, seq[0]));
@@ -105,6 +113,8 @@ const FarmGame = () => {
     setOptionStates(["idle", "idle", "idle"]);
     setShowAnimals(false);
     setTransition("none");
+    setPhaseHits(0);
+    setPhaseMisses(0);
   }, []);
 
   // Show animals with pop sounds
@@ -136,6 +146,7 @@ const FarmGame = () => {
 
     if (n === round.count) {
       playCorrectSound();
+      setPhaseHits((h) => h + 1);
       setOptionStates(round.options.map((o) => (o === n ? "correct" : "idle")));
       setRoundPhase("correct");
 
@@ -168,6 +179,7 @@ const FarmGame = () => {
     } else {
       // Wrong answer - phase fails
       playWrongSound();
+      setPhaseMisses((m) => m + 1);
       const idx = round.options.indexOf(n);
       setOptionStates((prev) => prev.map((s, i) => (i === idx ? "wrong" : s)));
       speak(t.ui.tryAgain, speechLang);
@@ -228,8 +240,11 @@ const FarmGame = () => {
             <span className="bg-card/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-foreground shadow">
               {t.ui.phaseLabel} {gamePhase} — {gamePhase === 1 ? t.ui.phase1Name : t.ui.phase2Name}
             </span>
-            <span className="bg-card/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-foreground shadow">
-              {t.ui.roundLabel} {phaseSequence[currentIndex]}/9
+            <span className="bg-card/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-farm-correct shadow">
+              ✅ {phaseHits}
+            </span>
+            <span className="bg-card/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-farm-wrong shadow">
+              ❌ {phaseMisses}
             </span>
           </div>
         </div>
