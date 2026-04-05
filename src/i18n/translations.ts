@@ -460,6 +460,8 @@ export const translations: Record<Locale, Translations> = {
         zebra: "ein Zebra", urso: "einen Bären", tigre: "einen Tiger", cobra: "eine Schlange",
         peixe: "einen Fisch", golfinho: "einen Delphin", polvo: "einen Kraken", caranguejo: "eine Krabbe",
         tartaruga: "eine Schildkröte", baleia: "einen Wal", tubarao: "einen Hai", lula: "einen Tintenfisch",
+        ovo: "ein Ei", coelhinho: "ein Häschen", pintinho: "ein Küken", cesta: "einen Korb",
+        flor: "eine Blume", borboleta: "einen Schmetterling", cenoura: "eine Karotte", chocolate: "eine Schokolade",
       };
       const numWords = ["", "", "zwei", "drei", "vier", "fünf", "sechs", "sieben", "acht", "neun"];
       if (count === 1) {
