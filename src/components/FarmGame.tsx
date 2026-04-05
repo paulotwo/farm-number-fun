@@ -7,6 +7,8 @@ import LanguageSelector from "./LanguageSelector";
 import farmBg from "@/assets/farm-bg.jpg";
 import jungleBg from "@/assets/jungle-bg.jpg";
 import oceanBg from "@/assets/ocean-bg.jpg";
+import easterBg from "@/assets/easter-bg.jpg";
+import EasterNumberOption from "./EasterNumberOption";
 import { useI18n } from "@/i18n";
 import {
   playCorrectSound,
