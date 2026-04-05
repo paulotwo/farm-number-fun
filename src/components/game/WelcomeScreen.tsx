@@ -63,6 +63,13 @@ const WelcomeScreen = ({ onStart }: WelcomeScreenProps) => {
           >
             {t.ui.aquaticButton}
           </button>
+          <button
+            onClick={() => onStart("easter")}
+            className="px-8 py-5 text-white text-xl md:text-2xl font-extrabold rounded-3xl shadow-2xl hover:scale-110 transition-transform animate-float border-4 border-pink-300"
+            style={{ animationDelay: "0.9s", background: "linear-gradient(135deg, hsl(330 70% 65%), hsl(280 60% 70%), hsl(45 80% 65%))" }}
+          >
+            {t.ui.easterButton}
+          </button>
         </div>
       </div>
     </div>

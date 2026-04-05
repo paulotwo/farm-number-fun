@@ -7,6 +7,8 @@ import LanguageSelector from "./LanguageSelector";
 import farmBg from "@/assets/farm-bg.jpg";
 import jungleBg from "@/assets/jungle-bg.jpg";
 import oceanBg from "@/assets/ocean-bg.jpg";
+import easterBg from "@/assets/easter-bg.jpg";
+import EasterNumberOption from "./EasterNumberOption";
 import { useI18n } from "@/i18n";
 import {
   playCorrectSound,
@@ -27,6 +29,7 @@ const MODE_BG: Record<AnimalMode, string> = {
   domestic: farmBg,
   wild: jungleBg,
   aquatic: oceanBg,
+  easter: easterBg,
 };
 
 const SEQUENTIAL = [1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -205,7 +208,10 @@ const FarmGame = () => {
   const modeTitle =
     mode === "wild" ? t.ui.wildTitle :
     mode === "aquatic" ? t.ui.aquaticTitle :
+    mode === "easter" ? t.ui.easterTitle :
     t.ui.domesticTitle;
+
+  const NumberComponent = mode === "easter" ? EasterNumberOption : NumberOption;
 
   return (
     <div
@@ -283,7 +289,7 @@ const FarmGame = () => {
         {(roundPhase === "choosing" || roundPhase === "correct") && (
           <div className="flex gap-4 md:gap-6">
             {round.options.map((n, i) => (
-              <NumberOption
+              <NumberComponent
                 key={n}
                 number={n}
                 onClick={handleChoice}

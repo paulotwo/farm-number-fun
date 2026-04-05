@@ -6,11 +6,13 @@ export interface Translations {
     wildTitle: string;
     aquaticTitle: string;
     domesticTitle: string;
+    easterTitle: string;
     subtitle: string;
     chooseMode: string;
     domesticButton: string;
     wildButton: string;
     aquaticButton: string;
+    easterButton: string;
     scoreLabel: string;
     roundLabel: string;
     phaseLabel: string;
@@ -44,11 +46,13 @@ export const translations: Record<Locale, Translations> = {
       domesticTitle: "🌻 A Fazenda dos Números 🌻",
       wildTitle: "🌿 Selva dos Números 🌿",
       aquaticTitle: "🌊 Oceano dos Números 🌊",
+      easterTitle: "🐰 Páscoa dos Números 🐰",
       subtitle: "Conte os animais e descubra o número!",
       chooseMode: "Escolha os seus animais:",
       domesticButton: "🐔 Animais da Fazenda",
       wildButton: "🦁 Animais Selvagens",
       aquaticButton: "🐙 Animais Aquáticos",
+      easterButton: "🐰 Especial de Páscoa",
       scoreLabel: "⭐ Pontos:",
       roundLabel: "🎯 Número:",
       phaseLabel: "📖 Fase:",
@@ -76,6 +80,8 @@ export const translations: Record<Locale, Translations> = {
       zebra: "zebra", urso: "urso", tigre: "tigre", cobra: "cobra",
       peixe: "peixe", golfinho: "golfinho", polvo: "polvo", caranguejo: "caranguejo",
       tartaruga: "tartaruga", baleia: "baleia", tubarao: "tubarão", lula: "lula",
+      ovo: "ovo", coelhinho: "coelhinho", pintinho: "pintinho", cesta: "cesta",
+      flor: "flor", borboleta: "borboleta", cenoura: "cenoura", chocolate: "chocolate",
     },
     narrateText: (count, animalName) => {
       const plurals: Record<string, string> = {
@@ -85,8 +91,10 @@ export const translations: Record<Locale, Translations> = {
         zebra: "zebras", urso: "ursos", tigre: "tigres", cobra: "cobras",
         peixe: "peixes", golfinho: "golfinhos", polvo: "polvos", caranguejo: "caranguejos",
         tartaruga: "tartarugas", baleia: "baleias", tubarao: "tubarões", lula: "lulas",
+        ovo: "ovos", coelhinho: "coelhinhos", pintinho: "pintinhos", cesta: "cestas",
+        flor: "flores", borboleta: "borboletas", cenoura: "cenouras", chocolate: "chocolates",
       };
-      const femAnimals = ["galinha", "vaca", "ovelha", "girafa", "zebra", "cobra", "tartaruga", "baleia", "lula"];
+      const femAnimals = ["galinha", "vaca", "ovelha", "girafa", "zebra", "cobra", "tartaruga", "baleia", "lula", "cesta", "flor", "borboleta", "cenoura"];
       const numWordF = ["", "uma", "duas", "três", "quatro", "cinco", "seis", "sete", "oito", "nove"];
       const numWordM = ["", "um", "dois", "três", "quatro", "cinco", "seis", "sete", "oito", "nove"];
       const word = femAnimals.includes(animalName) ? (numWordF[count] ?? String(count)) : (numWordM[count] ?? String(count));
@@ -105,11 +113,13 @@ export const translations: Record<Locale, Translations> = {
       domesticTitle: "🌻 The Number Farm 🌻",
       wildTitle: "🌿 Jungle Numbers 🌿",
       aquaticTitle: "🌊 Ocean Numbers 🌊",
+      easterTitle: "🐰 Easter Numbers 🐰",
       subtitle: "Count the animals and find the number!",
       chooseMode: "Choose your animals:",
       domesticButton: "🐔 Farm Animals",
       wildButton: "🦁 Wild Animals",
       aquaticButton: "🐙 Aquatic Animals",
+      easterButton: "🐰 Easter Special",
       scoreLabel: "⭐ Score:",
       roundLabel: "🎯 Number:",
       phaseLabel: "📖 Phase:",
@@ -137,6 +147,8 @@ export const translations: Record<Locale, Translations> = {
       zebra: "zebra", urso: "bear", tigre: "tiger", cobra: "snake",
       peixe: "fish", golfinho: "dolphin", polvo: "octopus", caranguejo: "crab",
       tartaruga: "turtle", baleia: "whale", tubarao: "shark", lula: "squid",
+      ovo: "egg", coelhinho: "bunny", pintinho: "chick", cesta: "basket",
+      flor: "flower", borboleta: "butterfly", cenoura: "carrot", chocolate: "chocolate",
     },
     narrateText: (count, animalName) => {
       const plurals: Record<string, string> = {
@@ -146,6 +158,8 @@ export const translations: Record<Locale, Translations> = {
         zebra: "zebras", urso: "bears", tigre: "tigers", cobra: "snakes",
         peixe: "fish", golfinho: "dolphins", polvo: "octopuses", caranguejo: "crabs",
         tartaruga: "turtles", baleia: "whales", tubarao: "sharks", lula: "squids",
+        ovo: "eggs", coelhinho: "bunnies", pintinho: "chicks", cesta: "baskets",
+        flor: "flowers", borboleta: "butterflies", cenoura: "carrots", chocolate: "chocolates",
       };
       const singulars: Record<string, string> = {
         galinha: "chicken", vaca: "cow", porco: "pig", ovelha: "sheep",
@@ -154,6 +168,8 @@ export const translations: Record<Locale, Translations> = {
         zebra: "zebra", urso: "bear", tigre: "tiger", cobra: "snake",
         peixe: "fish", golfinho: "dolphin", polvo: "octopus", caranguejo: "crab",
         tartaruga: "turtle", baleia: "whale", tubarao: "shark", lula: "squid",
+        ovo: "egg", coelhinho: "bunny", pintinho: "chick", cesta: "basket",
+        flor: "flower", borboleta: "butterfly", cenoura: "carrot", chocolate: "chocolate",
       };
       const numWords = ["", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
       const word = numWords[count] ?? String(count);
@@ -170,11 +186,13 @@ export const translations: Record<Locale, Translations> = {
       domesticTitle: "🌻 La Granja de los Números 🌻",
       wildTitle: "🌿 Selva de los Números 🌿",
       aquaticTitle: "🌊 Océano de los Números 🌊",
+      easterTitle: "🐰 Pascua de los Números 🐰",
       subtitle: "¡Cuenta los animales y descubre el número!",
       chooseMode: "Elige tus animales:",
       domesticButton: "🐔 Animales de Granja",
       wildButton: "🦁 Animales Salvajes",
       aquaticButton: "🐙 Animales Acuáticos",
+      easterButton: "🐰 Especial de Pascua",
       scoreLabel: "⭐ Puntos:",
       roundLabel: "🎯 Número:",
       phaseLabel: "📖 Fase:",
@@ -202,6 +220,8 @@ export const translations: Record<Locale, Translations> = {
       zebra: "cebra", urso: "oso", tigre: "tigre", cobra: "serpiente",
       peixe: "pez", golfinho: "delfín", polvo: "pulpo", caranguejo: "cangrejo",
       tartaruga: "tortuga", baleia: "ballena", tubarao: "tiburón", lula: "calamar",
+      ovo: "huevo", coelhinho: "conejito", pintinho: "pollito", cesta: "cesta",
+      flor: "flor", borboleta: "mariposa", cenoura: "zanahoria", chocolate: "chocolate",
     },
     narrateText: (count, animalName) => {
       const plurals: Record<string, string> = {
@@ -211,6 +231,8 @@ export const translations: Record<Locale, Translations> = {
         zebra: "cebras", urso: "osos", tigre: "tigres", cobra: "serpientes",
         peixe: "peces", golfinho: "delfines", polvo: "pulpos", caranguejo: "cangrejos",
         tartaruga: "tortugas", baleia: "ballenas", tubarao: "tiburones", lula: "calamares",
+        ovo: "huevos", coelhinho: "conejitos", pintinho: "pollitos", cesta: "cestas",
+        flor: "flores", borboleta: "mariposas", cenoura: "zanahorias", chocolate: "chocolates",
       };
       const singulars: Record<string, string> = {
         galinha: "gallina", vaca: "vaca", porco: "cerdo", ovelha: "oveja",
@@ -219,6 +241,8 @@ export const translations: Record<Locale, Translations> = {
         zebra: "cebra", urso: "oso", tigre: "tigre", cobra: "serpiente",
         peixe: "pez", golfinho: "delfín", polvo: "pulpo", caranguejo: "cangrejo",
         tartaruga: "tortuga", baleia: "ballena", tubarao: "tiburón", lula: "calamar",
+        ovo: "huevo", coelhinho: "conejito", pintinho: "pollito", cesta: "cesta",
+        flor: "flor", borboleta: "mariposa", cenoura: "zanahoria", chocolate: "chocolate",
       };
       const numWords = ["", "uno", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho", "nueve"];
       const word = numWords[count] ?? String(count);
@@ -235,11 +259,13 @@ export const translations: Record<Locale, Translations> = {
       domesticTitle: "🌻 La Ferme des Chiffres 🌻",
       wildTitle: "🌿 Jungle des Chiffres 🌿",
       aquaticTitle: "🌊 Océan des Chiffres 🌊",
+      easterTitle: "🐰 Pâques des Chiffres 🐰",
       subtitle: "Compte les animaux et trouve le chiffre !",
       chooseMode: "Choisis tes animaux :",
       domesticButton: "🐔 Animaux de Ferme",
       wildButton: "🦁 Animaux Sauvages",
       aquaticButton: "🐙 Animaux Aquatiques",
+      easterButton: "🐰 Spécial Pâques",
       scoreLabel: "⭐ Points :",
       roundLabel: "🎯 Numéro :",
       phaseLabel: "📖 Phase :",
@@ -267,6 +293,8 @@ export const translations: Record<Locale, Translations> = {
       zebra: "zèbre", urso: "ours", tigre: "tigre", cobra: "serpent",
       peixe: "poisson", golfinho: "dauphin", polvo: "pieuvre", caranguejo: "crabe",
       tartaruga: "tortue", baleia: "baleine", tubarao: "requin", lula: "calmar",
+      ovo: "œuf", coelhinho: "lapin", pintinho: "poussin", cesta: "panier",
+      flor: "fleur", borboleta: "papillon", cenoura: "carotte", chocolate: "chocolat",
     },
     narrateText: (count, animalName) => {
       const plurals: Record<string, string> = {
@@ -276,6 +304,8 @@ export const translations: Record<Locale, Translations> = {
         zebra: "zèbres", urso: "ours", tigre: "tigres", cobra: "serpents",
         peixe: "poissons", golfinho: "dauphins", polvo: "pieuvres", caranguejo: "crabes",
         tartaruga: "tortues", baleia: "baleines", tubarao: "requins", lula: "calmars",
+        ovo: "œufs", coelhinho: "lapins", pintinho: "poussins", cesta: "paniers",
+        flor: "fleurs", borboleta: "papillons", cenoura: "carottes", chocolate: "chocolats",
       };
       const singulars: Record<string, string> = {
         galinha: "poule", vaca: "vache", porco: "cochon", ovelha: "mouton",
@@ -284,6 +314,8 @@ export const translations: Record<Locale, Translations> = {
         zebra: "zèbre", urso: "ours", tigre: "tigre", cobra: "serpent",
         peixe: "poisson", golfinho: "dauphin", polvo: "pieuvre", caranguejo: "crabe",
         tartaruga: "tortue", baleia: "baleine", tubarao: "requin", lula: "calmar",
+        ovo: "œuf", coelhinho: "lapin", pintinho: "poussin", cesta: "panier",
+        flor: "fleur", borboleta: "papillon", cenoura: "carotte", chocolate: "chocolat",
       };
       const numWords = ["", "un", "deux", "trois", "quatre", "cinq", "six", "sept", "huit", "neuf"];
       const word = numWords[count] ?? String(count);
@@ -300,11 +332,13 @@ export const translations: Record<Locale, Translations> = {
       domesticTitle: "🌻 La Fattoria dei Numeri 🌻",
       wildTitle: "🌿 Giungla dei Numeri 🌿",
       aquaticTitle: "🌊 Oceano dei Numeri 🌊",
+      easterTitle: "🐰 Pasqua dei Numeri 🐰",
       subtitle: "Conta gli animali e scopri il numero!",
       chooseMode: "Scegli i tuoi animali:",
       domesticButton: "🐔 Animali da Fattoria",
       wildButton: "🦁 Animali Selvatici",
       aquaticButton: "🐙 Animali Acquatici",
+      easterButton: "🐰 Speciale Pasqua",
       scoreLabel: "⭐ Punti:",
       roundLabel: "🎯 Numero:",
       phaseLabel: "📖 Fase:",
@@ -332,6 +366,8 @@ export const translations: Record<Locale, Translations> = {
       zebra: "zebra", urso: "orso", tigre: "tigre", cobra: "serpente",
       peixe: "pesce", golfinho: "delfino", polvo: "polpo", caranguejo: "granchio",
       tartaruga: "tartaruga", baleia: "balena", tubarao: "squalo", lula: "calamaro",
+      ovo: "uovo", coelhinho: "coniglietto", pintinho: "pulcino", cesta: "cestino",
+      flor: "fiore", borboleta: "farfalla", cenoura: "carota", chocolate: "cioccolato",
     },
     narrateText: (count, animalName) => {
       const plurals: Record<string, string> = {
@@ -341,6 +377,8 @@ export const translations: Record<Locale, Translations> = {
         zebra: "zebre", urso: "orsi", tigre: "tigri", cobra: "serpenti",
         peixe: "pesci", golfinho: "delfini", polvo: "polpi", caranguejo: "granchi",
         tartaruga: "tartarughe", baleia: "balene", tubarao: "squali", lula: "calamari",
+        ovo: "uova", coelhinho: "coniglietti", pintinho: "pulcini", cesta: "cestini",
+        flor: "fiori", borboleta: "farfalle", cenoura: "carote", chocolate: "cioccolati",
       };
       const singulars: Record<string, string> = {
         galinha: "gallina", vaca: "mucca", porco: "maiale", ovelha: "pecora",
@@ -349,6 +387,8 @@ export const translations: Record<Locale, Translations> = {
         zebra: "zebra", urso: "orso", tigre: "tigre", cobra: "serpente",
         peixe: "pesce", golfinho: "delfino", polvo: "polpo", caranguejo: "granchio",
         tartaruga: "tartaruga", baleia: "balena", tubarao: "squalo", lula: "calamaro",
+        ovo: "uovo", coelhinho: "coniglietto", pintinho: "pulcino", cesta: "cestino",
+        flor: "fiore", borboleta: "farfalla", cenoura: "carota", chocolate: "cioccolato",
       };
       const numWords = ["", "uno", "due", "tre", "quattro", "cinque", "sei", "sette", "otto", "nove"];
       const word = numWords[count] ?? String(count);
@@ -365,11 +405,13 @@ export const translations: Record<Locale, Translations> = {
       domesticTitle: "🌻 Der Zahlenbauernhof 🌻",
       wildTitle: "🌿 Dschungel der Zahlen 🌿",
       aquaticTitle: "🌊 Ozean der Zahlen 🌊",
+      easterTitle: "🐰 Ostern der Zahlen 🐰",
       subtitle: "Zähle die Tiere und finde die Zahl!",
       chooseMode: "Wähle deine Tiere:",
       domesticButton: "🐔 Bauernhoftiere",
       wildButton: "🦁 Wilde Tiere",
       aquaticButton: "🐙 Wassertiere",
+      easterButton: "🐰 Ostern Spezial",
       scoreLabel: "⭐ Punkte:",
       roundLabel: "🎯 Nummer:",
       phaseLabel: "📖 Phase:",
@@ -397,6 +439,8 @@ export const translations: Record<Locale, Translations> = {
       zebra: "Zebra", urso: "Bär", tigre: "Tiger", cobra: "Schlange",
       peixe: "Fisch", golfinho: "Delphin", polvo: "Krake", caranguejo: "Krabbe",
       tartaruga: "Schildkröte", baleia: "Wal", tubarao: "Hai", lula: "Tintenfisch",
+      ovo: "Ei", coelhinho: "Häschen", pintinho: "Küken", cesta: "Korb",
+      flor: "Blume", borboleta: "Schmetterling", cenoura: "Karotte", chocolate: "Schokolade",
     },
     narrateText: (count, animalName) => {
       const plurals: Record<string, string> = {
@@ -406,6 +450,8 @@ export const translations: Record<Locale, Translations> = {
         zebra: "Zebras", urso: "Bären", tigre: "Tiger", cobra: "Schlangen",
         peixe: "Fische", golfinho: "Delphine", polvo: "Kraken", caranguejo: "Krabben",
         tartaruga: "Schildkröten", baleia: "Wale", tubarao: "Haie", lula: "Tintenfische",
+        ovo: "Eier", coelhinho: "Häschen", pintinho: "Küken", cesta: "Körbe",
+        flor: "Blumen", borboleta: "Schmetterlinge", cenoura: "Karotten", chocolate: "Schokoladen",
       };
       const singulars: Record<string, string> = {
         galinha: "ein Huhn", vaca: "eine Kuh", porco: "ein Schwein", ovelha: "ein Schaf",
@@ -414,6 +460,8 @@ export const translations: Record<Locale, Translations> = {
         zebra: "ein Zebra", urso: "einen Bären", tigre: "einen Tiger", cobra: "eine Schlange",
         peixe: "einen Fisch", golfinho: "einen Delphin", polvo: "einen Kraken", caranguejo: "eine Krabbe",
         tartaruga: "eine Schildkröte", baleia: "einen Wal", tubarao: "einen Hai", lula: "einen Tintenfisch",
+        ovo: "ein Ei", coelhinho: "ein Häschen", pintinho: "ein Küken", cesta: "einen Korb",
+        flor: "eine Blume", borboleta: "einen Schmetterling", cenoura: "eine Karotte", chocolate: "eine Schokolade",
       };
       const numWords = ["", "", "zwei", "drei", "vier", "fünf", "sechs", "sieben", "acht", "neun"];
       if (count === 1) {
