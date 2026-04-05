@@ -6,6 +6,17 @@
 All colors MUST be HSL.
 */
 
+* {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+input, textarea {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
 @layer base {
   :root {
     --background: 120 30% 95%;
