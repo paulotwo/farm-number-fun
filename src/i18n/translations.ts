@@ -247,6 +247,7 @@ export const translations: Record<Locale, Translations> = {
       domesticTitle: "🌻 La Ferme des Chiffres 🌻",
       wildTitle: "🌿 Jungle des Chiffres 🌿",
       aquaticTitle: "🌊 Océan des Chiffres 🌊",
+      easterTitle: "🐰 Pâques des Chiffres 🐰",
       subtitle: "Compte les animaux et trouve le chiffre !",
       chooseMode: "Choisis tes animaux :",
       domesticButton: "🐔 Animaux de Ferme",
