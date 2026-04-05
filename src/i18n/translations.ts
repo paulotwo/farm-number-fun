@@ -65,7 +65,7 @@ export const translations: Record<Locale, Translations> = {
       gameCompleteSpeech: "Parabéns! Você completou tudo! Você é um gênio dos números!",
       phaseCompleteText: "🎉 Fase completa! 🎉",
       phaseFailText: "😊 Vamos tentar de novo!",
-      gameCompleteText: "🏆 Parabéns! Completaste tudo! 🏆",
+      gameCompleteText: "🏆 Parabéns! Você completou tudo! 🏆",
       continueButton: "Próxima fase ➡️",
       playAgainButton: "Jogar de novo 🔄",
     },
