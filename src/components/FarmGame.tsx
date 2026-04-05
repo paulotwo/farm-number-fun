@@ -215,7 +215,7 @@ const FarmGame = () => {
     >
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-foreground/20" />
 
-      <header className="relative z-10 w-full flex items-start pt-6 pb-2 px-4">
+      <header className="relative z-20 w-full flex items-start pt-6 pb-2 px-4">
         <button
           onClick={handleGoHome}
           className="rounded-lg bg-muted px-3 py-2 text-lg transition-transform active:scale-95"
