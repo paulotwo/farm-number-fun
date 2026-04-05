@@ -113,6 +113,7 @@ export const translations: Record<Locale, Translations> = {
       domesticTitle: "🌻 The Number Farm 🌻",
       wildTitle: "🌿 Jungle Numbers 🌿",
       aquaticTitle: "🌊 Ocean Numbers 🌊",
+      easterTitle: "🐰 Easter Numbers 🐰",
       subtitle: "Count the animals and find the number!",
       chooseMode: "Choose your animals:",
       domesticButton: "🐔 Farm Animals",
