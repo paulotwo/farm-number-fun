@@ -186,6 +186,7 @@ export const translations: Record<Locale, Translations> = {
       domesticButton: "🐔 Animales de Granja",
       wildButton: "🦁 Animales Salvajes",
       aquaticButton: "🐙 Animales Acuáticos",
+      easterButton: "🐰 Especial de Pascua",
       scoreLabel: "⭐ Puntos:",
       roundLabel: "🎯 Número:",
       phaseLabel: "📖 Fase:",
