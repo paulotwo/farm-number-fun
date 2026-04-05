@@ -158,6 +158,8 @@ export const translations: Record<Locale, Translations> = {
         zebra: "zebras", urso: "bears", tigre: "tigers", cobra: "snakes",
         peixe: "fish", golfinho: "dolphins", polvo: "octopuses", caranguejo: "crabs",
         tartaruga: "turtles", baleia: "whales", tubarao: "sharks", lula: "squids",
+        ovo: "eggs", coelhinho: "bunnies", pintinho: "chicks", cesta: "baskets",
+        flor: "flowers", borboleta: "butterflies", cenoura: "carrots", chocolate: "chocolates",
       };
       const singulars: Record<string, string> = {
         galinha: "chicken", vaca: "cow", porco: "pig", ovelha: "sheep",
