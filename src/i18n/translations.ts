@@ -180,6 +180,7 @@ export const translations: Record<Locale, Translations> = {
       domesticTitle: "🌻 La Granja de los Números 🌻",
       wildTitle: "🌿 Selva de los Números 🌿",
       aquaticTitle: "🌊 Océano de los Números 🌊",
+      easterTitle: "🐰 Pascua de los Números 🐰",
       subtitle: "¡Cuenta los animales y descubre el número!",
       chooseMode: "Elige tus animales:",
       domesticButton: "🐔 Animales de Granja",
