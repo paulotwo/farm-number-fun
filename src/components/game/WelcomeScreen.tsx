@@ -16,7 +16,7 @@ const WelcomeScreen = ({ onStart }: WelcomeScreenProps) => {
       style={{
         backgroundImage: `url(${welcomeBg})`,
         backgroundSize: "cover",
-        backgroundPosition: "center",
+        backgroundPosition: "center center",
       }}
     >
       <div className="absolute inset-0 bg-foreground/30" />

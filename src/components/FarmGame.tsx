@@ -213,7 +213,7 @@ const FarmGame = () => {
       style={{
         backgroundImage: `url(${bgImage})`,
         backgroundSize: "cover",
-        backgroundPosition: "center bottom",
+        backgroundPosition: "center center",
       }}
     >
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-foreground/20" />
