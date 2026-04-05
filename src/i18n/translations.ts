@@ -91,6 +91,8 @@ export const translations: Record<Locale, Translations> = {
         zebra: "zebras", urso: "ursos", tigre: "tigres", cobra: "cobras",
         peixe: "peixes", golfinho: "golfinhos", polvo: "polvos", caranguejo: "caranguejos",
         tartaruga: "tartarugas", baleia: "baleias", tubarao: "tubarões", lula: "lulas",
+        ovo: "ovos", coelhinho: "coelhinhos", pintinho: "pintinhos", cesta: "cestas",
+        flor: "flores", borboleta: "borboletas", cenoura: "cenouras", chocolate: "chocolates",
       };
       const femAnimals = ["galinha", "vaca", "ovelha", "girafa", "zebra", "cobra", "tartaruga", "baleia", "lula"];
       const numWordF = ["", "uma", "duas", "três", "quatro", "cinco", "seis", "sete", "oito", "nove"];
