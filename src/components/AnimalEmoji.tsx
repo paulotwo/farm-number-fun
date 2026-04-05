@@ -6,51 +6,51 @@ interface AnimalEmojiProps {
   total: number;
 }
 
-const DOMESTIC_ANIMALS: Record<string, { emoji: string; name: string }> = {
-  galinha: { emoji: "🐔", name: "galinha" },
-  vaca: { emoji: "🐄", name: "vaca" },
-  porco: { emoji: "🐷", name: "porco" },
-  ovelha: { emoji: "🐑", name: "ovelha" },
-  cavalo: { emoji: "🐴", name: "cavalo" },
-  pato: { emoji: "🦆", name: "pato" },
-  coelho: { emoji: "🐰", name: "coelho" },
-  gato: { emoji: "🐱", name: "gato" },
+const DOMESTIC_ANIMALS: Record<string, { name: string; image: string }> = {
+  galinha:   { name: "galinha",   image: "/animals/domestic/galinha.png" },
+  vaca:      { name: "vaca",      image: "/animals/domestic/vaca.png" },
+  porco:     { name: "porco",     image: "/animals/domestic/porco.png" },
+  ovelha:    { name: "ovelha",    image: "/animals/domestic/ovelha.png" },
+  cavalo:    { name: "cavalo",    image: "/animals/domestic/cavalo.png" },
+  pato:      { name: "pato",      image: "/animals/domestic/pato.png" },
+  coelho:    { name: "coelho",    image: "/animals/domestic/coelho.png" },
+  gato:      { name: "gato",      image: "/animals/domestic/gato.png" },
 };
 
-const WILD_ANIMALS: Record<string, { emoji: string; name: string }> = {
-  leao: { emoji: "🦁", name: "leão" },
-  elefante: { emoji: "🐘", name: "elefante" },
-  girafa: { emoji: "🦒", name: "girafa" },
-  macaco: { emoji: "🐒", name: "macaco" },
-  zebra: { emoji: "🦓", name: "zebra" },
-  urso: { emoji: "🐻", name: "urso" },
-  tigre: { emoji: "🐯", name: "tigre" },
-  cobra: { emoji: "🐍", name: "cobra" },
+const WILD_ANIMALS: Record<string, { name: string; image: string }> = {
+  leao:      { name: "leão",      image: "/animals/wild/leao.png" },
+  elefante:  { name: "elefante",  image: "/animals/wild/elefante.png" },
+  girafa:    { name: "girafa",    image: "/animals/wild/girafa.png" },
+  macaco:    { name: "macaco",    image: "/animals/wild/macaco.png" },
+  zebra:     { name: "zebra",     image: "/animals/wild/zebra.png" },
+  urso:      { name: "urso",      image: "/animals/wild/urso.png" },
+  tigre:     { name: "tigre",     image: "/animals/wild/tigre.png" },
+  cobra:     { name: "cobra",     image: "/animals/wild/cobra.png" },
 };
 
-const AQUATIC_ANIMALS: Record<string, { emoji: string; name: string }> = {
-  peixe: { emoji: "🐟", name: "peixe" },
-  golfinho: { emoji: "🐬", name: "golfinho" },
-  polvo: { emoji: "🐙", name: "polvo" },
-  caranguejo: { emoji: "🦀", name: "caranguejo" },
-  tartaruga: { emoji: "🐢", name: "tartaruga" },
-  baleia: { emoji: "🐳", name: "baleia" },
-  tubarao: { emoji: "🦈", name: "tubarão" },
-  lula: { emoji: "🦑", name: "lula" },
+const AQUATIC_ANIMALS: Record<string, { name: string; image: string }> = {
+  peixe:      { name: "peixe",      image: "/animals/aquatic/peixe.png" },
+  golfinho:   { name: "golfinho",   image: "/animals/aquatic/golfinho.png" },
+  polvo:      { name: "polvo",      image: "/animals/aquatic/polvo.png" },
+  caranguejo: { name: "caranguejo", image: "/animals/aquatic/caranguejo.png" },
+  tartaruga:  { name: "tartaruga",  image: "/animals/aquatic/tartaruga.png" },
+  baleia:     { name: "baleia",     image: "/animals/aquatic/baleia.png" },
+  tubarao:    { name: "tubarão",    image: "/animals/aquatic/tubarao.png" },
+  lula:       { name: "lula",       image: "/animals/aquatic/lula.png" },
 };
 
-const EASTER_ITEMS: Record<string, { emoji: string; name: string }> = {
-  ovo: { emoji: "🥚", name: "ovo" },
-  coelhinho: { emoji: "🐰", name: "coelhinho" },
-  pintinho: { emoji: "🐣", name: "pintinho" },
-  cesta: { emoji: "🧺", name: "cesta" },
-  flor: { emoji: "🌷", name: "flor" },
-  borboleta: { emoji: "🦋", name: "borboleta" },
-  cenoura: { emoji: "🥕", name: "cenoura" },
-  chocolate: { emoji: "🍫", name: "chocolate" },
+const EASTER_ITEMS: Record<string, { name: string; image: string }> = {
+  ovo:        { name: "ovo",        image: "/animals/easter/ovo.png" },
+  coelhinho:  { name: "coelhinho",  image: "/animals/easter/coelhinho.png" },
+  pintinho:   { name: "pintinho",   image: "/animals/easter/pintinho.png" },
+  cesta:      { name: "cesta",      image: "/animals/easter/cesta.png" },
+  flor:       { name: "flor",       image: "/animals/easter/flor.png" },
+  borboleta:  { name: "borboleta",  image: "/animals/easter/borboleta.png" },
+  cenoura:    { name: "cenoura",    image: "/animals/easter/cenoura.png" },
+  chocolate:  { name: "chocolate",  image: "/animals/easter/chocolate.png" },
 };
 
-const ALL_ANIMALS: Record<string, { emoji: string; name: string }> = {
+const ALL_ANIMALS: Record<string, { name: string; image: string }> = {
   ...DOMESTIC_ANIMALS,
   ...WILD_ANIMALS,
   ...AQUATIC_ANIMALS,
@@ -72,6 +72,13 @@ export function getAnimalKeys(mode: AnimalMode) {
   return AQUATIC_KEYS;
 }
 
+function getImageSizeClass(total: number): string {
+  if (total <= 2) return "w-40 h-40 md:w-56 md:h-56";
+  if (total <= 4) return "w-32 h-32 md:w-44 md:h-44";
+  if (total <= 6) return "w-24 h-24 md:w-36 md:h-36";
+  return "w-20 h-20 md:w-32 md:h-32";
+}
+
 const AnimalEmoji = ({ animal, index, total }: AnimalEmojiProps) => {
   const data = ALL_ANIMALS[animal];
   const { t } = useI18n();
@@ -80,14 +87,19 @@ const AnimalEmoji = ({ animal, index, total }: AnimalEmojiProps) => {
   const translatedName = t.animalNames[animal] ?? data.name;
 
   return (
-    <span
-      className="inline-block text-6xl md:text-8xl animate-pop-in cursor-default select-none"
+    <div
+      className="inline-block animate-pop-in cursor-default select-none"
       style={{ animationDelay: `${index * 300}ms`, opacity: 0 }}
       role="img"
       aria-label={`${translatedName} ${index + 1}`}
     >
-      {data.emoji}
-    </span>
+      <img
+        src={data.image}
+        alt={translatedName}
+        className={`${getImageSizeClass(total)} object-contain drop-shadow-md`}
+        draggable={false}
+      />
+    </div>
   );
 };
 
