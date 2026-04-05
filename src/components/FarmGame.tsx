@@ -208,7 +208,10 @@ const FarmGame = () => {
   const modeTitle =
     mode === "wild" ? t.ui.wildTitle :
     mode === "aquatic" ? t.ui.aquaticTitle :
+    mode === "easter" ? t.ui.easterTitle :
     t.ui.domesticTitle;
+
+  const NumberComponent = mode === "easter" ? EasterNumberOption : NumberOption;
 
   return (
     <div
