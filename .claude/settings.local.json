@@ -1,28 +1,10 @@
 {
   "permissions": {
     "allow": [
-      "Bash(cp:*)",
-      "Bash(npm run:*)",
-      "Bash(npx tsc:*)",
+      "Read",
+      "Bash",
       "WebSearch",
-      "WebFetch(domain:ai.google.dev)",
-      "Bash(where nano-banana:*)",
-      "Bash(where nanobanan:*)",
-      "Bash(npx nano-banana:*)",
-      "WebFetch(domain:www.philschmid.de)",
-      "Bash(pip --version)",
-      "Bash(pip3 --version)",
-      "Bash(pip show:*)",
-      "Bash(mkdir -p \"K:/Personal/farm-number-fun/scripts\")",
-      "Bash(mkdir -p \"K:/Personal/farm-number-fun/public/animals/domestic\" \"K:/Personal/farm-number-fun/public/animals/wild\" \"K:/Personal/farm-number-fun/public/animals/aquatic\" \"K:/Personal/farm-number-fun/public/animals/easter\")",
-      "Bash(pip install:*)",
-      "Bash(python scripts/generate_animals.py)",
-      "Bash(GOOGLE_API_KEY=AIzaSyCAF4-6sHJ8_HO3BqS1QZry8TQTjdBCl00 python scripts/debug_api.py)",
-      "Bash(GOOGLE_API_KEY=AIzaSyCAF4-6sHJ8_HO3BqS1QZry8TQTjdBCl00 python scripts/generate_animals.py)",
-      "Read(//mnt/c/Users/Administrador/AppData/Local/Temp/8/claude/K--Personal-farm-number-fun/fa95bb51-5a80-4e8a-8cc9-3958537e6480/**)",
-      "Read(//mnt/c/Users/Administrador/AppData/Local/Temp/8/claude/K--Personal-farm-number-fun/fa95bb51-5a80-4e8a-8cc9-3958537e6480/tasks/**)",
-      "Bash(python3 -c ':*)",
-      "Bash(python:*)"
+      "WebFetch"
     ]
   }
 }
