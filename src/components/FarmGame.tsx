@@ -289,7 +289,7 @@ const FarmGame = () => {
         {(roundPhase === "choosing" || roundPhase === "correct") && (
           <div className="flex gap-4 md:gap-6">
             {round.options.map((n, i) => (
-              <NumberOption
+              <NumberComponent
                 key={n}
                 number={n}
                 onClick={handleChoice}

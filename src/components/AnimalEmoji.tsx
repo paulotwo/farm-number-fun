@@ -39,22 +39,36 @@ const AQUATIC_ANIMALS: Record<string, { emoji: string; name: string }> = {
   lula: { emoji: "🦑", name: "lula" },
 };
 
+const EASTER_ITEMS: Record<string, { emoji: string; name: string }> = {
+  ovo: { emoji: "🥚", name: "ovo" },
+  coelhinho: { emoji: "🐰", name: "coelhinho" },
+  pintinho: { emoji: "🐣", name: "pintinho" },
+  cesta: { emoji: "🧺", name: "cesta" },
+  flor: { emoji: "🌷", name: "flor" },
+  borboleta: { emoji: "🦋", name: "borboleta" },
+  cenoura: { emoji: "🥕", name: "cenoura" },
+  chocolate: { emoji: "🍫", name: "chocolate" },
+};
+
 const ALL_ANIMALS: Record<string, { emoji: string; name: string }> = {
   ...DOMESTIC_ANIMALS,
   ...WILD_ANIMALS,
   ...AQUATIC_ANIMALS,
+  ...EASTER_ITEMS,
 };
 
-export type AnimalMode = "domestic" | "wild" | "aquatic";
+export type AnimalMode = "domestic" | "wild" | "aquatic" | "easter";
 
 export const getAnimalData = (key: string) => ALL_ANIMALS[key];
 export const DOMESTIC_KEYS = Object.keys(DOMESTIC_ANIMALS);
 export const WILD_KEYS = Object.keys(WILD_ANIMALS);
 export const AQUATIC_KEYS = Object.keys(AQUATIC_ANIMALS);
+export const EASTER_KEYS = Object.keys(EASTER_ITEMS);
 
 export function getAnimalKeys(mode: AnimalMode) {
   if (mode === "domestic") return DOMESTIC_KEYS;
   if (mode === "wild") return WILD_KEYS;
+  if (mode === "easter") return EASTER_KEYS;
   return AQUATIC_KEYS;
 }
 
