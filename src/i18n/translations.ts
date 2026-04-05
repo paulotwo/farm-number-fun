@@ -6,11 +6,13 @@ export interface Translations {
     wildTitle: string;
     aquaticTitle: string;
     domesticTitle: string;
+    easterTitle: string;
     subtitle: string;
     chooseMode: string;
     domesticButton: string;
     wildButton: string;
     aquaticButton: string;
+    easterButton: string;
     scoreLabel: string;
     roundLabel: string;
     phaseLabel: string;
