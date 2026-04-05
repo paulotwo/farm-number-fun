@@ -314,6 +314,7 @@ export const translations: Record<Locale, Translations> = {
       domesticTitle: "🌻 La Fattoria dei Numeri 🌻",
       wildTitle: "🌿 Giungla dei Numeri 🌿",
       aquaticTitle: "🌊 Oceano dei Numeri 🌊",
+      easterTitle: "🐰 Pasqua dei Numeri 🐰",
       subtitle: "Conta gli animali e scopri il numero!",
       chooseMode: "Scegli i tuoi animali:",
       domesticButton: "🐔 Animali da Fattoria",
