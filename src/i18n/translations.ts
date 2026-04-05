@@ -293,6 +293,8 @@ export const translations: Record<Locale, Translations> = {
       zebra: "zèbre", urso: "ours", tigre: "tigre", cobra: "serpent",
       peixe: "poisson", golfinho: "dauphin", polvo: "pieuvre", caranguejo: "crabe",
       tartaruga: "tortue", baleia: "baleine", tubarao: "requin", lula: "calmar",
+      ovo: "œuf", coelhinho: "lapin", pintinho: "poussin", cesta: "panier",
+      flor: "fleur", borboleta: "papillon", cenoura: "carotte", chocolate: "chocolat",
     },
     narrateText: (count, animalName) => {
       const plurals: Record<string, string> = {
