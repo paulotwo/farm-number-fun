@@ -148,10 +148,13 @@ const FarmGame = () => {
       setOptionStates(round.options.map((o) => (o === n ? "correct" : "idle")));
       setRoundPhase("correct");
 
-      setTimeout(() => {
-        playCelebrateSound();
-        speak(t.celebrationSpeech(round.count), speechLang);
-      }, 300);
+      // Skip individual celebration speech on last round to avoid overlapping with phase transition speech
+      if (currentIndex < 8) {
+        setTimeout(() => {
+          playCelebrateSound();
+          speak(t.celebrationSpeech(round.count), speechLang);
+        }, 300);
+      }
 
       setTimeout(() => {
         if (currentIndex >= 8) {
