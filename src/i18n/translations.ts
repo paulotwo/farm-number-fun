@@ -241,6 +241,8 @@ export const translations: Record<Locale, Translations> = {
         zebra: "cebra", urso: "oso", tigre: "tigre", cobra: "serpiente",
         peixe: "pez", golfinho: "delfín", polvo: "pulpo", caranguejo: "cangrejo",
         tartaruga: "tortuga", baleia: "ballena", tubarao: "tiburón", lula: "calamar",
+        ovo: "huevo", coelhinho: "conejito", pintinho: "pollito", cesta: "cesta",
+        flor: "flor", borboleta: "mariposa", cenoura: "zanahoria", chocolate: "chocolate",
       };
       const numWords = ["", "uno", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho", "nueve"];
       const word = numWords[count] ?? String(count);
