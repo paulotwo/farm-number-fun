@@ -381,6 +381,7 @@ export const translations: Record<Locale, Translations> = {
       domesticTitle: "🌻 Der Zahlenbauernhof 🌻",
       wildTitle: "🌿 Dschungel der Zahlen 🌿",
       aquaticTitle: "🌊 Ozean der Zahlen 🌊",
+      easterTitle: "🐰 Ostern der Zahlen 🐰",
       subtitle: "Zähle die Tiere und finde die Zahl!",
       chooseMode: "Wähle deine Tiere:",
       domesticButton: "🐔 Bauernhoftiere",
