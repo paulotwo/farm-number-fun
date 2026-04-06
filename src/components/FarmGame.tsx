@@ -20,6 +20,7 @@ import {
   preloadVoices,
 } from "@/lib/sounds";
 import { requestFullscreen } from "@/lib/fullscreen";
+import { useDebugMode } from "@/hooks/use-debug-mode";
 
 type RoundPhase = "showing" | "choosing" | "correct" | "transition";
 type TransitionType = "none" | "phase-complete" | "game-complete";
@@ -60,6 +61,7 @@ function generateRound(mode: AnimalMode, count: number, prevAnimal?: string) {
 
 const FarmGame = () => {
   const { t, speechLang } = useI18n();
+  const { debug, fastMode, setFastMode } = useDebugMode();
   const [mode, setMode] = useState<AnimalMode | null>(null);
   const [started, setStarted] = useState(false);
   const [gamePhase, setGamePhase] = useState<1 | 2>(1);
