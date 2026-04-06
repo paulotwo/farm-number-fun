@@ -3,6 +3,7 @@ import AnimalEmoji, { getAnimalKeys, type AnimalMode } from "./AnimalEmoji";
 import NumberOption from "./NumberOption";
 import WelcomeScreen from "./game/WelcomeScreen";
 import PhaseTransition from "./game/PhaseTransition";
+import TrainPhase from "./game/TrainPhase";
 import LanguageSelector from "./LanguageSelector";
 import farmBg from "@/assets/farm-bg.jpg";
 import jungleBg from "@/assets/jungle-bg.jpg";
@@ -64,7 +65,7 @@ const FarmGame = () => {
   const { debug, fastMode, setFastMode } = useDebugMode();
   const [mode, setMode] = useState<AnimalMode | null>(null);
   const [started, setStarted] = useState(false);
-  const [gamePhase, setGamePhase] = useState<1 | 2>(1);
+  const [gamePhase, setGamePhase] = useState<1 | 2 | 3>(1);
   const [phaseSequence, setPhaseSequence] = useState<number[]>(SEQUENTIAL);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [round, setRound] = useState(() => generateRound("domestic", 1));
@@ -170,11 +171,8 @@ const FarmGame = () => {
       const nextDelay = fastMode ? 200 : 2500;
       setTimeout(() => {
         if (currentIndex >= 8) {
-          if (gamePhase === 1) {
-            setTransition("phase-complete");
-          } else {
-            setTransition("game-complete");
-          }
+          // Both phase 1 and phase 2 transition to next phase
+          setTransition("phase-complete");
         } else {
           setRoundPhase("transition");
           const nextIdx = currentIndex + 1;
@@ -200,14 +198,29 @@ const FarmGame = () => {
   const handleTransitionDone = useCallback(() => {
     if (!mode) return;
     if (transition === "phase-complete") {
-      startPhase(2, mode);
-    } else if (transition === "game-complete") {
-      handleGoHome();
+      if (gamePhase === 1) {
+        startPhase(2, mode);
+      } else if (gamePhase === 2) {
+        // Move to phase 3 (train)
+        setGamePhase(3);
+        setTransition("none");
+      }
     }
-  }, [transition, mode, gamePhase, startPhase, handleGoHome]);
+  }, [transition, mode, gamePhase, startPhase]);
 
   if (!started) {
     return <WelcomeScreen onStart={handleStart} />;
+  }
+
+  if (gamePhase === 3 && mode) {
+    return (
+      <TrainPhase
+        mode={mode}
+        bgImage={bgImage}
+        fastMode={fastMode}
+        onComplete={handleGoHome}
+      />
+    );
   }
 
   const modeTitle =
