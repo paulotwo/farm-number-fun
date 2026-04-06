@@ -254,15 +254,27 @@ const FarmGame = () => {
             🏠
           </button>
           {debug && (
-            <button
-              onClick={() => setFastMode((f) => !f)}
-              className={`rounded-lg px-3 py-1 text-xs font-bold transition-transform active:scale-95 ${
-                fastMode ? "bg-farm-correct text-foreground" : "bg-muted text-muted-foreground"
-              }`}
-              title="Fast mode"
-            >
-              ⚡ {fastMode ? "ON" : "OFF"}
-            </button>
+            <>
+              <button
+                onClick={() => setFastMode((f) => !f)}
+                className={`rounded-lg px-3 py-1 text-xs font-bold transition-transform active:scale-95 ${
+                  fastMode ? "bg-farm-correct text-foreground" : "bg-muted text-muted-foreground"
+                }`}
+                title="Fast mode"
+              >
+                ⚡ {fastMode ? "ON" : "OFF"}
+              </button>
+              <button
+                onClick={() => {
+                  if (gamePhase === 1) startPhase(2, mode);
+                  else if (gamePhase === 2) { setGamePhase(3); setTransition("none"); }
+                }}
+                className="rounded-lg px-3 py-1 text-xs font-bold bg-muted text-muted-foreground transition-transform active:scale-95"
+                title="Skip phase"
+              >
+                ⏭ SKIP
+              </button>
+            </>
           )}
         </div>
         <div className="flex-1 text-center">
