@@ -171,11 +171,8 @@ const FarmGame = () => {
       const nextDelay = fastMode ? 200 : 2500;
       setTimeout(() => {
         if (currentIndex >= 8) {
-          if (gamePhase === 1) {
-            setTransition("phase-complete");
-          } else {
-            setTransition("game-complete");
-          }
+          // Both phase 1 and phase 2 transition to next phase
+          setTransition("phase-complete");
         } else {
           setRoundPhase("transition");
           const nextIdx = currentIndex + 1;
@@ -201,11 +198,15 @@ const FarmGame = () => {
   const handleTransitionDone = useCallback(() => {
     if (!mode) return;
     if (transition === "phase-complete") {
-      startPhase(2, mode);
-    } else if (transition === "game-complete") {
-      handleGoHome();
+      if (gamePhase === 1) {
+        startPhase(2, mode);
+      } else if (gamePhase === 2) {
+        // Move to phase 3 (train)
+        setGamePhase(3);
+        setTransition("none");
+      }
     }
-  }, [transition, mode, gamePhase, startPhase, handleGoHome]);
+  }, [transition, mode, gamePhase, startPhase]);
 
   if (!started) {
     return <WelcomeScreen onStart={handleStart} />;
