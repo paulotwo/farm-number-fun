@@ -73,18 +73,18 @@ const PhaseTransition = ({ type, mode, gamePhase, onDone, bgImage }: PhaseTransi
             const data = getAnimalData(key);
             if (!data) return null;
             return (
-              <span
+              <img
                 key={key}
-                className={`text-5xl md:text-6xl animate-pop-in ${isSuccess ? "animate-float" : ""}`}
+                src={data.image}
+                alt={data.name}
+                className={`w-12 h-12 md:w-16 md:h-16 object-contain animate-pop-in ${isSuccess ? "animate-float" : ""}`}
                 style={{
                   animationDelay: `${i * 150}ms`,
                   opacity: 0,
                   animationFillMode: "forwards",
                   ...(isSuccess ? {} : { filter: "grayscale(0.3)" }),
                 }}
-              >
-                {data.emoji}
-              </span>
+              />
             );
           })}
         </div>

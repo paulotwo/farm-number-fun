@@ -265,7 +265,12 @@ const FarmGame = () => {
           </p>
         </div>
 
-        <div className="flex flex-wrap gap-3 md:gap-5 justify-center items-end min-h-[120px]">
+        <div
+          className={`flex flex-wrap justify-center items-center min-h-[120px] ${
+            round.count <= 3 ? "gap-4 md:gap-6" : round.count <= 6 ? "gap-2 md:gap-4" : "gap-1 md:gap-3"
+          }`}
+          style={{ maxWidth: round.count <= 4 ? "500px" : "600px" }}
+        >
           {showAnimals &&
             Array.from({ length: round.count }).map((_, i) => (
               <AnimalEmoji

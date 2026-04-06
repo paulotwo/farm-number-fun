@@ -73,10 +73,15 @@ export function getAnimalKeys(mode: AnimalMode) {
 }
 
 function getImageSizeClass(total: number): string {
-  if (total <= 2) return "w-40 h-40 md:w-56 md:h-56";
-  if (total <= 4) return "w-32 h-32 md:w-44 md:h-44";
-  if (total <= 6) return "w-24 h-24 md:w-36 md:h-36";
-  return "w-20 h-20 md:w-32 md:h-32";
+  if (total === 1) return "w-52 h-52 md:w-72 md:h-72";
+  if (total === 2) return "w-44 h-44 md:w-64 md:h-64";
+  if (total === 3) return "w-36 h-36 md:w-52 md:h-52";
+  if (total === 4) return "w-32 h-32 md:w-48 md:h-48";
+  if (total === 5) return "w-28 h-28 md:w-40 md:h-40";
+  if (total === 6) return "w-24 h-24 md:w-36 md:h-36";
+  if (total === 7) return "w-22 h-22 md:w-32 md:h-32";
+  if (total === 8) return "w-20 h-20 md:w-28 md:h-28";
+  return "w-18 h-18 md:w-24 md:h-24";
 }
 
 const AnimalEmoji = ({ animal, index, total }: AnimalEmojiProps) => {
