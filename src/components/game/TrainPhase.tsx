@@ -389,11 +389,6 @@ const TrainPhase = ({ mode, bgImage, fastMode, setFastMode, debug, onComplete }:
           </div>
         )}
 
-        {state === "showing" && (
-          <p className="text-muted-foreground text-sm animate-pulse font-medium bg-card/80 backdrop-blur rounded-full px-4 py-2 mt-4">
-            {t.ui.countingHint}
-          </p>
-        )}
       </div>
 
       {/* Ground */}
