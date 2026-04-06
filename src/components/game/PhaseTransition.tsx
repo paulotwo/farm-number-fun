@@ -11,9 +11,10 @@ interface PhaseTransitionProps {
   gamePhase: 1 | 2;
   onDone: () => void;
   bgImage: string;
+  fastMode?: boolean;
 }
 
-const PhaseTransition = ({ type, mode, gamePhase, onDone, bgImage }: PhaseTransitionProps) => {
+const PhaseTransition = ({ type, mode, gamePhase, onDone, bgImage, fastMode }: PhaseTransitionProps) => {
   const { t, speechLang } = useI18n();
   const [visible, setVisible] = useState(false);
   const [showButton, setShowButton] = useState(false);
@@ -23,6 +24,12 @@ const PhaseTransition = ({ type, mode, gamePhase, onDone, bgImage }: PhaseTransi
   const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
   useEffect(() => {
+    if (fastMode) {
+      setVisible(true);
+      setShowButton(true);
+      return;
+    }
+
     requestAnimationFrame(() => setVisible(true));
 
     const speechText =
@@ -38,7 +45,7 @@ const PhaseTransition = ({ type, mode, gamePhase, onDone, bgImage }: PhaseTransi
     }, 600);
 
     return () => clearTimeout(timer);
-  }, [type, t, speechLang, isSuccess]);
+  }, [type, t, speechLang, isSuccess, fastMode]);
 
   const handleClick = () => {
     setVisible(false);
