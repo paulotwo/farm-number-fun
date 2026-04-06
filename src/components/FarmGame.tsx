@@ -212,6 +212,17 @@ const FarmGame = () => {
     return <WelcomeScreen onStart={handleStart} />;
   }
 
+  if (gamePhase === 3 && mode) {
+    return (
+      <TrainPhase
+        mode={mode}
+        bgImage={bgImage}
+        fastMode={fastMode}
+        onComplete={handleGoHome}
+      />
+    );
+  }
+
   const modeTitle =
     mode === "wild" ? t.ui.wildTitle :
     mode === "aquatic" ? t.ui.aquaticTitle :
