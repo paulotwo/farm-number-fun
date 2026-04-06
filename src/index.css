@@ -17,6 +17,14 @@ input, textarea {
   user-select: text;
 }
 
+/* Em modo debug (?debug=1), permite seleção de texto e menu de contexto nativo */
+html.debug * {
+  -webkit-touch-callout: default;
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+
 @layer base {
   :root {
     --background: 120 30% 95%;

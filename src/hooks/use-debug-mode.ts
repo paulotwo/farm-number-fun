@@ -10,7 +10,9 @@ export function useDebugMode() {
   const [fastMode, setFastMode] = useState(false);
 
   useEffect(() => {
-    setDebug(new URLSearchParams(window.location.search).get("debug") === "1");
+    const isDebug = new URLSearchParams(window.location.search).get("debug") === "1";
+    setDebug(isDebug);
+    document.documentElement.classList.toggle("debug", isDebug);
   }, []);
 
   return { debug, fastMode, setFastMode };
