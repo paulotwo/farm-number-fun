@@ -123,23 +123,29 @@ const FarmGame = () => {
     if (!started || transition !== "none") return;
     const timer = setTimeout(() => {
       setShowAnimals(true);
-      for (let i = 0; i < round.count; i++) {
-        playPopSound(i * 300);
+      if (!fastMode) {
+        for (let i = 0; i < round.count; i++) {
+          playPopSound(i * 300);
+        }
       }
-    }, 300);
+    }, fastMode ? 50 : 300);
     return () => clearTimeout(timer);
-  }, [round, started, transition]);
+  }, [round, started, transition, fastMode]);
 
   // Speak narration then transition to choosing
   useEffect(() => {
     if (!started || roundPhase !== "showing" || !showAnimals || transition !== "none") return;
+    if (fastMode) {
+      const timer = setTimeout(() => setRoundPhase("choosing"), 100);
+      return () => clearTimeout(timer);
+    }
     const speakDelay = setTimeout(() => {
       speak(narration, speechLang, () => setRoundPhase("choosing"));
       const fallback = setTimeout(() => setRoundPhase("choosing"), 4000);
       return () => clearTimeout(fallback);
     }, round.count * 300 + 400);
     return () => clearTimeout(speakDelay);
-  }, [roundPhase, showAnimals, narration, round.count, started, speechLang, transition]);
+  }, [roundPhase, showAnimals, narration, round.count, started, speechLang, transition, fastMode]);
 
   const handleChoice = useCallback((n: number) => {
     if (roundPhase !== "choosing" || !mode) return;
@@ -147,30 +153,29 @@ const FarmGame = () => {
     const clickedIdx = round.options.indexOf(n);
 
     if (n === round.count) {
-      playClickSound();
-      playCorrectSound();
+      if (!fastMode) playClickSound();
+      if (!fastMode) playCorrectSound();
       setPhaseHits((h) => h + 1);
       setOptionStates(round.options.map((o) => (o === n ? "correct" : "idle")));
       setRoundPhase("correct");
 
       // Skip individual celebration speech on last round to avoid overlapping with phase transition speech
-      if (currentIndex < 8) {
+      if (currentIndex < 8 && !fastMode) {
         setTimeout(() => {
           playCelebrateSound();
           speak(t.celebrationSpeech(round.count), speechLang);
         }, 300);
       }
 
+      const nextDelay = fastMode ? 200 : 2500;
       setTimeout(() => {
         if (currentIndex >= 8) {
-          // Last number in phase — always advance
           if (gamePhase === 1) {
             setTransition("phase-complete");
           } else {
             setTransition("game-complete");
           }
         } else {
-          // Next round
           setRoundPhase("transition");
           const nextIdx = currentIndex + 1;
           setTimeout(() => {
@@ -179,20 +184,18 @@ const FarmGame = () => {
             setRound(generateRound(mode, phaseSequence[nextIdx], round.animal));
             setOptionStates(["idle", "idle", "idle"]);
             setRoundPhase("showing");
-          }, 400);
+          }, fastMode ? 50 : 400);
         }
-      }, 2500);
+      }, nextDelay);
     } else {
-      // Wrong answer — mark option and let child try again
-      if (optionStates[clickedIdx] === "wrong") return; // ignore re-click on already-wrong option
-      playClickSound();
-      playWrongSound();
+      if (optionStates[clickedIdx] === "wrong") return;
+      if (!fastMode) playClickSound();
+      if (!fastMode) playWrongSound();
       setPhaseMisses((m) => m + 1);
       setOptionStates((prev) => prev.map((s, i) => (i === clickedIdx ? "wrong" : s)));
-      speak(t.ui.tryAgain, speechLang);
-      // roundPhase stays "choosing" — child picks again
+      if (!fastMode) speak(t.ui.tryAgain, speechLang);
     }
-  }, [roundPhase, round, mode, t, speechLang, currentIndex, gamePhase, phaseSequence, optionStates]);
+  }, [roundPhase, round, mode, t, speechLang, currentIndex, gamePhase, phaseSequence, optionStates, fastMode]);
 
   const handleTransitionDone = useCallback(() => {
     if (!mode) return;
