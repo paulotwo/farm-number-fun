@@ -230,13 +230,26 @@ const FarmGame = () => {
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-foreground/20" />
 
       <header className="relative z-20 w-full flex items-start pt-6 pb-2 px-4">
-        <button
-          onClick={handleGoHome}
-          className="rounded-lg bg-muted px-3 py-2 text-lg transition-transform active:scale-95"
-          title="Home"
-        >
-          🏠
-        </button>
+        <div className="flex flex-col gap-1">
+          <button
+            onClick={handleGoHome}
+            className="rounded-lg bg-muted px-3 py-2 text-lg transition-transform active:scale-95"
+            title="Home"
+          >
+            🏠
+          </button>
+          {debug && (
+            <button
+              onClick={() => setFastMode((f) => !f)}
+              className={`rounded-lg px-3 py-1 text-xs font-bold transition-transform active:scale-95 ${
+                fastMode ? "bg-farm-correct text-foreground" : "bg-muted text-muted-foreground"
+              }`}
+              title="Fast mode"
+            >
+              ⚡ {fastMode ? "ON" : "OFF"}
+            </button>
+          )}
+        </div>
         <div className="flex-1 text-center">
           <h1
             className="text-2xl md:text-4xl font-extrabold text-primary-foreground drop-shadow-lg"
