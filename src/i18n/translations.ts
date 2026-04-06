@@ -18,6 +18,7 @@ export interface Translations {
     phaseLabel: string;
     phase1Name: string;
     phase2Name: string;
+    phase3Name: string;
     countingHint: string;
     tryAgain: string;
     languageLabel: string;
@@ -32,6 +33,12 @@ export interface Translations {
     gameCompleteText: string;
     continueButton: string;
     playAgainButton: string;
+    trainWagonIntro: string;
+    trainCountPrompt: (count: number) => string;
+    trainCorrectSpeech: (count: number) => string;
+    trainNextWagon: string;
+    trainAllDone: string;
+    trainExitSpeech: string;
   };
   animalNames: Record<string, string>;
   narrateText: (count: number, animalName: string) => string;
