@@ -10,6 +10,19 @@ interface WelcomeScreenProps {
 const WelcomeScreen = ({ onStart }: WelcomeScreenProps) => {
   const { t } = useI18n();
 
+  const handleShare = async () => {
+    const shareData = {
+      title: t.ui.gameTitle.replace(/[^\w\s]/g, "").trim(),
+      text: t.ui.shareText,
+      url: window.location.href,
+    };
+    if (navigator.share) {
+      try { await navigator.share(shareData); } catch { /* user cancelled */ }
+    } else {
+      await navigator.clipboard.writeText(`${shareData.text}\n${shareData.url}`);
+    }
+  };
+
   return (
     <div
       className="min-h-screen flex flex-col items-center justify-center relative overflow-hidden"
@@ -20,7 +33,13 @@ const WelcomeScreen = ({ onStart }: WelcomeScreenProps) => {
       }}
     >
       <div className="absolute inset-0 bg-foreground/30" />
-      <div className="absolute top-4 right-4 z-20">
+      <div className="absolute top-4 right-4 z-20 flex items-center gap-2">
+        <button
+          onClick={handleShare}
+          className="rounded-xl bg-card/80 backdrop-blur px-3 py-2 text-sm font-bold text-foreground shadow transition-transform hover:scale-105 active:scale-95"
+        >
+          {t.ui.shareButton}
+        </button>
         <LanguageSelector />
       </div>
       <div className="relative z-10 text-center flex flex-col items-center gap-6 px-4">

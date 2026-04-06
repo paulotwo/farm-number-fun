@@ -33,6 +33,8 @@ export interface Translations {
     gameCompleteText: string;
     continueButton: string;
     playAgainButton: string;
+    shareButton: string;
+    shareText: string;
     trainWagonIntro: string;
     trainCountPrompt: (count: number) => string;
     trainCorrectSpeech: (count: number) => string;
@@ -80,6 +82,8 @@ export const translations: Record<Locale, Translations> = {
       gameCompleteText: "🏆 Parabéns! Você completou tudo! 🏆",
       continueButton: "Próxima fase ➡️",
       playAgainButton: "Jogar de novo 🔄",
+      shareButton: "Compartilhar 📤",
+      shareText: "Venha aprender números com animais! 🐄🔢",
       trainWagonIntro: "Olha o trem! Conte os animais no vagão!",
       trainCountPrompt: (count) => count === 1 ? "Quantos animais tem no vagão? Tem um!" : `Quantos animais tem no vagão? Tem ${count}!`,
       trainCorrectSpeech: (count) => count === 1 ? "Isso mesmo! É o número um!" : `Isso mesmo! É o número ${count}!`,
@@ -154,6 +158,8 @@ export const translations: Record<Locale, Translations> = {
       gameCompleteText: "🏆 Congratulations! You did it! 🏆",
       continueButton: "Next phase ➡️",
       playAgainButton: "Play again 🔄",
+      shareButton: "Share 📤",
+      shareText: "Come learn numbers with animals! 🐄🔢",
       trainWagonIntro: "Look at the train! Count the animals in the wagon!",
       trainCountPrompt: (count) => `How many animals are in the wagon? There ${count === 1 ? "is one" : `are ${count}`}!`,
       trainCorrectSpeech: (count) => `That's right! It's number ${count}!`,
@@ -234,6 +240,8 @@ export const translations: Record<Locale, Translations> = {
       gameCompleteText: "🏆 ¡Felicidades! ¡Lo lograste! 🏆",
       continueButton: "Siguiente fase ➡️",
       playAgainButton: "Jugar de nuevo 🔄",
+      shareButton: "Compartir 📤",
+      shareText: "¡Ven a aprender números con animales! 🐄🔢",
       trainWagonIntro: "¡Mira el tren! ¡Cuenta los animales en el vagón!",
       trainCountPrompt: (count) => `¿Cuántos animales hay en el vagón? ¡Hay ${count}!`,
       trainCorrectSpeech: (count) => `¡Correcto! ¡Es el número ${count}!`,
@@ -314,6 +322,8 @@ export const translations: Record<Locale, Translations> = {
       gameCompleteText: "🏆 Félicitations ! Tu as réussi ! 🏆",
       continueButton: "Phase suivante ➡️",
       playAgainButton: "Rejouer 🔄",
+      shareButton: "Partager 📤",
+      shareText: "Viens apprendre les chiffres avec des animaux ! 🐄🔢",
       trainWagonIntro: "Regarde le train ! Compte les animaux dans le wagon !",
       trainCountPrompt: (count) => `Combien d'animaux dans le wagon ? Il y en a ${count} !`,
       trainCorrectSpeech: (count) => `C'est ça ! C'est le numéro ${count} !`,
@@ -394,6 +404,8 @@ export const translations: Record<Locale, Translations> = {
       gameCompleteText: "🏆 Complimenti! Ce l'hai fatta! 🏆",
       continueButton: "Fase successiva ➡️",
       playAgainButton: "Gioca ancora 🔄",
+      shareButton: "Condividi 📤",
+      shareText: "Vieni a imparare i numeri con gli animali! 🐄🔢",
       trainWagonIntro: "Guarda il treno! Conta gli animali nel vagone!",
       trainCountPrompt: (count) => `Quanti animali ci sono nel vagone? Ce ne sono ${count}!`,
       trainCorrectSpeech: (count) => `Esatto! È il numero ${count}!`,
@@ -474,6 +486,8 @@ export const translations: Record<Locale, Translations> = {
       gameCompleteText: "🏆 Herzlichen Glückwunsch! Geschafft! 🏆",
       continueButton: "Nächste Phase ➡️",
       playAgainButton: "Nochmal spielen 🔄",
+      shareButton: "Teilen 📤",
+      shareText: "Komm und lerne Zahlen mit Tieren! 🐄🔢",
       trainWagonIntro: "Schau dir den Zug an! Zähle die Tiere im Waggon!",
       trainCountPrompt: (count) => `Wie viele Tiere sind im Waggon? Es sind ${count}!`,
       trainCorrectSpeech: (count) => `Richtig! Es ist die Nummer ${count}!`,
