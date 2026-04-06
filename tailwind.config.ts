@@ -111,6 +111,15 @@ export default {
           "25%": { transform: "translateX(-8px)" },
           "75%": { transform: "translateX(8px)" },
         },
+        "train-chug": {
+          "0%, 100%": { transform: "translateY(0)" },
+          "25%": { transform: "translateY(-2px)" },
+          "75%": { transform: "translateY(2px)" },
+        },
+        "number-fly": {
+          "0%": { transform: "scale(1.5) translateY(0)", opacity: "1" },
+          "100%": { transform: "scale(1) translateY(-60px)", opacity: "0.8" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -121,6 +130,8 @@ export default {
         "float": "float 3s ease-in-out infinite",
         "celebrate": "celebrate 0.6s ease-in-out",
         "shake": "shake 0.4s ease-in-out",
+        "train-chug": "train-chug 0.3s ease-in-out infinite",
+        "number-fly": "number-fly 0.8s ease-out forwards",
       },
     },
   },
