@@ -103,10 +103,13 @@ const TrainPhase = ({ mode, bgImage, fastMode, setFastMode, debug, onComplete }:
       setState("correct");
       setFlyingNumber(n);
 
-      // Speak correct feedback
+      // Speak correct feedback, then chain the next speech to avoid overlap
       if (!fastMode) {
+        const nextSpeech = currentWagon >= 9 ? t.ui.trainAllDone : t.ui.trainNextWagon;
         setTimeout(() => {
-          speak(t.ui.trainCorrectSpeech(currentWagon), speechLang);
+          speak(t.ui.trainCorrectSpeech(currentWagon), speechLang, () => {
+            speak(nextSpeech, speechLang);
+          });
         }, 300);
       }
 
@@ -119,9 +122,6 @@ const TrainPhase = ({ mode, bgImage, fastMode, setFastMode, debug, onComplete }:
           // All wagons done → exit
           setState("exiting");
           if (!fastMode) playCelebrateSound();
-          if (!fastMode) {
-            setTimeout(() => speak(t.ui.trainAllDone, speechLang), 300);
-          }
           setTimeout(() => {
             setTrainOffset(-2000);
             setTimeout(() => {
@@ -134,9 +134,6 @@ const TrainPhase = ({ mode, bgImage, fastMode, setFastMode, debug, onComplete }:
         } else {
           // Move to next wagon
           setState("moving");
-          if (!fastMode) {
-            setTimeout(() => speak(t.ui.trainNextWagon, speechLang), 200);
-          }
           setTimeout(() => {
             setTrainOffset((prev) => prev - 200);
             setTimeout(() => {
