@@ -341,6 +341,7 @@ const FarmGame = () => {
           gamePhase={gamePhase}
           onDone={handleTransitionDone}
           bgImage={bgImage}
+          fastMode={fastMode}
         />
       )}
     </div>

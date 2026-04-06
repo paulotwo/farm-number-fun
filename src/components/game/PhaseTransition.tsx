@@ -11,6 +11,7 @@ interface PhaseTransitionProps {
   gamePhase: 1 | 2;
   onDone: () => void;
   bgImage: string;
+  fastMode?: boolean;
 }
 
 const PhaseTransition = ({ type, mode, gamePhase, onDone, bgImage }: PhaseTransitionProps) => {
