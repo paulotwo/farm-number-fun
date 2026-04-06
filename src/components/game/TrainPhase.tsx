@@ -18,6 +18,8 @@ interface TrainPhaseProps {
   mode: AnimalMode;
   bgImage: string;
   fastMode?: boolean;
+  setFastMode?: (fn: (prev: boolean) => boolean) => void;
+  debug?: boolean;
   onComplete: () => void;
 }
 
@@ -35,7 +37,7 @@ function pickAnimalForWagon(mode: AnimalMode, index: number): string {
   return keys[index % keys.length];
 }
 
-const TrainPhase = ({ mode, bgImage, fastMode, onComplete }: TrainPhaseProps) => {
+const TrainPhase = ({ mode, bgImage, fastMode, setFastMode, debug, onComplete }: TrainPhaseProps) => {
   const { t, speechLang } = useI18n();
   const [currentWagon, setCurrentWagon] = useState(1);
   const [state, setState] = useState<TrainState>("intro");
@@ -210,21 +212,44 @@ const TrainPhase = ({ mode, bgImage, fastMode, onComplete }: TrainPhaseProps) =>
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-foreground/20" />
 
       {/* Header */}
-      <header className="relative z-20 w-full text-center pt-4 pb-2 px-4">
-        <h1
-          className="text-xl md:text-3xl font-extrabold text-primary-foreground drop-shadow-lg"
-          style={{ textShadow: "2px 2px 8px rgba(0,0,0,0.5)" }}
-        >
-          🚂 {t.ui.phase3Name} 🚂
-        </h1>
-        <div className="mt-1 flex gap-2 justify-center">
-          <span className="bg-card/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-foreground shadow">
-            {t.ui.phaseLabel} 3 — {t.ui.phase3Name}
-          </span>
-          <span className="bg-card/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-farm-correct shadow">
-            🚃 {completedWagons.length}/9
-          </span>
+      <header className="relative z-20 w-full flex items-start pt-6 pb-2 px-4">
+        <div className="flex flex-col gap-1">
+          <button
+            onClick={onComplete}
+            className="rounded-lg bg-muted px-3 py-2 text-lg transition-transform active:scale-95"
+            title="Home"
+          >
+            🏠
+          </button>
+          {debug && setFastMode && (
+            <button
+              onClick={() => setFastMode((f) => !f)}
+              className={`rounded-lg px-3 py-1 text-xs font-bold transition-transform active:scale-95 ${
+                fastMode ? "bg-farm-correct text-foreground" : "bg-muted text-muted-foreground"
+              }`}
+              title="Fast mode"
+            >
+              ⚡ {fastMode ? "ON" : "OFF"}
+            </button>
+          )}
         </div>
+        <div className="flex-1 text-center">
+          <h1
+            className="text-xl md:text-3xl font-extrabold text-primary-foreground drop-shadow-lg"
+            style={{ textShadow: "2px 2px 8px rgba(0,0,0,0.5)" }}
+          >
+            🚂 {t.ui.phase3Name} 🚂
+          </h1>
+          <div className="mt-1 flex gap-2 justify-center">
+            <span className="bg-card/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-foreground shadow">
+              {t.ui.phaseLabel} 3 — {t.ui.phase3Name}
+            </span>
+            <span className="bg-card/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-farm-correct shadow">
+              🚃 {completedWagons.length}/9
+            </span>
+          </div>
+        </div>
+        <div className="w-10" />
       </header>
 
       {/* Train area */}

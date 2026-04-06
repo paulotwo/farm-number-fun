@@ -218,6 +218,8 @@ const FarmGame = () => {
         mode={mode}
         bgImage={bgImage}
         fastMode={fastMode}
+        setFastMode={setFastMode}
+        debug={debug}
         onComplete={handleGoHome}
       />
     );
