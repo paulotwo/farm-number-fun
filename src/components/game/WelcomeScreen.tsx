@@ -1,3 +1,4 @@
+import { Share2 } from "lucide-react";
 import { type AnimalMode } from "../AnimalEmoji";
 import LanguageSelector from "../LanguageSelector";
 import welcomeBg from "@/assets/welcome-bg.jpg";
@@ -36,9 +37,10 @@ const WelcomeScreen = ({ onStart }: WelcomeScreenProps) => {
       <div className="absolute top-4 right-4 z-20 flex items-center gap-2">
         <button
           onClick={handleShare}
-          className="rounded-xl bg-card/80 backdrop-blur px-3 py-2 text-sm font-bold text-foreground shadow transition-transform hover:scale-105 active:scale-95"
+          className="rounded-xl bg-card/80 backdrop-blur px-3 py-2 text-lg transition-transform hover:scale-105 active:scale-95 shadow"
+          title={t.ui.shareButton}
         >
-          {t.ui.shareButton}
+          <Share2 size={20} className="text-foreground" />
         </button>
         <LanguageSelector />
       </div>
