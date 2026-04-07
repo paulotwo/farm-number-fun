@@ -4,13 +4,15 @@ import { useState, useEffect } from "react";
 export function useDebugMode() {
   const [debug, setDebug] = useState(() => {
     if (typeof window === "undefined") return false;
-    return new URLSearchParams(window.location.search).get("debug") === "1";
+    const params = new URLSearchParams(window.location.search).get("debug") === "1";
+    const isLovablePreview = window.location.hostname.includes("lovable.app");
+    return params || isLovablePreview;
   });
 
   const [fastMode, setFastMode] = useState(false);
 
   useEffect(() => {
-    const isDebug = new URLSearchParams(window.location.search).get("debug") === "1";
+    const isDebug = new URLSearchParams(window.location.search).get("debug") === "1" || window.location.hostname.includes("lovable.app");
     setDebug(isDebug);
     document.documentElement.classList.toggle("debug", isDebug);
   }, []);
