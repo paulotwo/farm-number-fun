@@ -254,27 +254,15 @@ const FarmGame = () => {
             🏠
           </button>
           {debug && (
-            <>
-              <button
-                onClick={() => setFastMode((f) => !f)}
-                className={`rounded-lg px-3 py-1 text-xs font-bold transition-transform active:scale-95 ${
-                  fastMode ? "bg-farm-correct text-foreground" : "bg-muted text-muted-foreground"
-                }`}
-                title="Fast mode"
-              >
-                ⚡ {fastMode ? "ON" : "OFF"}
-              </button>
-              <button
-                onClick={() => {
-                  if (gamePhase === 1) startPhase(2, mode);
-                  else if (gamePhase === 2) { setGamePhase(3); setTransition("none"); }
-                }}
-                className="rounded-lg px-3 py-1 text-xs font-bold bg-muted text-muted-foreground transition-transform active:scale-95"
-                title="Skip phase"
-              >
-                ⏭ SKIP
-              </button>
-            </>
+            <button
+              onClick={() => setFastMode((f) => !f)}
+              className={`rounded-lg px-3 py-1 text-xs font-bold transition-transform active:scale-95 ${
+                fastMode ? "bg-farm-correct text-foreground" : "bg-muted text-muted-foreground"
+              }`}
+              title="Fast mode"
+            >
+              ⚡ {fastMode ? "ON" : "OFF"}
+            </button>
           )}
         </div>
         <div className="flex-1 text-center">
@@ -296,7 +284,18 @@ const FarmGame = () => {
             </span>
           </div>
         </div>
-        <LanguageSelector />
+        <div className="flex flex-col gap-1 items-end">
+          <LanguageSelector />
+          <button
+            onClick={() => {
+              if (gamePhase === 1) startPhase(2, mode);
+              else if (gamePhase === 2) { setGamePhase(3); setTransition("none"); }
+            }}
+            className="rounded-full bg-card/90 backdrop-blur px-3 py-1.5 text-sm font-bold text-foreground shadow transition-transform active:scale-95 hover:bg-card"
+          >
+            {t.ui.skipPhase}
+          </button>
+        </div>
       </header>
 
       <main

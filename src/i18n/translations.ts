@@ -41,6 +41,7 @@ export interface Translations {
     trainNextWagon: string;
     trainAllDone: string;
     trainExitSpeech: string;
+    skipPhase: string;
   };
   animalNames: Record<string, string>;
   narrateText: (count: number, animalName: string) => string;
@@ -90,6 +91,7 @@ export const translations: Record<Locale, Translations> = {
       trainNextWagon: "Muito bem! Vamos ver o próximo vagão!",
       trainAllDone: "O trem está completo! Todos os vagões estão numerados!",
       trainExitSpeech: "Parabéns! Você completou o trem dos números! Você é demais!",
+      skipPhase: "Pular ⏭",
     },
     animalNames: {
       galinha: "galinha", vaca: "vaca", porco: "porco", ovelha: "ovelha",
@@ -166,6 +168,7 @@ export const translations: Record<Locale, Translations> = {
       trainNextWagon: "Great job! Let's see the next wagon!",
       trainAllDone: "The train is complete! All wagons are numbered!",
       trainExitSpeech: "Congratulations! You completed the number train! You're amazing!",
+      skipPhase: "Skip ⏭",
     },
     animalNames: {
       galinha: "chicken", vaca: "cow", porco: "pig", ovelha: "sheep",
@@ -248,6 +251,7 @@ export const translations: Record<Locale, Translations> = {
       trainNextWagon: "¡Muy bien! ¡Veamos el siguiente vagón!",
       trainAllDone: "¡El tren está completo! ¡Todos los vagones tienen número!",
       trainExitSpeech: "¡Felicidades! ¡Completaste el tren de los números! ¡Eres increíble!",
+      skipPhase: "Saltar ⏭",
     },
     animalNames: {
       galinha: "gallina", vaca: "vaca", porco: "cerdo", ovelha: "oveja",
@@ -330,6 +334,7 @@ export const translations: Record<Locale, Translations> = {
       trainNextWagon: "Bravo ! Voyons le prochain wagon !",
       trainAllDone: "Le train est complet ! Tous les wagons ont un numéro !",
       trainExitSpeech: "Félicitations ! Tu as complété le train des chiffres ! Tu es super !",
+      skipPhase: "Passer ⏭",
     },
     animalNames: {
       galinha: "poule", vaca: "vache", porco: "cochon", ovelha: "mouton",
@@ -412,6 +417,7 @@ export const translations: Record<Locale, Translations> = {
       trainNextWagon: "Bravo! Vediamo il prossimo vagone!",
       trainAllDone: "Il treno è completo! Tutti i vagoni hanno un numero!",
       trainExitSpeech: "Complimenti! Hai completato il treno dei numeri! Sei fantastico!",
+      skipPhase: "Salta ⏭",
     },
     animalNames: {
       galinha: "gallina", vaca: "mucca", porco: "maiale", ovelha: "pecora",
@@ -494,6 +500,7 @@ export const translations: Record<Locale, Translations> = {
       trainNextWagon: "Super! Schauen wir uns den nächsten Waggon an!",
       trainAllDone: "Der Zug ist komplett! Alle Waggons haben eine Nummer!",
       trainExitSpeech: "Herzlichen Glückwunsch! Du hast den Zahlenzug geschafft! Du bist toll!",
+      skipPhase: "Weiter ⏭",
     },
     animalNames: {
       galinha: "Huhn", vaca: "Kuh", porco: "Schwein", ovelha: "Schaf",
