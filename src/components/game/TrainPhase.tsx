@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect, useMemo } from "react";
 import { getAnimalKeys, getAnimalData, type AnimalMode } from "../AnimalEmoji";
 import NumberOption from "../NumberOption";
 import EasterNumberOption from "../EasterNumberOption";
+import LanguageSelector from "../LanguageSelector";
 import { useI18n } from "@/i18n";
 import {
   playCorrectSound,
@@ -44,9 +45,9 @@ const TrainPhase = ({ mode, bgImage, fastMode, setFastMode, debug, onComplete }:
   const [options, setOptions] = useState<number[]>(() => generateOptions(1));
   const [optionStates, setOptionStates] = useState<("idle" | "correct" | "wrong")[]>(["idle", "idle", "idle"]);
   const [completedWagons, setCompletedWagons] = useState<number[]>([]);
-  const [trainOffset, setTrainOffset] = useState(0);
   const [flyingNumber, setFlyingNumber] = useState<number | null>(null);
   const [showAnimals, setShowAnimals] = useState(false);
+  const [exitPhase, setExitPhase] = useState(0); // 0=not exiting, 1-4 = animation segments
 
   const animal = useMemo(() => pickAnimalForWagon(mode, currentWagon - 1), [mode, currentWagon]);
   const NumberComponent = mode === "easter" ? EasterNumberOption : NumberOption;
@@ -103,7 +104,6 @@ const TrainPhase = ({ mode, bgImage, fastMode, setFastMode, debug, onComplete }:
       setState("correct");
       setFlyingNumber(n);
 
-      // Speak correct feedback, then chain the next speech to avoid overlap
       if (!fastMode) {
         const nextSpeech = currentWagon >= 9 ? t.ui.trainAllDone : t.ui.trainNextWagon;
         setTimeout(() => {
@@ -113,38 +113,25 @@ const TrainPhase = ({ mode, bgImage, fastMode, setFastMode, debug, onComplete }:
         }, 300);
       }
 
-      // After animation, move train or finish
       setTimeout(() => {
         setFlyingNumber(null);
         setCompletedWagons((prev) => [...prev, currentWagon]);
 
         if (currentWagon >= 9) {
-          // All wagons done → exit
           setState("exiting");
           if (!fastMode) playCelebrateSound();
-          setTimeout(() => {
-            setTrainOffset(-2000);
-            setTimeout(() => {
-              setState("done");
-              if (!fastMode) {
-                speak(t.ui.trainExitSpeech, speechLang);
-              }
-            }, fastMode ? 200 : 2000);
-          }, fastMode ? 200 : 2500);
+          // Start exit loop animation
+          setExitPhase(1);
         } else {
-          // Move to next wagon
           setState("moving");
           setTimeout(() => {
-            setTrainOffset((prev) => prev - 200);
-            setTimeout(() => {
-              const next = currentWagon + 1;
-              setCurrentWagon(next);
-              setOptions(generateOptions(next));
-              setOptionStates(["idle", "idle", "idle"]);
-              setShowAnimals(false);
-              setState("showing");
-            }, fastMode ? 100 : 600);
-          }, fastMode ? 200 : 1800);
+            const next = currentWagon + 1;
+            setCurrentWagon(next);
+            setOptions(generateOptions(next));
+            setOptionStates(["idle", "idle", "idle"]);
+            setShowAnimals(false);
+            setState("showing");
+          }, fastMode ? 100 : 800);
         }
       }, fastMode ? 300 : 2000);
     } else {
@@ -155,6 +142,40 @@ const TrainPhase = ({ mode, bgImage, fastMode, setFastMode, debug, onComplete }:
       if (!fastMode) speak(t.ui.tryAgain, speechLang);
     }
   }, [state, options, currentWagon, t, speechLang, optionStates, fastMode]);
+
+  // Exit loop animation: 4 segments around the screen
+  useEffect(() => {
+    if (exitPhase === 0) return;
+    const segDuration = fastMode ? 200 : 1200;
+    if (exitPhase <= 4) {
+      const timer = setTimeout(() => setExitPhase((p) => p + 1), segDuration);
+      return () => clearTimeout(timer);
+    }
+    // After loop, go to done
+    const timer = setTimeout(() => {
+      setState("done");
+      if (!fastMode) speak(t.ui.trainExitSpeech, speechLang);
+    }, fastMode ? 100 : 500);
+    return () => clearTimeout(timer);
+  }, [exitPhase, fastMode, t, speechLang]);
+
+  // Build exit train transform based on phase
+  const exitStyle = useMemo(() => {
+    if (exitPhase === 0) return {};
+    const dur = fastMode ? "0.2s" : "1.2s";
+    // Segments: right→, down→, left→, up+right exit
+    const transforms: Record<number, { transform: string }> = {
+      1: { transform: "translateX(110vw)" },                         // go right off screen
+      2: { transform: "translateX(110vw) translateY(80vh)" },        // go down (off screen right)
+      3: { transform: "translateX(-110vw) translateY(80vh)" },       // go left across bottom
+      4: { transform: "translateX(-110vw) translateY(0)" },          // go up on left side
+      5: { transform: "translateX(120vw) translateY(0)" },           // final exit right
+    };
+    return {
+      ...transforms[exitPhase] || transforms[5],
+      transition: `transform ${dur} ease-in-out`,
+    };
+  }, [exitPhase, fastMode]);
 
   const handlePlayAgain = useCallback(() => {
     onComplete();
@@ -201,6 +222,29 @@ const TrainPhase = ({ mode, bgImage, fastMode, setFastMode, debug, onComplete }:
     );
   }
 
+  // Build the wagon chain: locomotive + completed wagons + current wagon
+  // We reverse so the active wagon is at the right (rendered last), 
+  // and the train extends leftward / upward in zigzag rows.
+  const allWagons = [...completedWagons];
+  if (!completedWagons.includes(currentWagon)) {
+    allWagons.push(currentWagon);
+  }
+  // Wagons in order: locomotive, wagon 1, wagon 2, ..., current
+  const orderedWagons = allWagons.sort((a, b) => a - b);
+
+  // Break wagons into rows for zigzag layout
+  const WAGONS_PER_ROW = 4;
+  const rows: number[][] = [];
+  // Add locomotive as wagon 0
+  const fullChain = [0, ...orderedWagons];
+  for (let i = 0; i < fullChain.length; i += WAGONS_PER_ROW) {
+    rows.push(fullChain.slice(i, i + WAGONS_PER_ROW));
+  }
+  // Reverse rows so newest row is at the bottom (closest to options)
+  rows.reverse();
+  // Even rows (from bottom) go right-to-left, odd rows left-to-right (zigzag)
+  // But since we reversed, bottom row (index 0) should have active wagon at right
+
   return (
     <div
       className="min-h-screen flex flex-col relative overflow-hidden"
@@ -209,7 +253,7 @@ const TrainPhase = ({ mode, bgImage, fastMode, setFastMode, debug, onComplete }:
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-foreground/20" />
 
       {/* Header */}
-      <header className="relative z-20 w-full flex items-start pt-6 pb-2 px-4">
+      <header className="relative z-20 w-full flex items-start pt-4 pb-1 px-4">
         <div className="flex flex-col gap-1">
           <button
             onClick={onComplete}
@@ -219,24 +263,15 @@ const TrainPhase = ({ mode, bgImage, fastMode, setFastMode, debug, onComplete }:
             🏠
           </button>
           {debug && setFastMode && (
-            <>
-              <button
-                onClick={() => setFastMode((f) => !f)}
-                className={`rounded-lg px-3 py-1 text-xs font-bold transition-transform active:scale-95 ${
-                  fastMode ? "bg-farm-correct text-foreground" : "bg-muted text-muted-foreground"
-                }`}
-                title="Fast mode"
-              >
-                ⚡ {fastMode ? "ON" : "OFF"}
-              </button>
-              <button
-                onClick={onComplete}
-                className="rounded-lg px-3 py-1 text-xs font-bold bg-muted text-muted-foreground transition-transform active:scale-95"
-                title="Skip phase"
-              >
-                ⏭ SKIP
-              </button>
-            </>
+            <button
+              onClick={() => setFastMode((f) => !f)}
+              className={`rounded-lg px-3 py-1 text-xs font-bold transition-transform active:scale-95 ${
+                fastMode ? "bg-farm-correct text-foreground" : "bg-muted text-muted-foreground"
+              }`}
+              title="Fast mode"
+            >
+              ⚡ {fastMode ? "ON" : "OFF"}
+            </button>
           )}
         </div>
         <div className="flex-1 text-center">
@@ -244,118 +279,148 @@ const TrainPhase = ({ mode, bgImage, fastMode, setFastMode, debug, onComplete }:
             className="text-xl md:text-3xl font-extrabold text-primary-foreground drop-shadow-lg"
             style={{ textShadow: "2px 2px 8px rgba(0,0,0,0.5)" }}
           >
-            🚂 {t.ui.phase3Name} 🚂
+            🚂 {t.ui.phase3Name}
           </h1>
           <div className="mt-1 flex gap-2 justify-center">
             <span className="bg-card/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-foreground shadow">
-              {t.ui.phaseLabel} 3 — {t.ui.phase3Name}
+              {t.ui.phaseLabel} 3
             </span>
             <span className="bg-card/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-farm-correct shadow">
               🚃 {completedWagons.length}/9
             </span>
           </div>
         </div>
-        <div className="w-10" />
+        <div className="flex flex-col gap-1 items-end">
+          <LanguageSelector />
+          <button
+            onClick={onComplete}
+            className="rounded-full bg-card/90 backdrop-blur px-3 py-1.5 text-sm font-bold text-foreground shadow transition-transform active:scale-95 hover:bg-card"
+          >
+            {t.ui.skipPhase}
+          </button>
+        </div>
       </header>
 
-      {/* Train area */}
-      <div className="relative z-10 flex-1 flex flex-col items-center justify-center">
+      {/* Main train area */}
+      <div className="relative z-10 flex-1 flex flex-col justify-end pb-2 overflow-hidden">
         {/* Narration bubble */}
-        <div className="bg-card/95 backdrop-blur-sm rounded-3xl px-6 py-3 shadow-xl max-w-md text-center animate-bounce-in mb-4">
-          <p className="text-base md:text-xl font-bold text-foreground">
-            {state === "intro" && t.ui.trainWagonIntro}
-            {state === "showing" && t.ui.countingHint}
-            {state === "choosing" && t.ui.trainCountPrompt(currentWagon)}
-            {state === "correct" && t.ui.trainCorrectSpeech(currentWagon)}
-            {state === "moving" && t.ui.trainNextWagon}
-            {state === "exiting" && t.ui.trainAllDone}
-          </p>
+        <div className="flex justify-center px-4 mb-2">
+          <div className="bg-card/95 backdrop-blur-sm rounded-2xl px-5 py-2 shadow-xl max-w-sm text-center animate-bounce-in">
+            <p className="text-sm md:text-lg font-bold text-foreground">
+              {state === "intro" && t.ui.trainWagonIntro}
+              {state === "showing" && t.ui.countingHint}
+              {state === "choosing" && t.ui.trainCountPrompt(currentWagon)}
+              {state === "correct" && t.ui.trainCorrectSpeech(currentWagon)}
+              {state === "moving" && t.ui.trainNextWagon}
+              {state === "exiting" && t.ui.trainAllDone}
+            </p>
+          </div>
         </div>
 
-        {/* Train container */}
-        <div className="w-full overflow-hidden px-4">
-          <div
-            className="flex items-end transition-transform duration-700 ease-in-out"
-            style={{ transform: `translateX(${trainOffset}px)` }}
-          >
-            {/* Locomotive */}
-            <div className={`flex-shrink-0 flex flex-col items-center mx-1 ${state === "moving" || state === "exiting" ? "animate-train-chug" : ""}`}>
-              <div className="text-5xl md:text-7xl">🚂</div>
-              <div className="h-2 w-20 md:w-28 bg-foreground/30 rounded-full" />
-            </div>
+        {/* Train zigzag area */}
+        <div className="flex-1 flex flex-col justify-end px-2 overflow-hidden" style={state === "exiting" ? exitStyle : undefined}>
+          {rows.map((row, rowIdx) => {
+            // Bottom row (rowIdx 0 after reverse) = latest, align right
+            // Alternate direction: even rows right-aligned, odd rows left-aligned
+            const isRightAligned = rowIdx % 2 === 0;
 
-            {/* Wagons */}
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((wagonNum) => {
-              const isActive = wagonNum === currentWagon;
-              const isCompleted = completedWagons.includes(wagonNum);
-              const isVisible = wagonNum <= currentWagon;
-              const wagonAnimal = pickAnimalForWagon(mode, wagonNum - 1);
-              const animalData = getAnimalData(wagonAnimal);
-
-              if (!isVisible) return null;
-
-              return (
-                <div
-                  key={wagonNum}
-                  className={`flex-shrink-0 flex flex-col items-center mx-1 transition-all duration-500 ${
-                    isActive ? "scale-105" : "scale-95 opacity-80"
-                  }`}
-                >
-                  {/* Wagon box */}
-                  <div
-                    className={`relative rounded-xl border-4 px-2 py-1 min-w-[80px] md:min-w-[120px] min-h-[60px] md:min-h-[80px] flex flex-wrap items-center justify-center gap-0.5 ${
-                      isCompleted
-                        ? "bg-farm-correct/20 border-farm-correct"
-                        : isActive
-                        ? "bg-card/90 border-primary"
-                        : "bg-card/60 border-border"
-                    }`}
-                  >
-                    {/* Animals inside wagon */}
-                    {(isActive && showAnimals) || isCompleted ? (
-                      Array.from({ length: wagonNum }).map((_, i) => {
-                        if (!animalData) return null;
-                        return (
-                          <img
-                            key={i}
-                            src={animalData.image}
-                            alt={animalData.name}
-                            className={`object-contain ${
-                              wagonNum <= 3 ? "w-8 h-8 md:w-12 md:h-12" :
-                              wagonNum <= 6 ? "w-6 h-6 md:w-9 md:h-9" :
-                              "w-5 h-5 md:w-7 md:h-7"
-                            } ${isActive && !isCompleted ? "animate-pop-in" : ""}`}
-                            style={isActive && !isCompleted ? {
-                              animationDelay: `${i * 200}ms`,
-                              opacity: 0,
-                              animationFillMode: "forwards",
-                            } : undefined}
-                            draggable={false}
-                          />
-                        );
-                      })
-                    ) : null}
-
-                    {/* Number badge on completed wagons */}
-                    {isCompleted && (
-                      <div className="absolute -top-3 -right-3 w-8 h-8 md:w-10 md:h-10 rounded-full bg-farm-correct flex items-center justify-center shadow-lg">
-                        <span className="text-sm md:text-lg font-black text-primary-foreground">{wagonNum}</span>
+            return (
+              <div
+                key={rowIdx}
+                className={`flex items-end mb-1 ${
+                  isRightAligned ? "justify-end" : "justify-start"
+                }`}
+              >
+                {/* If right-aligned, items go left-to-right (locomotive first, wagon last at right) */}
+                {/* If left-aligned, reverse the visual order */}
+                {(isRightAligned ? row : [...row].reverse()).map((wagonNum) => {
+                  if (wagonNum === 0) {
+                    // Locomotive
+                    return (
+                      <div
+                        key="loco"
+                        className={`flex-shrink-0 flex flex-col items-center mx-0.5 ${
+                          state === "moving" || state === "exiting" ? "animate-train-chug" : ""
+                        }`}
+                      >
+                        <div className="text-4xl md:text-6xl" style={{ transform: isRightAligned ? "scaleX(1)" : "scaleX(-1)" }}>🚂</div>
+                        <div className="h-1.5 w-16 md:w-24 bg-foreground/30 rounded-full" />
                       </div>
-                    )}
-                  </div>
+                    );
+                  }
 
-                  {/* Wheels */}
-                  <div className="flex gap-2 -mt-1">
-                    <div className="w-4 h-4 md:w-5 md:h-5 rounded-full bg-foreground/60 border-2 border-foreground/30" />
-                    <div className="w-4 h-4 md:w-5 md:h-5 rounded-full bg-foreground/60 border-2 border-foreground/30" />
-                  </div>
+                  const isActive = wagonNum === currentWagon && !completedWagons.includes(wagonNum);
+                  const isCompleted = completedWagons.includes(wagonNum);
+                  const wagonAnimal = pickAnimalForWagon(mode, wagonNum - 1);
+                  const animalData = getAnimalData(wagonAnimal);
 
-                  {/* Rails under wagon */}
-                  <div className="h-1 w-full bg-foreground/20 rounded-full mt-0.5" />
-                </div>
-              );
-            })}
-          </div>
+                  return (
+                    <div
+                      key={wagonNum}
+                      className={`flex-shrink-0 flex flex-col items-center mx-0.5 transition-all duration-500 ${
+                        isActive ? "scale-105" : "scale-95 opacity-85"
+                      }`}
+                    >
+                      {/* Wagon box */}
+                      <div
+                        className={`relative rounded-xl border-3 px-1.5 py-1 flex flex-wrap items-center justify-center gap-0.5 ${
+                          isCompleted
+                            ? "bg-farm-correct/20 border-farm-correct"
+                            : isActive
+                            ? "bg-card/90 border-primary"
+                            : "bg-card/60 border-border"
+                        }`}
+                        style={{
+                          minWidth: wagonNum <= 3 ? "60px" : wagonNum <= 6 ? "70px" : "80px",
+                          minHeight: "50px",
+                        }}
+                      >
+                        {(isActive && showAnimals) || isCompleted ? (
+                          Array.from({ length: wagonNum }).map((_, i) => {
+                            if (!animalData) return null;
+                            return (
+                              <img
+                                key={i}
+                                src={animalData.image}
+                                alt={animalData.name}
+                                className={`object-contain ${
+                                  wagonNum <= 3 ? "w-7 h-7 md:w-10 md:h-10" :
+                                  wagonNum <= 6 ? "w-5 h-5 md:w-8 md:h-8" :
+                                  "w-4 h-4 md:w-6 md:h-6"
+                                } ${isActive && !isCompleted ? "animate-pop-in" : ""}`}
+                                style={isActive && !isCompleted ? {
+                                  animationDelay: `${i * 200}ms`,
+                                  opacity: 0,
+                                  animationFillMode: "forwards",
+                                } : undefined}
+                                draggable={false}
+                              />
+                            );
+                          })
+                        ) : null}
+
+                        {/* Number badge on completed wagons */}
+                        {isCompleted && (
+                          <div className="absolute -top-2.5 -right-2.5 w-7 h-7 md:w-9 md:h-9 rounded-full bg-farm-correct flex items-center justify-center shadow-lg">
+                            <span className="text-xs md:text-base font-black text-primary-foreground">{wagonNum}</span>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Wheels */}
+                      <div className="flex gap-1.5 -mt-0.5">
+                        <div className="w-3 h-3 md:w-4 md:h-4 rounded-full bg-foreground/60 border-2 border-foreground/30" />
+                        <div className="w-3 h-3 md:w-4 md:h-4 rounded-full bg-foreground/60 border-2 border-foreground/30" />
+                      </div>
+                      <div className="h-1 w-full bg-foreground/20 rounded-full" />
+                    </div>
+                  );
+                })}
+
+                {/* Rail connector between rows - a curved track visual */}
+              </div>
+            );
+          })}
         </div>
 
         {/* Flying number animation */}
@@ -372,7 +437,7 @@ const TrainPhase = ({ mode, bgImage, fastMode, setFastMode, debug, onComplete }:
 
         {/* Number options */}
         {(state === "choosing" || state === "correct") && (
-          <div className="flex gap-4 md:gap-6 mt-6 relative z-20">
+          <div className="flex gap-4 md:gap-6 justify-center py-3 relative z-20">
             {options.map((n, i) => (
               <NumberComponent
                 key={`${currentWagon}-${n}`}
@@ -385,11 +450,10 @@ const TrainPhase = ({ mode, bgImage, fastMode, setFastMode, debug, onComplete }:
             ))}
           </div>
         )}
-
       </div>
 
       {/* Ground */}
-      <div className="relative z-10 w-full h-8 bg-gradient-to-t from-farm-grass/40 to-transparent" />
+      <div className="relative z-10 w-full h-6 bg-gradient-to-t from-farm-grass/40 to-transparent" />
     </div>
   );
 };
