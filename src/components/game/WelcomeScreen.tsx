@@ -8,6 +8,31 @@ interface WelcomeScreenProps {
   onStart: (mode: AnimalMode) => void;
 }
 
+function isEasterSeason(): boolean {
+  const now = new Date();
+  const year = now.getFullYear();
+  // Show Easter mode from 2 weeks before Easter until 1 week after
+  // Easter Sunday calculation (Anonymous Gregorian algorithm)
+  const a = year % 19;
+  const b = Math.floor(year / 100);
+  const c = year % 100;
+  const d = Math.floor(b / 4);
+  const e = b % 4;
+  const f = Math.floor((b + 8) / 25);
+  const g = Math.floor((b - f + 1) / 3);
+  const h = (19 * a + b - d - g + 15) % 30;
+  const i = Math.floor(c / 4);
+  const k = c % 4;
+  const l = (32 + 2 * e + 2 * i - h - k) % 7;
+  const m = Math.floor((a + 11 * h + 22 * l) / 451);
+  const month = Math.floor((h + l - 7 * m + 114) / 31);
+  const day = ((h + l - 7 * m + 114) % 31) + 1;
+  const easter = new Date(year, month - 1, day);
+  const start = new Date(easter.getTime() - 14 * 86400000);
+  const end = new Date(easter.getTime() + 7 * 86400000);
+  return now >= start && now <= end;
+}
+
 const WelcomeScreen = ({ onStart }: WelcomeScreenProps) => {
   const { t } = useI18n();
 
@@ -84,13 +109,15 @@ const WelcomeScreen = ({ onStart }: WelcomeScreenProps) => {
           >
             {t.ui.aquaticButton}
           </button>
-          <button
-            onClick={() => onStart("easter")}
-            className="px-8 py-5 text-white text-xl md:text-2xl font-extrabold rounded-3xl shadow-2xl hover:scale-110 transition-transform animate-float border-4 border-pink-300"
-            style={{ animationDelay: "0.9s", background: "linear-gradient(135deg, hsl(330 70% 65%), hsl(280 60% 70%), hsl(45 80% 65%))" }}
-          >
-            {t.ui.easterButton}
-          </button>
+          {isEasterSeason() && (
+            <button
+              onClick={() => onStart("easter")}
+              className="px-8 py-5 text-white text-xl md:text-2xl font-extrabold rounded-3xl shadow-2xl hover:scale-110 transition-transform animate-float border-4 border-pink-300"
+              style={{ animationDelay: "0.9s", background: "linear-gradient(135deg, hsl(330 70% 65%), hsl(280 60% 70%), hsl(45 80% 65%))" }}
+            >
+              {t.ui.easterButton}
+            </button>
+          )}
         </div>
       </div>
     </div>

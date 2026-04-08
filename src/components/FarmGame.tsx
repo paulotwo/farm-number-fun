@@ -3,7 +3,7 @@ import AnimalEmoji, { getAnimalKeys, type AnimalMode } from "./AnimalEmoji";
 import NumberOption from "./NumberOption";
 import WelcomeScreen from "./game/WelcomeScreen";
 import PhaseTransition from "./game/PhaseTransition";
-import TrainPhase from "./game/TrainPhase";
+
 import LanguageSelector from "./LanguageSelector";
 import farmBg from "@/assets/farm-bg.jpg";
 import jungleBg from "@/assets/jungle-bg.jpg";
@@ -65,7 +65,7 @@ const FarmGame = () => {
   const { debug, fastMode, setFastMode } = useDebugMode();
   const [mode, setMode] = useState<AnimalMode | null>(null);
   const [started, setStarted] = useState(false);
-  const [gamePhase, setGamePhase] = useState<1 | 2 | 3>(1);
+  const [gamePhase, setGamePhase] = useState<1 | 2>(1);
   const [phaseSequence, setPhaseSequence] = useState<number[]>(SEQUENTIAL);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [round, setRound] = useState(() => generateRound("domestic", 1));
@@ -201,29 +201,15 @@ const FarmGame = () => {
       if (gamePhase === 1) {
         startPhase(2, mode);
       } else if (gamePhase === 2) {
-        // Move to phase 3 (train)
-        setGamePhase(3);
-        setTransition("none");
+        handleGoHome();
       }
     }
-  }, [transition, mode, gamePhase, startPhase]);
+  }, [transition, mode, gamePhase, startPhase, handleGoHome]);
 
   if (!started) {
     return <WelcomeScreen onStart={handleStart} />;
   }
 
-  if (gamePhase === 3 && mode) {
-    return (
-      <TrainPhase
-        mode={mode}
-        bgImage={bgImage}
-        fastMode={fastMode}
-        setFastMode={setFastMode}
-        debug={debug}
-        onComplete={handleGoHome}
-      />
-    );
-  }
 
   const modeTitle =
     mode === "wild" ? t.ui.wildTitle :
@@ -289,7 +275,7 @@ const FarmGame = () => {
           <button
             onClick={() => {
               if (gamePhase === 1) startPhase(2, mode);
-              else if (gamePhase === 2) { setGamePhase(3); setTransition("none"); }
+              else if (gamePhase === 2) handleGoHome();
             }}
             className="rounded-full bg-card/90 backdrop-blur px-3 py-1.5 text-sm font-bold text-foreground shadow transition-transform active:scale-95 hover:bg-card"
           >
