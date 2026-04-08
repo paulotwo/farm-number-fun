@@ -166,6 +166,7 @@ const FarmGame = () => {
       if (!fastMode) playClickSound();
       if (!fastMode) playCorrectSound();
       setPhaseHits((h) => h + 1);
+      setStreak((s) => s + 1);
       setOptionStates(round.options.map((o) => (o === n ? "correct" : "idle")));
       setRoundPhase("correct");
 
