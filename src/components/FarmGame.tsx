@@ -45,9 +45,12 @@ function shuffleArray(arr: number[]): number[] {
   return shuffled;
 }
 
-function generateRound(mode: AnimalMode, count: number, prevAnimal?: string) {
+function generateRound(mode: AnimalMode, count: number, usedAnimals: Set<string>) {
   const keys = getAnimalKeys(mode);
-  const available = keys.filter((a) => a !== prevAnimal);
+  // Filter out already used animals
+  let available = keys.filter((a) => !usedAnimals.has(a));
+  // If all used, reset (shouldn't happen with 16 animals and 9 rounds)
+  if (available.length === 0) available = keys;
   const animal = available[Math.floor(Math.random() * available.length)];
 
   const options = new Set<number>([count]);
@@ -68,13 +71,15 @@ const FarmGame = () => {
   const [gamePhase, setGamePhase] = useState<1 | 2>(1);
   const [phaseSequence, setPhaseSequence] = useState<number[]>(SEQUENTIAL);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [round, setRound] = useState(() => generateRound("domestic", 1));
+  const [usedAnimals, setUsedAnimals] = useState<Set<string>>(new Set());
+  const [round, setRound] = useState(() => generateRound("domestic", 1, new Set()));
   const [roundPhase, setRoundPhase] = useState<RoundPhase>("showing");
   const [optionStates, setOptionStates] = useState<OptionState[]>(["idle", "idle", "idle"]);
   const [showAnimals, setShowAnimals] = useState(false);
   const [transition, setTransition] = useState<TransitionType>("none");
   const [phaseHits, setPhaseHits] = useState(0);
   const [phaseMisses, setPhaseMisses] = useState(0);
+  const [streak, setStreak] = useState(0);
 
   useEffect(() => { preloadVoices(); }, []);
 
@@ -87,10 +92,14 @@ const FarmGame = () => {
 
   const startPhase = useCallback((phase: 1 | 2, m: AnimalMode) => {
     const seq = phase === 1 ? [...SEQUENTIAL] : shuffleArray(SEQUENTIAL);
+    const newUsed = new Set<string>();
+    const newRound = generateRound(m, seq[0], newUsed);
+    newUsed.add(newRound.animal);
     setGamePhase(phase);
     setPhaseSequence(seq);
     setCurrentIndex(0);
-    setRound(generateRound(m, seq[0]));
+    setUsedAnimals(newUsed);
+    setRound(newRound);
     setRoundPhase("showing");
     setOptionStates(["idle", "idle", "idle"]);
     setShowAnimals(false);
@@ -157,6 +166,7 @@ const FarmGame = () => {
       if (!fastMode) playClickSound();
       if (!fastMode) playCorrectSound();
       setPhaseHits((h) => h + 1);
+      setStreak((s) => s + 1);
       setOptionStates(round.options.map((o) => (o === n ? "correct" : "idle")));
       setRoundPhase("correct");
 
@@ -179,7 +189,9 @@ const FarmGame = () => {
           setTimeout(() => {
             setShowAnimals(false);
             setCurrentIndex(nextIdx);
-            setRound(generateRound(mode, phaseSequence[nextIdx], round.animal));
+            const newRound = generateRound(mode, phaseSequence[nextIdx], usedAnimals);
+            setUsedAnimals((prev) => new Set(prev).add(newRound.animal));
+            setRound(newRound);
             setOptionStates(["idle", "idle", "idle"]);
             setRoundPhase("showing");
           }, fastMode ? 50 : 400);
@@ -190,10 +202,11 @@ const FarmGame = () => {
       if (!fastMode) playClickSound();
       if (!fastMode) playWrongSound();
       setPhaseMisses((m) => m + 1);
+      setStreak(0);
       setOptionStates((prev) => prev.map((s, i) => (i === clickedIdx ? "wrong" : s)));
       if (!fastMode) speak(t.ui.tryAgain, speechLang);
     }
-  }, [roundPhase, round, mode, t, speechLang, currentIndex, gamePhase, phaseSequence, optionStates, fastMode]);
+  }, [roundPhase, round, mode, t, speechLang, currentIndex, gamePhase, phaseSequence, optionStates, fastMode, usedAnimals]);
 
   const handleTransitionDone = useCallback(() => {
     if (!mode) return;
@@ -268,6 +281,11 @@ const FarmGame = () => {
             <span className="bg-card/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-farm-wrong shadow">
               ❌ {phaseMisses}
             </span>
+            {streak >= 3 && (
+              <span className="bg-card/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold shadow animate-bounce-in">
+                🔥 {streak}
+              </span>
+            )}
           </div>
         </div>
         <div className="flex flex-col gap-1 items-end">
