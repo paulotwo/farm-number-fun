@@ -96,10 +96,16 @@ export const translations: Record<Locale, Translations> = {
     animalNames: {
       galinha: "galinha", vaca: "vaca", porco: "porco", ovelha: "ovelha",
       cavalo: "cavalo", pato: "pato", coelho: "coelho", gato: "gato",
+      cachorro: "cachorro", burro: "burro", peru: "peru", cabra: "cabra",
+      ganso: "ganso", hamster: "hamster", papagaio: "papagaio", ponei: "pônei",
       leao: "leão", elefante: "elefante", girafa: "girafa", macaco: "macaco",
       zebra: "zebra", urso: "urso", tigre: "tigre", cobra: "cobra",
+      panda: "panda", hipopotamo: "hipopótamo", canguru: "canguru", koala: "coala",
+      preguica: "preguiça", raposa: "raposa", coruja: "coruja", camaleao: "camaleão",
       peixe: "peixe", golfinho: "golfinho", polvo: "polvo", caranguejo: "caranguejo",
       tartaruga: "tartaruga", baleia: "baleia", tubarao: "tubarão", lula: "lula",
+      cavalo_marinho: "cavalo-marinho", foca: "foca", pinguim: "pinguim", arraia: "arraia",
+      morsa: "morsa", lontra: "lontra", estrela_do_mar: "estrela-do-mar", lagosta: "lagosta",
       ovo: "ovo", coelhinho: "coelhinho", pintinho: "pintinho", cesta: "cesta",
       flor: "flor", borboleta: "borboleta", cenoura: "cenoura", chocolate: "chocolate",
     },
@@ -107,14 +113,20 @@ export const translations: Record<Locale, Translations> = {
       const plurals: Record<string, string> = {
         galinha: "galinhas", vaca: "vacas", porco: "porcos", ovelha: "ovelhas",
         cavalo: "cavalos", pato: "patos", coelho: "coelhos", gato: "gatos",
+        cachorro: "cachorros", burro: "burros", peru: "perus", cabra: "cabras",
+        ganso: "gansos", hamster: "hamsters", papagaio: "papagaios", ponei: "pôneis",
         leao: "leões", elefante: "elefantes", girafa: "girafas", macaco: "macacos",
         zebra: "zebras", urso: "ursos", tigre: "tigres", cobra: "cobras",
+        panda: "pandas", hipopotamo: "hipopótamos", canguru: "cangurus", koala: "coalas",
+        preguica: "preguiças", raposa: "raposas", coruja: "corujas", camaleao: "camaleões",
         peixe: "peixes", golfinho: "golfinhos", polvo: "polvos", caranguejo: "caranguejos",
         tartaruga: "tartarugas", baleia: "baleias", tubarao: "tubarões", lula: "lulas",
+        cavalo_marinho: "cavalos-marinhos", foca: "focas", pinguim: "pinguins", arraia: "arraias",
+        morsa: "morsas", lontra: "lontras", estrela_do_mar: "estrelas-do-mar", lagosta: "lagostas",
         ovo: "ovos", coelhinho: "coelhinhos", pintinho: "pintinhos", cesta: "cestas",
         flor: "flores", borboleta: "borboletas", cenoura: "cenouras", chocolate: "chocolates",
       };
-      const femAnimals = ["galinha", "vaca", "ovelha", "girafa", "zebra", "cobra", "tartaruga", "baleia", "lula", "cesta", "flor", "borboleta", "cenoura"];
+      const femAnimals = ["galinha", "vaca", "ovelha", "cabra", "girafa", "zebra", "cobra", "raposa", "coruja", "preguica", "tartaruga", "baleia", "lula", "foca", "arraia", "morsa", "lontra", "estrela_do_mar", "lagosta", "cesta", "flor", "borboleta", "cenoura"];
       const numWordF = ["", "uma", "duas", "três", "quatro", "cinco", "seis", "sete", "oito", "nove"];
       const numWordM = ["", "um", "dois", "três", "quatro", "cinco", "seis", "sete", "oito", "nove"];
       const word = femAnimals.includes(animalName) ? (numWordF[count] ?? String(count)) : (numWordM[count] ?? String(count));
