@@ -79,6 +79,7 @@ const FarmGame = () => {
   const [transition, setTransition] = useState<TransitionType>("none");
   const [phaseHits, setPhaseHits] = useState(0);
   const [phaseMisses, setPhaseMisses] = useState(0);
+  const [streak, setStreak] = useState(0);
 
   useEffect(() => { preloadVoices(); }, []);
 
