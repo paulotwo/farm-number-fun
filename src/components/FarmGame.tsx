@@ -202,6 +202,7 @@ const FarmGame = () => {
       if (!fastMode) playClickSound();
       if (!fastMode) playWrongSound();
       setPhaseMisses((m) => m + 1);
+      setStreak(0);
       setOptionStates((prev) => prev.map((s, i) => (i === clickedIdx ? "wrong" : s)));
       if (!fastMode) speak(t.ui.tryAgain, speechLang);
     }
