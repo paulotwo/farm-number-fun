@@ -71,7 +71,8 @@ const FarmGame = () => {
   const [gamePhase, setGamePhase] = useState<1 | 2>(1);
   const [phaseSequence, setPhaseSequence] = useState<number[]>(SEQUENTIAL);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [round, setRound] = useState(() => generateRound("domestic", 1));
+  const [usedAnimals, setUsedAnimals] = useState<Set<string>>(new Set());
+  const [round, setRound] = useState(() => generateRound("domestic", 1, new Set()));
   const [roundPhase, setRoundPhase] = useState<RoundPhase>("showing");
   const [optionStates, setOptionStates] = useState<OptionState[]>(["idle", "idle", "idle"]);
   const [showAnimals, setShowAnimals] = useState(false);
@@ -90,10 +91,14 @@ const FarmGame = () => {
 
   const startPhase = useCallback((phase: 1 | 2, m: AnimalMode) => {
     const seq = phase === 1 ? [...SEQUENTIAL] : shuffleArray(SEQUENTIAL);
+    const newUsed = new Set<string>();
+    const newRound = generateRound(m, seq[0], newUsed);
+    newUsed.add(newRound.animal);
     setGamePhase(phase);
     setPhaseSequence(seq);
     setCurrentIndex(0);
-    setRound(generateRound(m, seq[0]));
+    setUsedAnimals(newUsed);
+    setRound(newRound);
     setRoundPhase("showing");
     setOptionStates(["idle", "idle", "idle"]);
     setShowAnimals(false);
@@ -182,7 +187,9 @@ const FarmGame = () => {
           setTimeout(() => {
             setShowAnimals(false);
             setCurrentIndex(nextIdx);
-            setRound(generateRound(mode, phaseSequence[nextIdx], round.animal));
+            const newRound = generateRound(mode, phaseSequence[nextIdx], usedAnimals);
+            setUsedAnimals((prev) => new Set(prev).add(newRound.animal));
+            setRound(newRound);
             setOptionStates(["idle", "idle", "idle"]);
             setRoundPhase("showing");
           }, fastMode ? 50 : 400);
