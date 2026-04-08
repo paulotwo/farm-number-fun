@@ -203,7 +203,7 @@ const FarmGame = () => {
       setOptionStates((prev) => prev.map((s, i) => (i === clickedIdx ? "wrong" : s)));
       if (!fastMode) speak(t.ui.tryAgain, speechLang);
     }
-  }, [roundPhase, round, mode, t, speechLang, currentIndex, gamePhase, phaseSequence, optionStates, fastMode]);
+  }, [roundPhase, round, mode, t, speechLang, currentIndex, gamePhase, phaseSequence, optionStates, fastMode, usedAnimals]);
 
   const handleTransitionDone = useCallback(() => {
     if (!mode) return;
