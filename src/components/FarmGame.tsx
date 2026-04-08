@@ -281,6 +281,11 @@ const FarmGame = () => {
             <span className="bg-card/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-farm-wrong shadow">
               ❌ {phaseMisses}
             </span>
+            {streak >= 3 && (
+              <span className="bg-card/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold shadow animate-bounce-in">
+                🔥 {streak}
+              </span>
+            )}
           </div>
         </div>
         <div className="flex flex-col gap-1 items-end">
