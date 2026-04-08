@@ -45,9 +45,12 @@ function shuffleArray(arr: number[]): number[] {
   return shuffled;
 }
 
-function generateRound(mode: AnimalMode, count: number, prevAnimal?: string) {
+function generateRound(mode: AnimalMode, count: number, usedAnimals: Set<string>) {
   const keys = getAnimalKeys(mode);
-  const available = keys.filter((a) => a !== prevAnimal);
+  // Filter out already used animals
+  let available = keys.filter((a) => !usedAnimals.has(a));
+  // If all used, reset (shouldn't happen with 16 animals and 9 rounds)
+  if (available.length === 0) available = keys;
   const animal = available[Math.floor(Math.random() * available.length)];
 
   const options = new Set<number>([count]);
