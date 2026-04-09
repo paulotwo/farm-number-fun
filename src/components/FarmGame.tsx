@@ -3,6 +3,7 @@ import AnimalEmoji, { getAnimalKeys, type AnimalMode } from "./AnimalEmoji";
 import NumberOption from "./NumberOption";
 import WelcomeScreen from "./game/WelcomeScreen";
 import PhaseTransition from "./game/PhaseTransition";
+import BubblePhase from "./game/BubblePhase";
 
 import LanguageSelector from "./LanguageSelector";
 import farmBg from "@/assets/farm-bg.jpg";
@@ -23,7 +24,7 @@ import {
 import { requestFullscreen } from "@/lib/fullscreen";
 import { useDebugMode } from "@/hooks/use-debug-mode";
 
-type RoundPhase = "showing" | "choosing" | "correct" | "transition";
+type RoundPhase = "showing" | "choosing" | "correct" | "transition" | "bubble";
 type TransitionType = "none" | "phase-complete" | "game-complete";
 type OptionState = "idle" | "correct" | "wrong";
 
@@ -68,7 +69,7 @@ const FarmGame = () => {
   const { debug, fastMode, setFastMode } = useDebugMode();
   const [mode, setMode] = useState<AnimalMode | null>(null);
   const [started, setStarted] = useState(false);
-  const [gamePhase, setGamePhase] = useState<1 | 2>(1);
+  const [gamePhase, setGamePhase] = useState<1 | 2 | 3>(1);
   const [phaseSequence, setPhaseSequence] = useState<number[]>(SEQUENTIAL);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [usedAnimals, setUsedAnimals] = useState<Set<string>>(new Set());
@@ -214,13 +215,31 @@ const FarmGame = () => {
       if (gamePhase === 1) {
         startPhase(2, mode);
       } else if (gamePhase === 2) {
-        handleGoHome();
+        // Go to phase 3 (bubbles)
+        setGamePhase(3);
+        setTransition("none");
       }
     }
-  }, [transition, mode, gamePhase, startPhase, handleGoHome]);
+  }, [transition, mode, gamePhase, startPhase]);
+
+  const handleBubbleComplete = useCallback(() => {
+    handleGoHome();
+  }, [handleGoHome]);
 
   if (!started) {
     return <WelcomeScreen onStart={handleStart} />;
+  }
+
+  if (gamePhase === 3 && mode) {
+    return (
+      <BubblePhase
+        mode={mode}
+        onComplete={handleBubbleComplete}
+        onGoHome={handleGoHome}
+        bgImage={bgImage}
+        fastMode={fastMode}
+      />
+    );
   }
 
 
@@ -293,7 +312,10 @@ const FarmGame = () => {
           <button
             onClick={() => {
               if (gamePhase === 1) startPhase(2, mode);
-              else if (gamePhase === 2) handleGoHome();
+              else if (gamePhase === 2) {
+                setGamePhase(3);
+                setTransition("none");
+              }
             }}
             className="rounded-full bg-card/90 backdrop-blur px-3 py-1.5 text-sm font-bold text-foreground shadow transition-transform active:scale-95 hover:bg-card"
           >
