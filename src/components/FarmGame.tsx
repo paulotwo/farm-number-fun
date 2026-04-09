@@ -215,10 +215,16 @@ const FarmGame = () => {
       if (gamePhase === 1) {
         startPhase(2, mode);
       } else if (gamePhase === 2) {
-        handleGoHome();
+        // Go to phase 3 (bubbles)
+        setGamePhase(3);
+        setTransition("none");
       }
     }
-  }, [transition, mode, gamePhase, startPhase, handleGoHome]);
+  }, [transition, mode, gamePhase, startPhase]);
+
+  const handleBubbleComplete = useCallback(() => {
+    handleGoHome();
+  }, [handleGoHome]);
 
   if (!started) {
     return <WelcomeScreen onStart={handleStart} />;
