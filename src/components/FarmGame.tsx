@@ -312,7 +312,10 @@ const FarmGame = () => {
           <button
             onClick={() => {
               if (gamePhase === 1) startPhase(2, mode);
-              else if (gamePhase === 2) handleGoHome();
+              else if (gamePhase === 2) {
+                setGamePhase(3);
+                setTransition("none");
+              }
             }}
             className="rounded-full bg-card/90 backdrop-blur px-3 py-1.5 text-sm font-bold text-foreground shadow transition-transform active:scale-95 hover:bg-card"
           >
