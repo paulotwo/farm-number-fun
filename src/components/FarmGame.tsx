@@ -3,6 +3,7 @@ import AnimalEmoji, { getAnimalKeys, type AnimalMode } from "./AnimalEmoji";
 import NumberOption from "./NumberOption";
 import WelcomeScreen from "./game/WelcomeScreen";
 import PhaseTransition from "./game/PhaseTransition";
+import BubblePhase from "./game/BubblePhase";
 
 import LanguageSelector from "./LanguageSelector";
 import farmBg from "@/assets/farm-bg.jpg";
