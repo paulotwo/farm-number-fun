@@ -41,6 +41,7 @@ export interface Translations {
     trainNextWagon: string;
     trainAllDone: string;
     trainExitSpeech: string;
+    bubblePopPrompt: string;
     skipPhase: string;
   };
   animalNames: Record<string, string>;
@@ -68,7 +69,7 @@ export const translations: Record<Locale, Translations> = {
       phaseLabel: "📖 Fase:",
       phase1Name: "Números em Ordem",
       phase2Name: "Números Misturados",
-      phase3Name: "O Trem dos Números",
+      phase3Name: "Bolhas Flutuantes",
       countingHint: "Contando os animais...",
       tryAgain: "Tente de novo!",
       languageLabel: "Idioma",
