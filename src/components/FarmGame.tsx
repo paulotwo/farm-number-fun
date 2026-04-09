@@ -230,6 +230,18 @@ const FarmGame = () => {
     return <WelcomeScreen onStart={handleStart} />;
   }
 
+  if (gamePhase === 3 && mode) {
+    return (
+      <BubblePhase
+        mode={mode}
+        onComplete={handleBubbleComplete}
+        onGoHome={handleGoHome}
+        bgImage={bgImage}
+        fastMode={fastMode}
+      />
+    );
+  }
+
 
   const modeTitle =
     mode === "wild" ? t.ui.wildTitle :
