@@ -24,7 +24,7 @@ import {
 import { requestFullscreen } from "@/lib/fullscreen";
 import { useDebugMode } from "@/hooks/use-debug-mode";
 
-type RoundPhase = "showing" | "choosing" | "correct" | "transition";
+type RoundPhase = "showing" | "choosing" | "correct" | "transition" | "bubble";
 type TransitionType = "none" | "phase-complete" | "game-complete";
 type OptionState = "idle" | "correct" | "wrong";
 
@@ -69,7 +69,7 @@ const FarmGame = () => {
   const { debug, fastMode, setFastMode } = useDebugMode();
   const [mode, setMode] = useState<AnimalMode | null>(null);
   const [started, setStarted] = useState(false);
-  const [gamePhase, setGamePhase] = useState<1 | 2>(1);
+  const [gamePhase, setGamePhase] = useState<1 | 2 | 3>(1);
   const [phaseSequence, setPhaseSequence] = useState<number[]>(SEQUENTIAL);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [usedAnimals, setUsedAnimals] = useState<Set<string>>(new Set());
