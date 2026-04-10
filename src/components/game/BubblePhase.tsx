@@ -322,35 +322,37 @@ const BubblePhase = ({ mode, onComplete, onGoHome, bgImage, fastMode }: BubblePh
                   onClick={() => handleBubblePop(bubble)}
                   disabled={!!bubble.escaping || !!bubble.popAnim}
                 >
-                  <div className="relative">
+                  <div className={`relative ${bubble.popAnim ? "animate-bubble-pop" : ""}`}>
                     {/* Pop particles */}
                     {bubble.popAnim && (
                       <>
-                        {[0, 60, 120, 180, 240, 300].map((deg) => (
+                        {[
+                          { x: -30, y: -30, color: "hsl(var(--farm-sun))" },
+                          { x: 30, y: -30, color: "hsl(var(--farm-correct))" },
+                          { x: -35, y: 10, color: "hsl(var(--farm-sun))" },
+                          { x: 35, y: 10, color: "hsl(var(--accent))" },
+                          { x: -20, y: 35, color: "hsl(var(--farm-correct))" },
+                          { x: 20, y: 35, color: "hsl(var(--farm-sun))" },
+                        ].map((p, i) => (
                           <div
-                            key={deg}
-                            className="absolute w-3 h-3 rounded-full bg-farm-sun"
+                            key={i}
+                            className="bubble-particle"
                             style={{
-                              left: "50%",
-                              top: "50%",
-                              animation: "bubble-particle 0.4s ease-out forwards",
-                              transform: `rotate(${deg}deg) translateY(-10px)`,
+                              left: `calc(50% + ${p.x}px)`,
+                              top: `calc(50% + ${p.y}px)`,
+                              background: p.color,
                             }}
                           />
                         ))}
                       </>
                     )}
-                    {/* Bubble — larger size */}
+                    {/* Bubble */}
                     <div
-                      className={`w-20 h-20 md:w-24 md:h-24 rounded-full flex items-center justify-center
+                      className={`bubble-inner w-20 h-20 md:w-24 md:h-24 rounded-full flex items-center justify-center
                         border-2 border-white/50 shadow-lg backdrop-blur-sm
-                        ${bubble.popAnim
-                          ? "scale-150 opacity-0"
-                          : "bg-gradient-to-br from-sky-200/80 to-blue-400/60"
-                        }`}
+                        bg-gradient-to-br from-sky-200/80 to-blue-400/60`}
                       style={{
-                        boxShadow: bubble.popAnim ? "none" : "inset -4px -4px 8px rgba(255,255,255,0.4), 0 4px 12px rgba(0,100,200,0.3)",
-                        transition: bubble.popAnim ? "transform 0.3s ease-out, opacity 0.3s ease-out" : "none",
+                        boxShadow: "inset -4px -4px 8px rgba(255,255,255,0.4), 0 4px 12px rgba(0,100,200,0.3)",
                       }}
                     >
                       <span className="text-3xl md:text-4xl font-black text-foreground drop-shadow-sm">
