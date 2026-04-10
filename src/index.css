@@ -130,3 +130,18 @@ html.debug * {
     font-family: 'Fredoka', sans-serif;
   }
 }
+
+@keyframes bubble-pop {
+  0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+  50% { transform: translate(-50%, -50%) scale(1.4); opacity: 0.6; }
+  100% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+}
+
+@keyframes bubble-particle {
+  0% { transform: rotate(var(--deg, 0deg)) translateY(-10px); opacity: 1; }
+  100% { transform: rotate(var(--deg, 0deg)) translateY(-40px); opacity: 0; }
+}
+
+.animate-bubble-pop {
+  animation: bubble-pop 0.4s ease-out forwards;
+}
