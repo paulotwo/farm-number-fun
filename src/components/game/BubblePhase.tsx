@@ -147,15 +147,22 @@ const BubblePhase = ({ mode, onComplete, onGoHome, bgImage, fastMode }: BubblePh
   }, [narrating, gameOver, bubbleDuration]);
 
   const handleBubblePop = useCallback((bubble: Bubble) => {
-    if (showCorrect || gameOver) return;
-
-    setBubbles((prev) =>
-      prev.map((b) => (b.id === bubble.id ? { ...b, popped: true } : b))
-    );
+    if (showCorrect || gameOver || bubble.escaping || bubble.popAnim) return;
 
     if (bubble.number === round.count) {
+      // Correct — pop burst animation
       if (!fastMode) playClickSound();
       if (!fastMode) playCorrectSound();
+      setBubbles((prev) =>
+        prev.map((b) => (b.id === bubble.id ? { ...b, popAnim: true } : b))
+      );
+      // Remove after animation
+      setTimeout(() => {
+        setBubbles((prev) =>
+          prev.map((b) => (b.id === bubble.id ? { ...b, popped: true } : b))
+        );
+      }, 400);
+
       setHits((h) => h + 1);
       setShowCorrect(true);
 
@@ -186,8 +193,19 @@ const BubblePhase = ({ mode, onComplete, onGoHome, bgImage, fastMode }: BubblePh
         }
       }, nextDelay);
     } else {
+      // Wrong — bubble escapes to the side
       if (!fastMode) playClickSound();
       if (!fastMode) playWrongSound();
+      const escapeDir = bubble.x > 50 ? "right" : "left";
+      setBubbles((prev) =>
+        prev.map((b) => (b.id === bubble.id ? { ...b, escaping: escapeDir } : b))
+      );
+      // Remove after escape animation
+      setTimeout(() => {
+        setBubbles((prev) =>
+          prev.map((b) => (b.id === bubble.id ? { ...b, popped: true } : b))
+        );
+      }, 600);
       setMisses((m) => m + 1);
       if (!fastMode) speak(t.ui.tryAgain, speechLang);
     }
@@ -282,38 +300,67 @@ const BubblePhase = ({ mode, onComplete, onGoHome, bgImage, fastMode }: BubblePh
             .map((bubble) => {
               const elapsed = now - bubble.startTime;
               const progress = Math.min(elapsed / bubbleDuration, 1);
-              // Bubble goes from bottom (100%) to top (-10%)
               const top = 100 - progress * 110;
-              // Slight horizontal wobble
               const wobbleX = Math.sin(elapsed / 400) * 8;
+
+              // Escape animation offset
+              const escapeX = bubble.escaping === "left" ? -200 : bubble.escaping === "right" ? 200 : 0;
+              const escapeRotate = bubble.escaping ? (bubble.escaping === "left" ? -45 : 45) : 0;
+              const escapeOpacity = bubble.escaping ? 0 : 1;
 
               return (
                 <button
                   key={bubble.id}
-                  className="absolute pointer-events-auto transition-transform active:scale-90"
+                  className={`absolute pointer-events-auto active:scale-90 ${bubble.popAnim ? "animate-bubble-pop" : ""}`}
                   style={{
                     left: `calc(${bubble.x}% + ${wobbleX}px)`,
                     top: `${top}%`,
-                    transform: "translate(-50%, -50%)",
+                    transform: `translate(-50%, -50%) translateX(${escapeX}px) rotate(${escapeRotate}deg)`,
+                    opacity: escapeOpacity,
+                    transition: bubble.escaping ? "transform 0.5s ease-in, opacity 0.5s ease-in" : "none",
                   }}
                   onClick={() => handleBubblePop(bubble)}
+                  disabled={!!bubble.escaping || !!bubble.popAnim}
                 >
                   <div className="relative">
-                    {/* Bubble */}
+                    {/* Pop particles */}
+                    {bubble.popAnim && (
+                      <>
+                        {[0, 60, 120, 180, 240, 300].map((deg) => (
+                          <div
+                            key={deg}
+                            className="absolute w-3 h-3 rounded-full bg-farm-sun"
+                            style={{
+                              left: "50%",
+                              top: "50%",
+                              animation: "bubble-particle 0.4s ease-out forwards",
+                              transform: `rotate(${deg}deg) translateY(-10px)`,
+                            }}
+                          />
+                        ))}
+                      </>
+                    )}
+                    {/* Bubble — larger size */}
                     <div
-                      className="w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center
-                        bg-gradient-to-br from-sky-200/80 to-blue-400/60 border-2 border-white/50
-                        shadow-lg backdrop-blur-sm"
+                      className={`w-20 h-20 md:w-24 md:h-24 rounded-full flex items-center justify-center
+                        border-2 border-white/50 shadow-lg backdrop-blur-sm
+                        ${bubble.popAnim
+                          ? "scale-150 opacity-0"
+                          : "bg-gradient-to-br from-sky-200/80 to-blue-400/60"
+                        }`}
                       style={{
-                        boxShadow: "inset -4px -4px 8px rgba(255,255,255,0.4), 0 4px 12px rgba(0,100,200,0.3)",
+                        boxShadow: bubble.popAnim ? "none" : "inset -4px -4px 8px rgba(255,255,255,0.4), 0 4px 12px rgba(0,100,200,0.3)",
+                        transition: bubble.popAnim ? "transform 0.3s ease-out, opacity 0.3s ease-out" : "none",
                       }}
                     >
-                      <span className="text-2xl md:text-3xl font-black text-foreground drop-shadow-sm">
+                      <span className="text-3xl md:text-4xl font-black text-foreground drop-shadow-sm">
                         {bubble.number}
                       </span>
                     </div>
                     {/* Shine */}
-                    <div className="absolute top-2 left-3 w-4 h-3 bg-white/50 rounded-full rotate-[-30deg]" />
+                    {!bubble.popAnim && (
+                      <div className="absolute top-2 left-4 w-5 h-4 bg-white/50 rounded-full rotate-[-30deg]" />
+                    )}
                   </div>
                 </button>
               );
