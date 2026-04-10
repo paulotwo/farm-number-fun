@@ -132,7 +132,14 @@ export const translations: Record<Locale, Translations> = {
       const numWordF = ["", "uma", "duas", "três", "quatro", "cinco", "seis", "sete", "oito", "nove"];
       const numWordM = ["", "um", "dois", "três", "quatro", "cinco", "seis", "sete", "oito", "nove"];
       const word = femAnimals.includes(animalName) ? (numWordF[count] ?? String(count)) : (numWordM[count] ?? String(count));
-      const name = count === 1 ? animalName : (plurals[animalName] ?? animalName + "s");
+      const singulars: Record<string, string> = {
+        cavalo_marinho: "cavalo-marinho", estrela_do_mar: "estrela-do-mar",
+        tubarao: "tubarão", pinguim: "pinguim", preguica: "preguiça",
+        hipopotamo: "hipopótamo", camaleao: "camaleão", leao: "leão",
+        ponei: "pônei",
+      };
+      const singular = singulars[animalName] ?? animalName;
+      const name = count === 1 ? singular : (plurals[animalName] ?? singular + "s");
       return `Olha! Temos ${word} ${name}!`;
     },
     celebrationText: (count) =>
