@@ -174,7 +174,7 @@ const BubblePhase = ({ mode, onComplete, onGoHome, bgImage, fastMode }: BubblePh
 
       setTimeout(() => {
         setShowCorrect(true);
-      }, 180);
+      }, fastMode ? 80 : 320);
 
       const nextDelay = fastMode ? 200 : 2500;
       setTimeout(() => {
@@ -329,6 +329,7 @@ const BubblePhase = ({ mode, onComplete, onGoHome, bgImage, fastMode }: BubblePh
                     {/* Pop particles */}
                     {bubble.popAnim && (
                       <>
+                        <div className="bubble-ring" />
                         {[
                           { x: -30, y: -30, color: "hsl(var(--farm-sun))" },
                           { x: 30, y: -30, color: "hsl(var(--farm-correct))" },
@@ -341,9 +342,11 @@ const BubblePhase = ({ mode, onComplete, onGoHome, bgImage, fastMode }: BubblePh
                             key={i}
                             className="bubble-particle"
                             style={{
-                              left: `calc(50% + ${p.x}px)`,
-                              top: `calc(50% + ${p.y}px)`,
+                              left: "50%",
+                              top: "50%",
                               background: p.color,
+                              ["--particle-x" as string]: `${p.x}px`,
+                              ["--particle-y" as string]: `${p.y}px`,
                             }}
                           />
                         ))}

@@ -133,13 +133,19 @@ html.debug * {
 
 @keyframes bubble-pop {
   0% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.5); opacity: 0.6; }
-  100% { transform: scale(0); opacity: 0; }
+  35% { transform: scale(1.18); opacity: 0.95; }
+  100% { transform: scale(0.15); opacity: 0; }
 }
 
 @keyframes bubble-particle-out {
-  0% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-  100% { opacity: 0; transform: translate(-50%, -50%) scale(2.5); }
+  0% { opacity: 0; transform: translate(-50%, -50%) translate(0, 0) scale(0.2); }
+  20% { opacity: 1; }
+  100% { opacity: 0; transform: translate(-50%, -50%) translate(var(--particle-x), var(--particle-y)) scale(1.3); }
+}
+
+@keyframes bubble-ring-out {
+  0% { opacity: 0.9; transform: translate(-50%, -50%) scale(0.2); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(1.7); }
 }
 
 .animate-bubble-pop > .bubble-inner {
@@ -148,8 +154,21 @@ html.debug * {
 
 .bubble-particle {
   position: absolute;
-  width: 10px;
-  height: 10px;
+  width: 14px;
+  height: 14px;
   border-radius: 50%;
-  animation: bubble-particle-out 0.5s ease-out forwards;
+  animation: bubble-particle-out 0.45s ease-out forwards;
+  box-shadow: 0 0 12px hsl(var(--background) / 0.9);
+}
+
+.bubble-ring {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 88px;
+  height: 88px;
+  border-radius: 9999px;
+  border: 5px solid hsl(var(--background) / 0.95);
+  animation: bubble-ring-out 0.35s ease-out forwards;
+  box-shadow: 0 0 22px hsl(var(--accent) / 0.35);
 }
