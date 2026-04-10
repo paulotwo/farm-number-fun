@@ -164,7 +164,6 @@ const BubblePhase = ({ mode, onComplete, onGoHome, bgImage, fastMode }: BubblePh
       }, 400);
 
       setHits((h) => h + 1);
-      setShowCorrect(true);
 
       if (currentNumber < 9 && !fastMode) {
         setTimeout(() => {
@@ -172,6 +171,10 @@ const BubblePhase = ({ mode, onComplete, onGoHome, bgImage, fastMode }: BubblePh
           speak(t.celebrationSpeech(round.count), speechLang);
         }, 300);
       }
+
+      setTimeout(() => {
+        setShowCorrect(true);
+      }, 180);
 
       const nextDelay = fastMode ? 200 : 2500;
       setTimeout(() => {
