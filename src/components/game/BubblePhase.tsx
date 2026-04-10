@@ -24,6 +24,8 @@ interface Bubble {
   x: number; // percentage 0-100
   startTime: number;
   popped: boolean;
+  escaping?: "left" | "right"; // flies off screen when wrong
+  popAnim?: boolean; // burst animation when correct
 }
 
 function generateBubbleRound(count: number, mode: AnimalMode, usedAnimals: Set<string>) {
