@@ -69,7 +69,7 @@ const FarmGame = () => {
   const { debug, fastMode, setFastMode } = useDebugMode();
   const [mode, setMode] = useState<AnimalMode | null>(null);
   const [started, setStarted] = useState(false);
-  const [gamePhase, setGamePhase] = useState<1 | 2 | 3>(1);
+  const [gamePhase, setGamePhase] = useState<1 | 3>(1);
   const [phaseSequence, setPhaseSequence] = useState<number[]>(SEQUENTIAL);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [usedAnimals, setUsedAnimals] = useState<Set<string>>(new Set());
@@ -91,8 +91,8 @@ const FarmGame = () => {
 
   const bgImage = mode ? MODE_BG[mode] : farmBg;
 
-  const startPhase = useCallback((phase: 1 | 2, m: AnimalMode) => {
-    const seq = phase === 1 ? [...SEQUENTIAL] : shuffleArray(SEQUENTIAL);
+  const startPhase = useCallback((phase: 1, m: AnimalMode) => {
+    const seq = [...SEQUENTIAL];
     const newUsed = new Set<string>();
     const newRound = generateRound(m, seq[0], newUsed);
     newUsed.add(newRound.animal);
@@ -212,15 +212,11 @@ const FarmGame = () => {
   const handleTransitionDone = useCallback(() => {
     if (!mode) return;
     if (transition === "phase-complete") {
-      if (gamePhase === 1) {
-        startPhase(2, mode);
-      } else if (gamePhase === 2) {
-        // Go to phase 3 (bubbles)
-        setGamePhase(3);
-        setTransition("none");
-      }
+      // Go directly to phase 3 (bubbles)
+      setGamePhase(3);
+      setTransition("none");
     }
-  }, [transition, mode, gamePhase, startPhase]);
+  }, [transition, mode]);
 
   const handleBubbleComplete = useCallback(() => {
     handleGoHome();
@@ -292,7 +288,7 @@ const FarmGame = () => {
           </h1>
           <div className="mt-2 flex flex-wrap gap-2 justify-center">
             <span className="bg-card/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-foreground shadow">
-              {t.ui.phaseLabel} {gamePhase} — {gamePhase === 1 ? t.ui.phase1Name : t.ui.phase2Name}
+              {t.ui.phaseLabel} 1 — {t.ui.phase1Name}
             </span>
             <span className="bg-card/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-farm-correct shadow">
               ✅ {phaseHits}
@@ -311,11 +307,8 @@ const FarmGame = () => {
           <LanguageSelector />
           <button
             onClick={() => {
-              if (gamePhase === 1) startPhase(2, mode);
-              else if (gamePhase === 2) {
-                setGamePhase(3);
-                setTransition("none");
-              }
+              setGamePhase(3);
+              setTransition("none");
             }}
             className="rounded-full bg-card/90 backdrop-blur px-3 py-1.5 text-sm font-bold text-foreground shadow transition-transform active:scale-95 hover:bg-card"
           >
