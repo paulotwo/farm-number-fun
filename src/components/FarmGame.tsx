@@ -4,6 +4,7 @@ import NumberOption from "./NumberOption";
 import WelcomeScreen from "./game/WelcomeScreen";
 import PhaseTransition from "./game/PhaseTransition";
 import BubblePhase from "./game/BubblePhase";
+import MatchPhase from "./game/MatchPhase";
 
 import LanguageSelector from "./LanguageSelector";
 import farmBg from "@/assets/farm-bg.jpg";
@@ -69,7 +70,7 @@ const FarmGame = () => {
   const { debug, fastMode, setFastMode } = useDebugMode();
   const [mode, setMode] = useState<AnimalMode | null>(null);
   const [started, setStarted] = useState(false);
-  const [gamePhase, setGamePhase] = useState<1 | 3>(1);
+  const [gamePhase, setGamePhase] = useState<1 | 2 | 3>(1);
   const [phaseSequence, setPhaseSequence] = useState<number[]>(SEQUENTIAL);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [usedAnimals, setUsedAnimals] = useState<Set<string>>(new Set());
@@ -212,8 +213,8 @@ const FarmGame = () => {
   const handleTransitionDone = useCallback(() => {
     if (!mode) return;
     if (transition === "phase-complete") {
-      // Go directly to phase 3 (bubbles)
-      setGamePhase(3);
+      // Go to phase 2 (match groups)
+      setGamePhase(2);
       setTransition("none");
     }
   }, [transition, mode]);
@@ -222,8 +223,24 @@ const FarmGame = () => {
     handleGoHome();
   }, [handleGoHome]);
 
+  const handleMatchComplete = useCallback(() => {
+    setGamePhase(3);
+  }, []);
+
   if (!started) {
     return <WelcomeScreen onStart={handleStart} />;
+  }
+
+  if (gamePhase === 2 && mode) {
+    return (
+      <MatchPhase
+        mode={mode}
+        onComplete={handleMatchComplete}
+        onGoHome={handleGoHome}
+        bgImage={bgImage}
+        fastMode={fastMode}
+      />
+    );
   }
 
   if (gamePhase === 3 && mode) {
