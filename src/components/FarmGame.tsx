@@ -324,7 +324,7 @@ const FarmGame = () => {
           <LanguageSelector />
           <button
             onClick={() => {
-              setGamePhase(3);
+              setGamePhase(2);
               setTransition("none");
             }}
             className="rounded-full bg-card/90 backdrop-blur px-3 py-1.5 text-sm font-bold text-foreground shadow transition-transform active:scale-95 hover:bg-card"
