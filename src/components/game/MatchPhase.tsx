@@ -248,13 +248,16 @@ const MatchPhase = ({ mode, onComplete, onGoHome, bgImage, fastMode }: MatchPhas
             >
               {showAnimals &&
                 Array.from({ length: group.count }).map((_, ai) => (
-                  <AnimalEmoji
+                  <div
                     key={`${group.animal}-${ai}`}
-                    animal={group.animal}
-                    index={ai}
-                    total={group.count}
-                    size={group.count <= 3 ? "md" : group.count <= 6 ? "sm" : "xs"}
-                  />
+                    className={group.count <= 3 ? "w-12 h-12" : group.count <= 6 ? "w-9 h-9" : "w-7 h-7"}
+                  >
+                    <AnimalEmoji
+                      animal={group.animal}
+                      index={ai}
+                      total={group.count}
+                    />
+                  </div>
                 ))}
             </button>
           ))}
