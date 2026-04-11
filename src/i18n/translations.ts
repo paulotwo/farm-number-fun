@@ -42,6 +42,9 @@ export interface Translations {
     trainAllDone: string;
     trainExitSpeech: string;
     bubblePopPrompt: string;
+    matchTitle: string;
+    matchPrompt: string;
+    matchInstruction: (count: number) => string;
     skipPhase: string;
   };
   animalNames: Record<string, string>;
@@ -93,6 +96,9 @@ export const translations: Record<Locale, Translations> = {
       trainAllDone: "O trem está completo! Todos os vagões estão numerados!",
       trainExitSpeech: "Parabéns! Você completou o trem dos números! Você é demais!",
       bubblePopPrompt: "Estoure a bolha com o número certo!",
+      matchTitle: "🔍 Encontre o Grupo",
+      matchPrompt: "Qual grupo tem essa quantidade de animais?",
+      matchInstruction: (count) => `Encontre o grupo com ${count} ${count === 1 ? "animal" : "animais"}!`,
       skipPhase: "Pular ⏭",
     },
     animalNames: {
@@ -190,6 +196,9 @@ export const translations: Record<Locale, Translations> = {
       trainAllDone: "The train is complete! All wagons are numbered!",
       trainExitSpeech: "Congratulations! You completed the number train! You're amazing!",
       bubblePopPrompt: "Pop the bubble with the right number!",
+      matchTitle: "🔍 Find the Group",
+      matchPrompt: "Which group has this many animals?",
+      matchInstruction: (count) => `Find the group with ${count} ${count === 1 ? "animal" : "animals"}!`,
       skipPhase: "Skip ⏭",
     },
     animalNames: {
@@ -292,6 +301,9 @@ export const translations: Record<Locale, Translations> = {
       trainAllDone: "¡El tren está completo! ¡Todos los vagones tienen número!",
       trainExitSpeech: "¡Felicidades! ¡Completaste el tren de los números! ¡Eres increíble!",
       bubblePopPrompt: "¡Revienta la burbuja con el número correcto!",
+      matchTitle: "🔍 Encuentra el Grupo",
+      matchPrompt: "¿Qué grupo tiene esta cantidad de animales?",
+      matchInstruction: (count) => `¡Encuentra el grupo con ${count} ${count === 1 ? "animal" : "animales"}!`,
       skipPhase: "Saltar ⏭",
     },
     animalNames: {
@@ -394,6 +406,9 @@ export const translations: Record<Locale, Translations> = {
       trainAllDone: "Le train est complet ! Tous les wagons ont un numéro !",
       trainExitSpeech: "Félicitations ! Tu as complété le train des chiffres ! Tu es super !",
       bubblePopPrompt: "Éclate la bulle avec le bon chiffre !",
+      matchTitle: "🔍 Trouve le Groupe",
+      matchPrompt: "Quel groupe a ce nombre d'animaux ?",
+      matchInstruction: (count) => `Trouve le groupe avec ${count} ${count === 1 ? "animal" : "animaux"} !`,
       skipPhase: "Passer ⏭",
     },
     animalNames: {
@@ -496,6 +511,9 @@ export const translations: Record<Locale, Translations> = {
       trainAllDone: "Il treno è completo! Tutti i vagoni hanno un numero!",
       trainExitSpeech: "Complimenti! Hai completato il treno dei numeri! Sei fantastico!",
       bubblePopPrompt: "Scoppia la bolla con il numero giusto!",
+      matchTitle: "🔍 Trova il Gruppo",
+      matchPrompt: "Quale gruppo ha questo numero di animali?",
+      matchInstruction: (count) => `Trova il gruppo con ${count} ${count === 1 ? "animale" : "animali"}!`,
       skipPhase: "Salta ⏭",
     },
     animalNames: {
@@ -598,6 +616,9 @@ export const translations: Record<Locale, Translations> = {
       trainAllDone: "Der Zug ist komplett! Alle Waggons haben eine Nummer!",
       trainExitSpeech: "Herzlichen Glückwunsch! Du hast den Zahlenzug geschafft! Du bist toll!",
       bubblePopPrompt: "Platze die Blase mit der richtigen Zahl!",
+      matchTitle: "🔍 Finde die Gruppe",
+      matchPrompt: "Welche Gruppe hat so viele Tiere?",
+      matchInstruction: (count) => `Finde die Gruppe mit ${count} ${count === 1 ? "Tier" : "Tieren"}!`,
       skipPhase: "Weiter ⏭",
     },
     animalNames: {
