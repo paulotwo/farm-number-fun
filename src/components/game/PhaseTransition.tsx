@@ -8,7 +8,7 @@ type TransitionType = "phase-complete" | "phase-fail" | "game-complete";
 interface PhaseTransitionProps {
   type: TransitionType;
   mode: AnimalMode;
-  gamePhase: 1 | 2 | 3;
+  gamePhase: 1 | 3;
   onDone: () => void;
   bgImage: string;
   fastMode?: boolean;
@@ -105,7 +105,7 @@ const PhaseTransition = ({ type, mode, gamePhase, onDone, bgImage, fastMode }: P
           </h2>
           {type === "phase-complete" && (
             <p className="text-center text-muted-foreground font-bold mt-2">
-              {t.ui.phaseLabel} {gamePhase} ✓ → {t.ui.phaseLabel} {gamePhase + 1}
+              {t.ui.phase1Name} ✓ → 🫧
             </p>
           )}
         </div>
