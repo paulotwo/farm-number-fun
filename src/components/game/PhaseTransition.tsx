@@ -8,7 +8,7 @@ type TransitionType = "phase-complete" | "phase-fail" | "game-complete";
 interface PhaseTransitionProps {
   type: TransitionType;
   mode: AnimalMode;
-  gamePhase: 1 | 3;
+  gamePhase: number;
   onDone: () => void;
   bgImage: string;
   fastMode?: boolean;
