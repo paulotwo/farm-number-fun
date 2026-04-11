@@ -90,11 +90,15 @@ const BubblePhase = ({ mode, onComplete, onGoHome, bgImage, fastMode }: BubblePh
         return;
       }
       const text = t.narrateText(round.count, round.animal);
-      speak(text, speechLang, () => {
-        setTimeout(() => {
-          speak(t.ui.bubblePopPrompt, speechLang, () => setNarrating(false));
-        }, 300);
-      });
+      if (currentNumber === 1) {
+        speak(text, speechLang, () => {
+          setTimeout(() => {
+            speak(t.ui.bubblePopPrompt, speechLang, () => setNarrating(false));
+          }, 300);
+        });
+      } else {
+        speak(text, speechLang, () => setNarrating(false));
+      }
       setTimeout(() => setNarrating(false), 5000);
     }, fastMode ? 100 : round.count * 300 + 500);
 
