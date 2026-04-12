@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback } from "react";
 import AnimalEmoji, { getAnimalKeys, type AnimalMode } from "../AnimalEmoji";
 import LanguageSelector from "../LanguageSelector";
 import { useI18n } from "@/i18n";
@@ -39,10 +39,8 @@ function generateGroups(
   const available = keys.filter((a) => !usedAnimals.has(a));
   const pool = available.length >= 3 ? available : keys;
 
-  // Pick 3 distinct animals for the 3 groups
   const picked = shuffleArray(pool).slice(0, 3);
 
-  // Generate 3 distinct counts, one of which is correctCount
   const counts = new Set<number>([correctCount]);
   while (counts.size < 3) {
     const c = Math.max(1, Math.min(9, correctCount + Math.floor(Math.random() * 5) - 2));
@@ -164,7 +162,7 @@ const MatchPhase = ({ mode, onComplete, onGoHome, bgImage, fastMode }: MatchPhas
     >
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-foreground/20" />
 
-      {/* Header */}
+      {/* Header — same pattern as phase 1 */}
       <header className="relative z-20 w-full flex items-start pt-6 pb-2 px-4">
         <div className="flex flex-col gap-1">
           <button
@@ -180,11 +178,11 @@ const MatchPhase = ({ mode, onComplete, onGoHome, bgImage, fastMode }: MatchPhas
             className="text-2xl md:text-4xl font-extrabold text-primary-foreground drop-shadow-lg"
             style={{ textShadow: "2px 2px 8px rgba(0,0,0,0.5)" }}
           >
-            {t.ui.matchTitle}
+            🔍 {t.ui.phase3Name}
           </h1>
           <div className="mt-2 flex flex-wrap gap-2 justify-center">
             <span className="bg-card/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-foreground shadow">
-              {currentIndex + 1} / 9
+              {t.ui.phaseLabel} 3 — {currentIndex + 1}/9
             </span>
             <span className="bg-card/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-farm-correct shadow">
               ✅ {hits}
@@ -237,25 +235,25 @@ const MatchPhase = ({ mode, onComplete, onGoHome, bgImage, fastMode }: MatchPhas
               key={`${group.animal}-${group.count}-${gi}`}
               onClick={() => handleGroupClick(gi)}
               disabled={phase !== "choosing"}
-              className={`relative flex flex-wrap justify-center items-center gap-1 p-4 rounded-2xl border-4 transition-all duration-300 min-w-[100px] min-h-[90px] ${
+              className={`relative flex flex-wrap justify-center items-center gap-1 p-3 rounded-2xl border-4 transition-all duration-300 overflow-hidden ${
                 groupStates[gi] === "correct"
                   ? "border-farm-correct bg-farm-correct/20 scale-110 shadow-lg"
                   : groupStates[gi] === "wrong"
                   ? "border-farm-wrong bg-farm-wrong/20 animate-shake"
                   : "border-card/80 bg-card/70 backdrop-blur hover:scale-105 hover:border-primary/50 active:scale-95"
               } ${phase === "choosing" ? "cursor-pointer" : "cursor-default"}`}
-              style={{ maxWidth: "160px" }}
+              style={{ width: "140px", height: "110px" }}
             >
               {showAnimals &&
                 Array.from({ length: group.count }).map((_, ai) => (
                   <div
                     key={`${group.animal}-${ai}`}
-                    className={group.count <= 3 ? "w-12 h-12" : group.count <= 6 ? "w-9 h-9" : "w-7 h-7"}
+                    className={group.count <= 3 ? "w-9 h-9" : group.count <= 6 ? "w-7 h-7" : "w-5 h-5"}
                   >
                     <AnimalEmoji
                       animal={group.animal}
                       index={ai}
-                      total={group.count}
+                      total={9}
                     />
                   </div>
                 ))}

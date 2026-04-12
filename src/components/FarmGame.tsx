@@ -49,9 +49,7 @@ function shuffleArray(arr: number[]): number[] {
 
 function generateRound(mode: AnimalMode, count: number, usedAnimals: Set<string>) {
   const keys = getAnimalKeys(mode);
-  // Filter out already used animals
   let available = keys.filter((a) => !usedAnimals.has(a));
-  // If all used, reset (shouldn't happen with 16 animals and 9 rounds)
   if (available.length === 0) available = keys;
   const animal = available[Math.floor(Math.random() * available.length)];
 
@@ -172,7 +170,6 @@ const FarmGame = () => {
       setOptionStates(round.options.map((o) => (o === n ? "correct" : "idle")));
       setRoundPhase("correct");
 
-      // Skip individual celebration speech on last round to avoid overlapping with phase transition speech
       if (currentIndex < 8 && !fastMode) {
         setTimeout(() => {
           playCelebrateSound();
@@ -183,7 +180,6 @@ const FarmGame = () => {
       const nextDelay = fastMode ? 200 : 2500;
       setTimeout(() => {
         if (currentIndex >= 8) {
-          // Both phase 1 and phase 2 transition to next phase
           setTransition("phase-complete");
         } else {
           setRoundPhase("transition");
@@ -213,37 +209,27 @@ const FarmGame = () => {
   const handleTransitionDone = useCallback(() => {
     if (!mode) return;
     if (transition === "phase-complete") {
-      // Go to phase 2 (match groups)
+      // Phase 1 done → go to phase 2 (bubbles)
       setGamePhase(2);
       setTransition("none");
     }
   }, [transition, mode]);
 
   const handleBubbleComplete = useCallback(() => {
-    handleGoHome();
-  }, [handleGoHome]);
-
-  const handleMatchComplete = useCallback(() => {
+    // Phase 2 (bubbles) done → go to phase 3 (match)
     setGamePhase(3);
   }, []);
+
+  const handleMatchComplete = useCallback(() => {
+    handleGoHome();
+  }, [handleGoHome]);
 
   if (!started) {
     return <WelcomeScreen onStart={handleStart} />;
   }
 
+  // Phase 2: Bubbles
   if (gamePhase === 2 && mode) {
-    return (
-      <MatchPhase
-        mode={mode}
-        onComplete={handleMatchComplete}
-        onGoHome={handleGoHome}
-        bgImage={bgImage}
-        fastMode={fastMode}
-      />
-    );
-  }
-
-  if (gamePhase === 3 && mode) {
     return (
       <BubblePhase
         mode={mode}
@@ -255,6 +241,18 @@ const FarmGame = () => {
     );
   }
 
+  // Phase 3: Match groups
+  if (gamePhase === 3 && mode) {
+    return (
+      <MatchPhase
+        mode={mode}
+        onComplete={handleMatchComplete}
+        onGoHome={handleGoHome}
+        bgImage={bgImage}
+        fastMode={fastMode}
+      />
+    );
+  }
 
   const modeTitle =
     mode === "wild" ? t.ui.wildTitle :
