@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import AnimalEmoji, { getAnimalKeys, type AnimalMode } from "../AnimalEmoji";
+import LanguageSelector from "../LanguageSelector";
 import { useI18n } from "@/i18n";
 import {
   playCorrectSound,
@@ -21,11 +22,11 @@ interface BubblePhaseProps {
 interface Bubble {
   id: number;
   number: number;
-  x: number; // percentage 0-100
+  x: number;
   startTime: number;
   popped: boolean;
-  escaping?: "left" | "right"; // flies off screen when wrong
-  popAnim?: boolean; // burst animation when correct
+  escaping?: "left" | "right";
+  popAnim?: boolean;
 }
 
 function generateBubbleRound(count: number, mode: AnimalMode, usedAnimals: Set<string>) {
@@ -36,9 +37,9 @@ function generateBubbleRound(count: number, mode: AnimalMode, usedAnimals: Set<s
   return { count, animal };
 }
 
-const BUBBLE_DURATION_BASE = 6000; // ms for bubble to travel full height
-const BUBBLE_SPAWN_INTERVAL = 1800; // ms between spawns
-const SPEED_INCREASE = 400; // ms faster per completed number
+const BUBBLE_DURATION_BASE = 6000;
+const BUBBLE_SPAWN_INTERVAL = 1800;
+const SPEED_INCREASE = 400;
 
 const BubblePhase = ({ mode, onComplete, onGoHome, bgImage, fastMode }: BubblePhaseProps) => {
   const { t, speechLang } = useI18n();
@@ -58,7 +59,6 @@ const BubblePhase = ({ mode, onComplete, onGoHome, bgImage, fastMode }: BubblePh
 
   const bubbleDuration = Math.max(3000, BUBBLE_DURATION_BASE - (currentNumber - 1) * SPEED_INCREASE);
 
-  // Generate options for bubbles: correct number + distractors
   const getOptions = useCallback((correct: number) => {
     const opts = new Set<number>([correct]);
     while (opts.size < 3) {
@@ -117,16 +117,15 @@ const BubblePhase = ({ mode, onComplete, onGoHome, bgImage, fastMode }: BubblePh
     const spawn = () => {
       const num = options[Math.floor(Math.random() * options.length)];
       const id = ++bubbleIdRef.current;
-      const x = 10 + Math.random() * 70; // 10% to 80%
+      const x = 10 + Math.random() * 70;
       setBubbles((prev) => {
-        // Limit max bubbles on screen
         const active = prev.filter((b) => !b.popped);
         if (active.length >= 6) return prev;
         return [...prev, { id, number: num, x, startTime: Date.now(), popped: false }];
       });
     };
 
-    spawn(); // immediate first bubble
+    spawn();
     const interval = fastMode ? 400 : BUBBLE_SPAWN_INTERVAL;
     spawnTimerRef.current = setInterval(spawn, interval);
 
@@ -135,7 +134,7 @@ const BubblePhase = ({ mode, onComplete, onGoHome, bgImage, fastMode }: BubblePh
     };
   }, [narrating, showCorrect, gameOver, round.count, getOptions, fastMode]);
 
-  // Animation loop to remove expired bubbles
+  // Animation loop
   useEffect(() => {
     if (narrating || gameOver) return;
 
@@ -154,13 +153,11 @@ const BubblePhase = ({ mode, onComplete, onGoHome, bgImage, fastMode }: BubblePh
     if (showCorrect || gameOver || bubble.escaping || bubble.popAnim) return;
 
     if (bubble.number === round.count) {
-      // Correct — pop burst animation
       if (!fastMode) playClickSound();
       if (!fastMode) playCorrectSound();
       setBubbles((prev) =>
         prev.map((b) => (b.id === bubble.id ? { ...b, popAnim: true } : b))
       );
-      // Remove after animation
       setTimeout(() => {
         setBubbles((prev) =>
           prev.map((b) => (b.id === bubble.id ? { ...b, popped: true } : b))
@@ -187,7 +184,7 @@ const BubblePhase = ({ mode, onComplete, onGoHome, bgImage, fastMode }: BubblePh
           setGameOver(true);
           if (!fastMode) {
             playCelebrateSound();
-            speak(t.ui.gameCompleteSpeech, speechLang);
+            speak(t.ui.phaseCompleteSpeech, speechLang);
           }
         } else {
           const next = currentNumber + 1;
@@ -200,14 +197,12 @@ const BubblePhase = ({ mode, onComplete, onGoHome, bgImage, fastMode }: BubblePh
         }
       }, nextDelay);
     } else {
-      // Wrong — bubble escapes to the side
       if (!fastMode) playClickSound();
       if (!fastMode) playWrongSound();
       const escapeDir = bubble.x > 50 ? "right" : "left";
       setBubbles((prev) =>
         prev.map((b) => (b.id === bubble.id ? { ...b, escaping: escapeDir } : b))
       );
-      // Remove after escape animation
       setTimeout(() => {
         setBubbles((prev) =>
           prev.map((b) => (b.id === bubble.id ? { ...b, popped: true } : b))
@@ -231,25 +226,27 @@ const BubblePhase = ({ mode, onComplete, onGoHome, bgImage, fastMode }: BubblePh
     >
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-foreground/20" />
 
-      {/* Header */}
+      {/* Header — same pattern as phase 1 */}
       <header className="relative z-20 w-full flex items-start pt-6 pb-2 px-4">
-        <button
-          onClick={onGoHome}
-          className="rounded-lg bg-muted px-3 py-2 text-lg transition-transform active:scale-95"
-          title="Home"
-        >
-          🏠
-        </button>
+        <div className="flex flex-col gap-1">
+          <button
+            onClick={onGoHome}
+            className="rounded-lg bg-muted px-3 py-2 text-lg transition-transform active:scale-95"
+            title="Home"
+          >
+            🏠
+          </button>
+        </div>
         <div className="flex-1 text-center">
           <h1
-            className="text-xl md:text-3xl font-extrabold text-primary-foreground drop-shadow-lg"
+            className="text-2xl md:text-4xl font-extrabold text-primary-foreground drop-shadow-lg"
             style={{ textShadow: "2px 2px 8px rgba(0,0,0,0.5)" }}
           >
-            🫧 {t.ui.phase3Name}
+            🫧 {t.ui.phase2Name}
           </h1>
           <div className="mt-2 flex flex-wrap gap-2 justify-center">
             <span className="bg-card/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-foreground shadow">
-              {t.ui.phaseLabel} 3 — {currentNumber}/9
+              {t.ui.phaseLabel} 2 — {currentNumber}/9
             </span>
             <span className="bg-card/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-farm-correct shadow">
               ✅ {hits}
@@ -259,7 +256,15 @@ const BubblePhase = ({ mode, onComplete, onGoHome, bgImage, fastMode }: BubblePh
             </span>
           </div>
         </div>
-        <div className="w-10" /> {/* Spacer */}
+        <div className="flex flex-col gap-1 items-end">
+          <LanguageSelector />
+          <button
+            onClick={onComplete}
+            className="rounded-full bg-card/90 backdrop-blur px-3 py-1.5 text-sm font-bold text-foreground shadow transition-transform active:scale-95 hover:bg-card"
+          >
+            {t.ui.skipPhase}
+          </button>
+        </div>
       </header>
 
       {/* Animals display */}
@@ -310,7 +315,6 @@ const BubblePhase = ({ mode, onComplete, onGoHome, bgImage, fastMode }: BubblePh
               const top = 100 - progress * 110;
               const wobbleX = Math.sin(elapsed / 400) * 8;
 
-              // Escape animation offset
               const escapeX = bubble.escaping === "left" ? -200 : bubble.escaping === "right" ? 200 : 0;
               const escapeRotate = bubble.escaping ? (bubble.escaping === "left" ? -45 : 45) : 0;
               const escapeOpacity = bubble.escaping ? 0 : 1;
@@ -330,7 +334,6 @@ const BubblePhase = ({ mode, onComplete, onGoHome, bgImage, fastMode }: BubblePh
                   disabled={!!bubble.escaping || !!bubble.popAnim}
                 >
                   <div className={`relative ${bubble.popAnim ? "animate-bubble-pop" : ""}`}>
-                    {/* Pop particles */}
                     {bubble.popAnim && (
                       <>
                         <div className="bubble-ring" />
@@ -356,7 +359,6 @@ const BubblePhase = ({ mode, onComplete, onGoHome, bgImage, fastMode }: BubblePh
                         ))}
                       </>
                     )}
-                    {/* Bubble */}
                     <div
                       className={`bubble-inner w-20 h-20 md:w-24 md:h-24 rounded-full flex items-center justify-center
                         border-2 border-white/50 shadow-lg backdrop-blur-sm
@@ -369,7 +371,6 @@ const BubblePhase = ({ mode, onComplete, onGoHome, bgImage, fastMode }: BubblePh
                         {bubble.number}
                       </span>
                     </div>
-                    {/* Shine */}
                     {!bubble.popAnim && (
                       <div className="absolute top-2 left-4 w-5 h-4 bg-white/50 rounded-full rotate-[-30deg]" />
                     )}
@@ -386,17 +387,17 @@ const BubblePhase = ({ mode, onComplete, onGoHome, bgImage, fastMode }: BubblePh
           <div className="flex flex-col items-center gap-6 px-4 max-w-lg">
             <div className="bg-card/95 backdrop-blur-sm rounded-3xl px-8 py-5 shadow-2xl animate-bounce-in">
               <h2 className="text-2xl md:text-4xl font-extrabold text-foreground text-center">
-                {t.ui.gameCompleteText}
+                {t.ui.phaseCompleteText}
               </h2>
               <p className="text-center text-muted-foreground font-bold mt-2">
                 ✅ {hits} &nbsp; ❌ {misses}
               </p>
             </div>
             <button
-              onClick={onGoHome}
+              onClick={onComplete}
               className="px-8 py-4 text-xl md:text-2xl font-extrabold rounded-3xl shadow-2xl animate-bounce-in border-4 border-border transition-transform hover:scale-110 bg-secondary text-foreground"
             >
-              {t.ui.playAgainButton}
+              {t.ui.continueButton}
             </button>
           </div>
         </div>
