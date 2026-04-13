@@ -103,9 +103,19 @@ const PhaseTransition = ({ type, mode, gamePhase, onDone, bgImage, fastMode }: P
           >
             {titleText}
           </h2>
-          {type === "phase-complete" && (
+          {type === "phase-complete" && gamePhase === 1 && (
             <p className="text-center text-muted-foreground font-bold mt-2">
               {t.ui.phase1Name} ✓ → 🫧 {t.ui.phase2Name}
+            </p>
+          )}
+          {type === "phase-complete" && gamePhase === 2 && (
+            <p className="text-center text-muted-foreground font-bold mt-2">
+              {t.ui.phase2Name} ✓ → 🔍 {t.ui.phase3Name}
+            </p>
+          )}
+          {type === "phase-complete" && gamePhase === 3 && (
+            <p className="text-center text-muted-foreground font-bold mt-2">
+              {t.ui.phase3Name} ✓ → ✏️ {t.ui.phase4Name}
             </p>
           )}
         </div>
