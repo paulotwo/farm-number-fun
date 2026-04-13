@@ -19,6 +19,7 @@ export interface Translations {
     phase1Name: string;
     phase2Name: string;
     phase3Name: string;
+    phase4Name: string;
     countingHint: string;
     tryAgain: string;
     languageLabel: string;
@@ -45,6 +46,8 @@ export interface Translations {
     matchTitle: string;
     matchPrompt: string;
     matchInstruction: (count: number) => string;
+    tracePrompt: string;
+    traceInstruction: (count: number) => string;
     skipPhase: string;
   };
   animalNames: Record<string, string>;

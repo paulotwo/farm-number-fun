@@ -5,6 +5,7 @@ import WelcomeScreen from "./game/WelcomeScreen";
 import PhaseTransition from "./game/PhaseTransition";
 import BubblePhase from "./game/BubblePhase";
 import MatchPhase from "./game/MatchPhase";
+import TracePhase from "./game/TracePhase";
 
 import LanguageSelector from "./LanguageSelector";
 import farmBg from "@/assets/farm-bg.jpg";
