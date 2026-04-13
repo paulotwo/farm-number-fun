@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import AnimalEmoji, { getAnimalKeys, type AnimalMode } from "../AnimalEmoji";
+import { getAnimalKeys, getAnimalData, type AnimalMode } from "../AnimalEmoji";
 import LanguageSelector from "../LanguageSelector";
 import { useI18n } from "@/i18n";
 import {
