@@ -102,6 +102,8 @@ export const translations: Record<Locale, Translations> = {
       matchTitle: "🔍 Encontre o Grupo",
       matchPrompt: "Qual grupo tem essa quantidade de animais?",
       matchInstruction: (count) => `Encontre o grupo com ${count} ${count === 1 ? "animal" : "animais"}!`,
+      tracePrompt: "Trace o número com o dedo!",
+      traceInstruction: (count) => `Trace o número ${count}!`,
       skipPhase: "Pular ⏭",
     },
     animalNames: {
@@ -202,6 +204,8 @@ export const translations: Record<Locale, Translations> = {
       matchTitle: "🔍 Find the Group",
       matchPrompt: "Which group has this many animals?",
       matchInstruction: (count) => `Find the group with ${count} ${count === 1 ? "animal" : "animals"}!`,
+      tracePrompt: "Trace the number with your finger!",
+      traceInstruction: (count) => `Trace the number ${count}!`,
       skipPhase: "Skip ⏭",
     },
     animalNames: {
@@ -307,6 +311,8 @@ export const translations: Record<Locale, Translations> = {
       matchTitle: "🔍 Encuentra el Grupo",
       matchPrompt: "¿Qué grupo tiene esta cantidad de animales?",
       matchInstruction: (count) => `¡Encuentra el grupo con ${count} ${count === 1 ? "animal" : "animales"}!`,
+      tracePrompt: "¡Traza el número con el dedo!",
+      traceInstruction: (count) => `¡Traza el número ${count}!`,
       skipPhase: "Saltar ⏭",
     },
     animalNames: {
@@ -412,6 +418,8 @@ export const translations: Record<Locale, Translations> = {
       matchTitle: "🔍 Trouve le Groupe",
       matchPrompt: "Quel groupe a ce nombre d'animaux ?",
       matchInstruction: (count) => `Trouve le groupe avec ${count} ${count === 1 ? "animal" : "animaux"} !`,
+      tracePrompt: "Trace le chiffre avec ton doigt !",
+      traceInstruction: (count) => `Trace le chiffre ${count} !`,
       skipPhase: "Passer ⏭",
     },
     animalNames: {
@@ -517,6 +525,8 @@ export const translations: Record<Locale, Translations> = {
       matchTitle: "🔍 Trova il Gruppo",
       matchPrompt: "Quale gruppo ha questo numero di animali?",
       matchInstruction: (count) => `Trova il gruppo con ${count} ${count === 1 ? "animale" : "animali"}!`,
+      tracePrompt: "Traccia il numero con il dito!",
+      traceInstruction: (count) => `Traccia il numero ${count}!`,
       skipPhase: "Salta ⏭",
     },
     animalNames: {
@@ -622,6 +632,8 @@ export const translations: Record<Locale, Translations> = {
       matchTitle: "🔍 Finde die Gruppe",
       matchPrompt: "Welche Gruppe hat so viele Tiere?",
       matchInstruction: (count) => `Finde die Gruppe mit ${count} ${count === 1 ? "Tier" : "Tieren"}!`,
+      tracePrompt: "Zeichne die Zahl mit dem Finger nach!",
+      traceInstruction: (count) => `Zeichne die Zahl ${count} nach!`,
       skipPhase: "Weiter ⏭",
     },
     animalNames: {
