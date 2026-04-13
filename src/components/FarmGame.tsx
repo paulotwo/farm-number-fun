@@ -5,6 +5,7 @@ import WelcomeScreen from "./game/WelcomeScreen";
 import PhaseTransition from "./game/PhaseTransition";
 import BubblePhase from "./game/BubblePhase";
 import MatchPhase from "./game/MatchPhase";
+import TracePhase from "./game/TracePhase";
 
 import LanguageSelector from "./LanguageSelector";
 import farmBg from "@/assets/farm-bg.jpg";
@@ -68,7 +69,7 @@ const FarmGame = () => {
   const { debug, fastMode, setFastMode } = useDebugMode();
   const [mode, setMode] = useState<AnimalMode | null>(null);
   const [started, setStarted] = useState(false);
-  const [gamePhase, setGamePhase] = useState<1 | 2 | 3>(1);
+  const [gamePhase, setGamePhase] = useState<1 | 2 | 3 | 4>(1);
   const [phaseSequence, setPhaseSequence] = useState<number[]>(SEQUENTIAL);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [usedAnimals, setUsedAnimals] = useState<Set<string>>(new Set());
@@ -216,11 +217,14 @@ const FarmGame = () => {
   }, [transition, mode]);
 
   const handleBubbleComplete = useCallback(() => {
-    // Phase 2 (bubbles) done → go to phase 3 (match)
     setGamePhase(3);
   }, []);
 
   const handleMatchComplete = useCallback(() => {
+    setGamePhase(4);
+  }, []);
+
+  const handleTraceComplete = useCallback(() => {
     handleGoHome();
   }, [handleGoHome]);
 
@@ -247,6 +251,19 @@ const FarmGame = () => {
       <MatchPhase
         mode={mode}
         onComplete={handleMatchComplete}
+        onGoHome={handleGoHome}
+        bgImage={bgImage}
+        fastMode={fastMode}
+      />
+    );
+  }
+
+  // Phase 4: Trace numbers
+  if (gamePhase === 4 && mode) {
+    return (
+      <TracePhase
+        mode={mode}
+        onComplete={handleTraceComplete}
         onGoHome={handleGoHome}
         bgImage={bgImage}
         fastMode={fastMode}
