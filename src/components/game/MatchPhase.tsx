@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import AnimalEmoji, { getAnimalKeys, type AnimalMode } from "../AnimalEmoji";
+import { getAnimalKeys, getAnimalData, type AnimalMode } from "../AnimalEmoji";
 import LanguageSelector from "../LanguageSelector";
 import { useI18n } from "@/i18n";
 import {
@@ -230,35 +230,43 @@ const MatchPhase = ({ mode, onComplete, onGoHome, bgImage, fastMode }: MatchPhas
 
         {/* Animal groups */}
         <div className="flex flex-col sm:flex-row gap-4 w-full max-w-lg justify-center items-center">
-          {round.groups.map((group, gi) => (
-            <button
-              key={`${group.animal}-${group.count}-${gi}`}
-              onClick={() => handleGroupClick(gi)}
-              disabled={phase !== "choosing"}
-              className={`relative flex flex-wrap justify-center items-center gap-1 p-3 rounded-2xl border-4 transition-all duration-300 overflow-hidden ${
-                groupStates[gi] === "correct"
-                  ? "border-farm-correct bg-farm-correct/20 scale-110 shadow-lg"
-                  : groupStates[gi] === "wrong"
-                  ? "border-farm-wrong bg-farm-wrong/20 animate-shake"
-                  : "border-card/80 bg-card/70 backdrop-blur hover:scale-105 hover:border-primary/50 active:scale-95"
-              } ${phase === "choosing" ? "cursor-pointer" : "cursor-default"}`}
-              style={{ width: "140px", height: "110px" }}
-            >
-              {showAnimals &&
-                Array.from({ length: group.count }).map((_, ai) => (
-                  <div
-                    key={`${group.animal}-${ai}`}
-                    className={group.count <= 3 ? "w-9 h-9" : group.count <= 6 ? "w-7 h-7" : "w-5 h-5"}
-                  >
-                    <AnimalEmoji
-                      animal={group.animal}
-                      index={ai}
-                      total={9}
-                    />
-                  </div>
-                ))}
-            </button>
-          ))}
+          {round.groups.map((group, gi) => {
+            const size =
+              group.count <= 2 ? "w-12 h-12" :
+              group.count <= 4 ? "w-9 h-9" :
+              group.count <= 6 ? "w-7 h-7" : "w-6 h-6";
+            return (
+              <button
+                key={`${group.animal}-${group.count}-${gi}`}
+                onClick={() => handleGroupClick(gi)}
+                disabled={phase !== "choosing"}
+                className={`relative flex flex-wrap justify-center content-center items-center gap-1 p-2 rounded-2xl border-4 transition-all duration-300 ${
+                  groupStates[gi] === "correct"
+                    ? "border-farm-correct bg-farm-correct/20 scale-110 shadow-lg"
+                    : groupStates[gi] === "wrong"
+                    ? "border-farm-wrong bg-farm-wrong/20 animate-shake"
+                    : "border-card/80 bg-card/70 backdrop-blur hover:scale-105 hover:border-primary/50 active:scale-95"
+                } ${phase === "choosing" ? "cursor-pointer" : "cursor-default"}`}
+                style={{ width: "150px", height: "120px" }}
+              >
+                {showAnimals &&
+                  Array.from({ length: group.count }).map((_, ai) => (
+                    <div
+                      key={`${group.animal}-${ai}`}
+                      className={`${size} flex-shrink-0`}
+                    >
+                      <img
+                        src={getAnimalData(group.animal)?.image ?? ""}
+                        alt=""
+                        className="w-full h-full object-contain animate-pop-in"
+                        style={{ animationDelay: `${ai * 100}ms`, opacity: 0 }}
+                        draggable={false}
+                      />
+                    </div>
+                  ))}
+              </button>
+            );
+          })}
         </div>
 
         {phase === "showing" && (
