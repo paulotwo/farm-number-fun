@@ -256,7 +256,7 @@ const MatchPhase = ({ mode, onComplete, onGoHome, bgImage, fastMode }: MatchPhas
                       className={`${size} flex-shrink-0`}
                     >
                       <img
-                        src={`/animals/${mode === "easter" ? "easter" : mode === "wild" ? "wild" : mode === "aquatic" ? "aquatic" : "domestic"}/${group.animal}.png`}
+                        src={getAnimalData(group.animal)?.image ?? ""}
                         alt=""
                         className="w-full h-full object-contain animate-pop-in"
                         style={{ animationDelay: `${ai * 100}ms`, opacity: 0 }}
