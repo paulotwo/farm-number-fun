@@ -19,41 +19,42 @@ interface TracePhaseProps {
 }
 
 // SVG path data for numbers 1-9 as traceable outlines
+// Paths designed to match rounded Fredoka-style numbers, drawn left→right, top→bottom
 const NUMBER_PATHS: Record<number, { path: string; viewBox: string }> = {
   1: {
-    path: "M 50 20 L 50 80 M 35 80 L 65 80 M 35 25 L 50 20",
+    path: "M 40 25 L 50 18 L 50 82",
     viewBox: "0 0 100 100",
   },
   2: {
-    path: "M 25 35 Q 25 15 50 15 Q 75 15 75 35 Q 75 50 50 60 L 25 80 L 75 80",
+    path: "M 30 32 Q 30 15 50 15 Q 72 15 72 32 Q 72 48 50 58 L 28 82 L 72 82",
     viewBox: "0 0 100 100",
   },
   3: {
-    path: "M 25 20 L 70 20 L 45 48 Q 72 48 72 63 Q 72 82 48 82 Q 25 82 25 72",
+    path: "M 30 22 Q 50 15 65 22 Q 75 30 65 45 Q 55 50 50 50 Q 60 50 70 58 Q 78 68 65 78 Q 50 86 30 78",
     viewBox: "0 0 100 100",
   },
   4: {
-    path: "M 60 80 L 60 15 L 20 60 L 80 60",
+    path: "M 25 18 L 25 58 L 72 58 M 60 18 L 60 82",
     viewBox: "0 0 100 100",
   },
   5: {
-    path: "M 70 15 L 30 15 L 25 48 Q 50 38 70 50 Q 80 60 65 78 Q 50 85 25 75",
+    path: "M 68 18 L 32 18 L 28 50 Q 45 42 60 48 Q 75 55 70 70 Q 62 85 40 82 Q 28 80 25 72",
     viewBox: "0 0 100 100",
   },
   6: {
-    path: "M 65 20 Q 30 20 28 55 Q 28 82 50 82 Q 72 82 72 63 Q 72 45 50 45 Q 28 45 28 55",
+    path: "M 62 18 Q 35 18 30 50 Q 28 65 38 78 Q 50 88 62 78 Q 72 68 68 55 Q 62 44 50 44 Q 38 44 30 52",
     viewBox: "0 0 100 100",
   },
   7: {
-    path: "M 25 20 L 75 20 L 45 82",
+    path: "M 28 18 L 72 18 L 45 82",
     viewBox: "0 0 100 100",
   },
   8: {
-    path: "M 50 50 Q 25 50 25 35 Q 25 18 50 18 Q 75 18 75 35 Q 75 50 50 50 Q 22 50 22 67 Q 22 85 50 85 Q 78 85 78 67 Q 78 50 50 50",
+    path: "M 50 48 Q 32 48 32 32 Q 32 16 50 16 Q 68 16 68 32 Q 68 48 50 48 Q 28 48 28 66 Q 28 84 50 84 Q 72 84 72 66 Q 72 48 50 48",
     viewBox: "0 0 100 100",
   },
   9: {
-    path: "M 35 80 Q 70 80 72 45 Q 72 18 50 18 Q 28 18 28 37 Q 28 55 50 55 Q 72 55 72 45",
+    path: "M 70 48 Q 62 56 50 56 Q 38 56 30 46 Q 25 36 32 24 Q 42 14 55 18 Q 68 22 70 38 L 70 48 Q 68 70 55 82",
     viewBox: "0 0 100 100",
   },
 };
