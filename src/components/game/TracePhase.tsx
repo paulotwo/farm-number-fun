@@ -114,15 +114,24 @@ const TracePhase = ({ mode, onComplete, onGoHome, bgImage, fastMode }: TracePhas
       const t2 = setTimeout(() => setPhase("tracing"), 100);
       return () => clearTimeout(t2);
     }
+    // First number: speak the instruction. Subsequent numbers: skip narration here
+    // (the celebration speech of the previous round already announced what's next visually).
+    if (!instructionSpoken) {
+      const delay = setTimeout(() => {
+        speak(t.ui.tracePrompt, speechLang, () => setPhase("tracing"));
+        setInstructionSpoken(true);
+        const fallback = setTimeout(() => setPhase("tracing"), 4000);
+        return () => clearTimeout(fallback);
+      }, 400);
+      return () => clearTimeout(delay);
+    }
+    // For numbers 2-9, just announce the digit shortly — but wait long enough so
+    // the previous celebration speech finished without being cut off.
     const delay = setTimeout(() => {
-      const text = !instructionSpoken
-        ? t.ui.tracePrompt
-        : `${currentNumber}`;
-      speak(text, speechLang, () => setPhase("tracing"));
-      if (!instructionSpoken) setInstructionSpoken(true);
-      const fallback = setTimeout(() => setPhase("tracing"), 4000);
+      speak(`${currentNumber}`, speechLang, () => setPhase("tracing"));
+      const fallback = setTimeout(() => setPhase("tracing"), 2500);
       return () => clearTimeout(fallback);
-    }, 400);
+    }, 200);
     return () => clearTimeout(delay);
   }, [phase, fastMode, t, speechLang, currentNumber, instructionSpoken]);
 
