@@ -164,14 +164,15 @@ const SumPhase = ({ mode, onComplete, onGoHome, bgImage, fastMode }: SumPhasePro
   const animalImg = getAnimalData(round.animal)?.image ?? "";
 
   // Fixed-size boxes; animal size scales by the LARGER of the two groups
-  // so both boxes look visually consistent.
+  // so both boxes look visually consistent. Sized to fit inside 100px (mobile)
+  // / 150px (desktop) boxes accounting for padding (p-2 = 8px) and gaps.
   const maxGroup = Math.max(round.a, round.b);
   const sizeClass =
-    maxGroup === 1 ? "w-20 h-20 md:w-24 md:h-24" :
-    maxGroup === 2 ? "w-16 h-16 md:w-20 md:h-20" :
-    maxGroup === 3 ? "w-12 h-12 md:w-16 md:h-16" :
-    maxGroup === 4 ? "w-10 h-10 md:w-14 md:h-14" :
-    "w-8 h-8 md:w-12 md:h-12";
+    maxGroup === 1 ? "w-16 h-16 md:w-24 md:h-24" :
+    maxGroup === 2 ? "w-10 h-10 md:w-14 md:h-14" :
+    maxGroup === 3 ? "w-7 h-7 md:w-10 md:h-10" :
+    maxGroup === 4 ? "w-9 h-9 md:w-14 md:h-14" :
+    "w-7 h-7 md:w-10 md:h-10";
 
   return (
     <div
