@@ -118,6 +118,11 @@ const PhaseTransition = ({ type, mode, gamePhase, onDone, bgImage, fastMode }: P
               {t.ui.phase3Name} ✓ → ✏️ {t.ui.phase4Name}
             </p>
           )}
+          {type === "phase-complete" && gamePhase === 4 && (
+            <p className="text-center text-muted-foreground font-bold mt-2">
+              {t.ui.phase4Name} ✓ → ➕ {t.ui.phase5Name}
+            </p>
+          )}
         </div>
 
         {/* Numbers parade for success */}
