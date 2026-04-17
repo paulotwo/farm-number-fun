@@ -6,6 +6,7 @@ import PhaseTransition from "./game/PhaseTransition";
 import BubblePhase from "./game/BubblePhase";
 import MatchPhase from "./game/MatchPhase";
 import TracePhase from "./game/TracePhase";
+import SumPhase from "./game/SumPhase";
 
 import LanguageSelector from "./LanguageSelector";
 import farmBg from "@/assets/farm-bg.jpg";
@@ -69,7 +70,7 @@ const FarmGame = () => {
   const { debug, fastMode, setFastMode } = useDebugMode();
   const [mode, setMode] = useState<AnimalMode | null>(null);
   const [started, setStarted] = useState(false);
-  const [gamePhase, setGamePhase] = useState<1 | 2 | 3 | 4>(1);
+  const [gamePhase, setGamePhase] = useState<1 | 2 | 3 | 4 | 5>(1);
   const [phaseSequence, setPhaseSequence] = useState<number[]>(SEQUENTIAL);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [usedAnimals, setUsedAnimals] = useState<Set<string>>(new Set());
@@ -225,6 +226,10 @@ const FarmGame = () => {
   }, []);
 
   const handleTraceComplete = useCallback(() => {
+    setGamePhase(5);
+  }, []);
+
+  const handleSumComplete = useCallback(() => {
     handleGoHome();
   }, [handleGoHome]);
 
@@ -264,6 +269,19 @@ const FarmGame = () => {
       <TracePhase
         mode={mode}
         onComplete={handleTraceComplete}
+        onGoHome={handleGoHome}
+        bgImage={bgImage}
+        fastMode={fastMode}
+      />
+    );
+  }
+
+  // Phase 5: Simple sums
+  if (gamePhase === 5 && mode) {
+    return (
+      <SumPhase
+        mode={mode}
+        onComplete={handleSumComplete}
         onGoHome={handleGoHome}
         bgImage={bgImage}
         fastMode={fastMode}
