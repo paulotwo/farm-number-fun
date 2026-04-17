@@ -277,31 +277,33 @@ const SumPhase = ({ mode, onComplete, onGoHome, bgImage, fastMode }: SumPhasePro
               ))}
           </div>
 
+        </div>
+
+        {/* Equals + result on a new line */}
+        <div className="flex items-center justify-center gap-3 md:gap-5">
           <div
-            className="shrink-0 text-3xl sm:text-5xl md:text-6xl font-black text-primary-foreground drop-shadow-lg"
+            className="text-3xl sm:text-5xl md:text-6xl font-black text-primary-foreground drop-shadow-lg"
             style={{ textShadow: "3px 3px 0 rgba(0,0,0,0.3)" }}
           >
             =
           </div>
 
-          <div
-            className={`shrink-0 text-4xl sm:text-6xl md:text-7xl font-black drop-shadow-lg ${
-              phase === "correct" ? "text-farm-correct animate-celebrate" : "text-primary-foreground"
-            }`}
-            style={{ textShadow: "3px 3px 0 rgba(0,0,0,0.3)" }}
-          >
-            ?
-          </div>
+          {phase === "correct" ? (
+            <div
+              className="text-5xl sm:text-7xl md:text-8xl font-black text-farm-correct animate-celebrate drop-shadow-lg"
+              style={{ textShadow: "3px 3px 0 rgba(0,0,0,0.2)" }}
+            >
+              {round.total}
+            </div>
+          ) : (
+            <div
+              className="text-4xl sm:text-6xl md:text-7xl font-black text-primary-foreground drop-shadow-lg"
+              style={{ textShadow: "3px 3px 0 rgba(0,0,0,0.3)" }}
+            >
+              ?
+            </div>
+          )}
         </div>
-
-        {phase === "correct" && (
-          <div
-            className="text-7xl md:text-8xl font-black text-farm-correct animate-celebrate drop-shadow-lg"
-            style={{ textShadow: "3px 3px 0 rgba(0,0,0,0.2)" }}
-          >
-            {round.a} + {round.b} = {round.total}
-          </div>
-        )}
 
         {(phase === "choosing" || phase === "correct") && (
           <div className="flex gap-4 md:gap-6">
