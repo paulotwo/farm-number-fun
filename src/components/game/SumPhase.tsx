@@ -163,11 +163,15 @@ const SumPhase = ({ mode, onComplete, onGoHome, bgImage, fastMode }: SumPhasePro
 
   const animalImg = getAnimalData(round.animal)?.image ?? "";
 
-  // Size animals based on group size
+  // Fixed-size boxes; animal size scales by the LARGER of the two groups
+  // so both boxes look visually consistent.
+  const maxGroup = Math.max(round.a, round.b);
   const sizeClass =
-    round.total <= 3 ? "w-16 h-16 md:w-20 md:h-20" :
-    round.total <= 6 ? "w-12 h-12 md:w-16 md:h-16" :
-    "w-10 h-10 md:w-14 md:h-14";
+    maxGroup === 1 ? "w-20 h-20 md:w-24 md:h-24" :
+    maxGroup === 2 ? "w-16 h-16 md:w-20 md:h-20" :
+    maxGroup === 3 ? "w-12 h-12 md:w-16 md:h-16" :
+    maxGroup === 4 ? "w-10 h-10 md:w-14 md:h-14" :
+    "w-8 h-8 md:w-12 md:h-12";
 
   return (
     <div
@@ -233,10 +237,10 @@ const SumPhase = ({ mode, onComplete, onGoHome, bgImage, fastMode }: SumPhasePro
           </p>
         </div>
 
-        {/* Two groups + plus sign */}
-        <div className="flex items-center justify-center gap-3 md:gap-6 flex-wrap">
-          {/* Group A */}
-          <div className="bg-card/70 backdrop-blur border-4 border-card/80 rounded-2xl p-3 flex flex-wrap justify-center items-center content-center gap-1 min-w-[110px] min-h-[110px] md:min-w-[140px] md:min-h-[140px]">
+        {/* Two groups + plus sign — kept on a single row, no wrapping */}
+        <div className="flex items-center justify-center gap-1.5 sm:gap-3 md:gap-5 flex-nowrap w-full max-w-full">
+          {/* Group A — fixed size */}
+          <div className="shrink-0 bg-card/70 backdrop-blur border-4 border-card/80 rounded-2xl p-2 flex flex-wrap justify-center items-center content-center gap-1 w-[100px] h-[100px] md:w-[150px] md:h-[150px]">
             {showAnimals &&
               Array.from({ length: round.a }).map((_, i) => (
                 <img
@@ -251,14 +255,14 @@ const SumPhase = ({ mode, onComplete, onGoHome, bgImage, fastMode }: SumPhasePro
           </div>
 
           <div
-            className="text-5xl md:text-7xl font-black text-primary-foreground drop-shadow-lg"
+            className="shrink-0 text-3xl sm:text-5xl md:text-6xl font-black text-primary-foreground drop-shadow-lg"
             style={{ textShadow: "3px 3px 0 rgba(0,0,0,0.3)" }}
           >
             ➕
           </div>
 
-          {/* Group B */}
-          <div className="bg-card/70 backdrop-blur border-4 border-card/80 rounded-2xl p-3 flex flex-wrap justify-center items-center content-center gap-1 min-w-[110px] min-h-[110px] md:min-w-[140px] md:min-h-[140px]">
+          {/* Group B — fixed size, identical to Group A */}
+          <div className="shrink-0 bg-card/70 backdrop-blur border-4 border-card/80 rounded-2xl p-2 flex flex-wrap justify-center items-center content-center gap-1 w-[100px] h-[100px] md:w-[150px] md:h-[150px]">
             {showAnimals &&
               Array.from({ length: round.b }).map((_, i) => (
                 <img
@@ -273,14 +277,14 @@ const SumPhase = ({ mode, onComplete, onGoHome, bgImage, fastMode }: SumPhasePro
           </div>
 
           <div
-            className="text-5xl md:text-7xl font-black text-primary-foreground drop-shadow-lg"
+            className="shrink-0 text-3xl sm:text-5xl md:text-6xl font-black text-primary-foreground drop-shadow-lg"
             style={{ textShadow: "3px 3px 0 rgba(0,0,0,0.3)" }}
           >
             =
           </div>
 
           <div
-            className={`text-6xl md:text-8xl font-black drop-shadow-lg ${
+            className={`shrink-0 text-4xl sm:text-6xl md:text-7xl font-black drop-shadow-lg ${
               phase === "correct" ? "text-farm-correct animate-celebrate" : "text-primary-foreground"
             }`}
             style={{ textShadow: "3px 3px 0 rgba(0,0,0,0.3)" }}
