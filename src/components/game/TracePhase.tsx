@@ -159,19 +159,20 @@ const TracePhase = ({ mode, onComplete, onGoHome, bgImage, fastMode }: TracePhas
 
       if (newIdx >= targetPoints.length) {
         // Completed!
-        if (!fastMode) playCorrectSound();
         setHits((h) => h + 1);
         setShowSuccess(true);
         setPhase("correct");
 
-        if (currentNumber < 9 && !fastMode) {
+        if (!fastMode) {
+          // Single celebratory chime, then speech (no overlap with playCorrectSound)
+          playCelebrateSound();
           setTimeout(() => {
-            playCelebrateSound();
             speak(t.celebrationSpeech(currentNumber), speechLang);
-          }, 300);
+          }, 600);
         }
 
-        const nextDelay = fastMode ? 200 : 2500;
+        // Wait long enough for the celebration speech to finish before advancing
+        const nextDelay = fastMode ? 200 : 3200;
         setTimeout(() => {
           if (currentNumber >= 9) {
             onComplete();
