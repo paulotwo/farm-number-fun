@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import { type AnimalMode } from "../AnimalEmoji";
+import { type AnimalMode, getAnimalKeys, getAnimalData } from "../AnimalEmoji";
 import LanguageSelector from "../LanguageSelector";
 import { useI18n } from "@/i18n";
 import {
@@ -61,6 +61,13 @@ const NUMBER_PATHS: Record<number, { path: string; viewBox: string }> = {
 
 const SEQUENCE = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
+function pickAnimalForNumber(mode: AnimalMode, usedAnimals: Set<string>): string {
+  const keys = getAnimalKeys(mode);
+  let available = keys.filter((a) => !usedAnimals.has(a));
+  if (available.length === 0) available = keys;
+  return available[Math.floor(Math.random() * available.length)];
+}
+
 function getPathPoints(pathStr: string, numPoints: number): { x: number; y: number }[] {
   if (typeof document === "undefined") return [];
   const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
@@ -93,6 +100,12 @@ const TracePhase = ({ mode, onComplete, onGoHome, bgImage, fastMode }: TracePhas
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [instructionSpoken, setInstructionSpoken] = useState(false);
+  const [currentAnimal, setCurrentAnimal] = useState(() => pickAnimalForNumber(mode, new Set()));
+  const [usedAnimals, setUsedAnimals] = useState<Set<string>>(() => {
+    const s = new Set<string>();
+    s.add(pickAnimalForNumber(mode, new Set()));
+    return s;
+  });
 
   // Generate target points for the current number
   useEffect(() => {
@@ -105,6 +118,10 @@ const TracePhase = ({ mode, onComplete, onGoHome, bgImage, fastMode }: TracePhas
     setUserPath([]);
     setIsDrawing(false);
     setShowSuccess(false);
+    // Pick a new animal for this number
+    const animal = pickAnimalForNumber(mode, usedAnimals);
+    setCurrentAnimal(animal);
+    setUsedAnimals((prev) => new Set(prev).add(animal));
   }, [currentNumber]);
 
   // Intro narration
@@ -403,15 +420,39 @@ const TracePhase = ({ mode, onComplete, onGoHome, bgImage, fastMode }: TracePhas
           {/* Success overlay */}
           {showSuccess && (
             <div className="absolute inset-0 flex items-center justify-center bg-farm-correct/20 rounded-3xl">
-              <span className="text-8xl font-black text-farm-correct animate-celebrate drop-shadow-lg">
-                {currentNumber}
-              </span>
+              <div className="flex flex-col items-center gap-2">
+                <span className="text-7xl font-black text-farm-correct animate-celebrate drop-shadow-lg">
+                  {currentNumber}
+                </span>
+                <span className="text-3xl animate-bounce-in">🎉</span>
+              </div>
             </div>
           )}
         </div>
       </main>
 
-      <div className="relative z-10 w-full mt-auto h-8 bg-gradient-to-t from-farm-grass/40 to-transparent" />
+      {/* Animals row below tracing area */}
+      <div className="relative z-10 mt-3 mb-2 px-4">
+        <div className="flex justify-center items-center gap-1 flex-wrap" style={{ maxWidth: "340px", margin: "0 auto" }}>
+          {Array.from({ length: currentNumber }).map((_, i) => {
+            const data = getAnimalData(currentAnimal);
+            if (!data) return null;
+            const size = currentNumber <= 3 ? "w-14 h-14" : currentNumber <= 6 ? "w-11 h-11" : "w-9 h-9";
+            return (
+              <img
+                key={`trace-animal-${i}`}
+                src={data.image}
+                alt={data.name}
+                className={`${size} object-contain drop-shadow-md animate-pop-in`}
+                style={{ animationDelay: showSuccess ? `${i * 100}ms` : "0ms", opacity: showSuccess ? undefined : 0.4 }}
+                draggable={false}
+              />
+            );
+          })}
+        </div>
+      </div>
+
+      <div className="relative z-10 w-full h-8 bg-gradient-to-t from-farm-grass/40 to-transparent" />
     </div>
   );
 };
