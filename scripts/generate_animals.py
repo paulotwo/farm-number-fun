@@ -180,7 +180,8 @@ def create_transparent_animal(description: str, output_path: str) -> bool:
         transparent = remove_green_screen(raw)
         transparent = cleanup_edges(transparent)
 
-        transparent.save(output_path, "PNG")
+        # WebP: o jogo carrega public/animals/<tema>/<chave>.webp (AnimalEmoji.tsx).
+        transparent.save(output_path, "WEBP", quality=88, method=6)
         print(f"  Salvo: {output_path}")
         return True
 
@@ -206,10 +207,10 @@ def main():
         print(f"{'='*50}")
 
         for key, description in animals.items():
-            output_path = os.path.join(theme_dir, f"{key}.png")
+            output_path = os.path.join(theme_dir, f"{key}.webp")
 
             if os.path.exists(output_path):
-                print(f"  Pulando (já existe): {key}.png")
+                print(f"  Pulando (já existe): {key}.webp")
                 done += 1
                 continue
 

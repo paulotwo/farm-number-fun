@@ -49,26 +49,6 @@ export default defineConfig(({ mode }) => {
             globPatterns: ["**/*.{js,css,html,ico,png,svg,jpg,jpeg,webp,woff,woff2}"],
             maximumFileSizeToCacheInBytes: 4194304,
             navigateFallbackDenylist: [/^\/~oauth/],
-            runtimeCaching: [
-              {
-                urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
-                handler: "CacheFirst",
-                options: {
-                  cacheName: "google-fonts-cache",
-                  expiration: { maxEntries: 10, maxAgeSeconds: 60 * 60 * 24 * 365 },
-                  cacheableResponse: { statuses: [0, 200] },
-                },
-              },
-              {
-                urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
-                handler: "CacheFirst",
-                options: {
-                  cacheName: "gstatic-fonts-cache",
-                  expiration: { maxEntries: 10, maxAgeSeconds: 60 * 60 * 24 * 365 },
-                  cacheableResponse: { statuses: [0, 200] },
-                },
-              },
-            ],
           },
           manifest: false,
         }),
