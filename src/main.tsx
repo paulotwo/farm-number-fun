@@ -1,6 +1,11 @@
 import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
+// Fredoka embutida no bundle: o app (e o PWA offline) não dependem do Google Fonts.
+import "@fontsource/fredoka/400.css";
+import "@fontsource/fredoka/500.css";
+import "@fontsource/fredoka/600.css";
+import "@fontsource/fredoka/700.css";
 
 // Guard PWA service worker: never register in iframe or preview hosts
 const isInIframe = (() => {

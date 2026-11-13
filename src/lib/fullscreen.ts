@@ -1,3 +1,5 @@
+import { isNative } from "@/lib/platform";
+
 /** Check if running as installed PWA (standalone mode) */
 export function isStandalone(): boolean {
   return (
@@ -8,7 +10,8 @@ export function isStandalone(): boolean {
 
 /** Request fullscreen if not in standalone/PWA mode */
 export function requestFullscreen() {
-  if (isStandalone()) return;
+  // No app nativo a tela e o retrato são da casca (manifest/Capacitor).
+  if (isNative || isStandalone()) return;
   const el = document.documentElement;
   if (el.requestFullscreen) {
     el.requestFullscreen().catch(() => {});

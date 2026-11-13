@@ -264,7 +264,7 @@ const TracePhase = ({ mode, onComplete, onGoHome, bgImage, fastMode }: TracePhas
 
   return (
     <div
-      className="min-h-screen flex flex-col items-center relative overflow-hidden"
+      className="min-h-screen pb-[env(safe-area-inset-bottom)] flex flex-col items-center relative overflow-hidden"
       style={{
         backgroundImage: `url(${bgImage})`,
         backgroundSize: "cover",
@@ -274,7 +274,7 @@ const TracePhase = ({ mode, onComplete, onGoHome, bgImage, fastMode }: TracePhas
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-foreground/20" />
 
       {/* Header */}
-      <header className="relative z-20 w-full flex items-start pt-6 pb-2 px-4">
+      <header className="relative z-20 w-full flex items-start pt-[calc(1.5rem+env(safe-area-inset-top))] pb-2 px-4">
         <div className="flex flex-col gap-1">
           <button
             onClick={onGoHome}

@@ -151,7 +151,7 @@ const TrainPhase = ({ mode, bgImage, fastMode, setFastMode, debug, onComplete }:
   if (state === "done") {
     return (
       <div
-        className="min-h-screen flex flex-col items-center justify-center relative overflow-hidden"
+        className="min-h-screen pb-[env(safe-area-inset-bottom)] flex flex-col items-center justify-center relative overflow-hidden"
         style={{ backgroundImage: `url(${bgImage})`, backgroundSize: "cover", backgroundPosition: "center" }}
       >
         <div className="absolute inset-0 bg-foreground/40" />
@@ -197,13 +197,13 @@ const TrainPhase = ({ mode, bgImage, fastMode, setFastMode, debug, onComplete }:
 
   return (
     <div
-      className="min-h-screen flex flex-col relative overflow-hidden"
+      className="min-h-screen pb-[env(safe-area-inset-bottom)] flex flex-col relative overflow-hidden"
       style={{ backgroundImage: `url(${bgImage})`, backgroundSize: "cover", backgroundPosition: "center" }}
     >
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-foreground/20" />
 
       {/* Header */}
-      <header className="relative z-20 w-full flex items-start pt-4 pb-1 px-4">
+      <header className="relative z-20 w-full flex items-start pt-[calc(1rem+env(safe-area-inset-top))] pb-1 px-4">
         <div className="flex flex-col gap-1">
           <button
             onClick={onComplete}

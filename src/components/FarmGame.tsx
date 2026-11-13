@@ -23,7 +23,10 @@ import {
   playClickSound,
   speak,
   preloadVoices,
+  stopSpeech,
 } from "@/lib/sounds";
+import { App as CapacitorApp } from "@capacitor/app";
+import { isNative } from "@/lib/platform";
 import { requestFullscreen } from "@/lib/fullscreen";
 import { useDebugMode } from "@/hooks/use-debug-mode";
 
@@ -118,6 +121,7 @@ const FarmGame = () => {
   }, [startPhase]);
 
   const handleGoHome = useCallback(() => {
+    stopSpeech();
     setStarted(false);
     setMode(null);
     setGamePhase(1);
@@ -129,6 +133,23 @@ const FarmGame = () => {
     setPhaseHits(0);
     setPhaseMisses(0);
   }, []);
+
+  // App nativo: botão voltar do Android (jogo → início → sai do app) e
+  // silêncio quando o app vai para segundo plano.
+  useEffect(() => {
+    if (!isNative) return;
+    const back = CapacitorApp.addListener("backButton", () => {
+      if (started) handleGoHome();
+      else CapacitorApp.exitApp();
+    });
+    const state = CapacitorApp.addListener("appStateChange", ({ isActive }) => {
+      if (!isActive) stopSpeech();
+    });
+    return () => {
+      back.then((h) => h.remove());
+      state.then((h) => h.remove());
+    };
+  }, [started, handleGoHome]);
 
   // Show animals with pop sounds
   useEffect(() => {
@@ -299,7 +320,7 @@ const FarmGame = () => {
 
   return (
     <div
-      className="min-h-screen flex flex-col items-center relative overflow-hidden"
+      className="min-h-screen pb-[env(safe-area-inset-bottom)] flex flex-col items-center relative overflow-hidden"
       style={{
         backgroundImage: `url(${bgImage})`,
         backgroundSize: "cover",
@@ -308,7 +329,7 @@ const FarmGame = () => {
     >
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-foreground/20" />
 
-      <header className="relative z-20 w-full flex items-start pt-6 pb-2 px-4">
+      <header className="relative z-20 w-full flex items-start pt-[calc(1.5rem+env(safe-area-inset-top))] pb-2 px-4">
         <div className="flex flex-col gap-1">
           <button
             onClick={handleGoHome}

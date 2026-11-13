@@ -1,5 +1,7 @@
 // Sound utilities using Web Audio API and Web Speech API
 // No backend needed — everything runs in the browser
+import { TextToSpeech } from "@capacitor-community/text-to-speech";
+import { isNative } from "@/lib/platform";
 
 let audioCtx: AudioContext | null = null;
 
@@ -100,8 +102,54 @@ export function playClickSound() {
   osc.stop(now + 0.05);
 }
 
-/** Speak text using Web Speech API */
+// O WebView do Android não implementa `speechSynthesis`: no app a fala usa o
+// TTS do sistema pelo plugin. Cada fala nova descarta a anterior; `onEnd` só
+// roda para a fala atual, quando ela termina ou quando não há como falar (sem
+// voz para o idioma), para o jogo nunca ficar esperando uma fala que não vem.
+let nativeSpeechId = 0;
+const NATIVE_RETRY_MS = 400;
+
+function speakNative(text: string, lang: string, onEnd?: () => void) {
+  const id = ++nativeSpeechId;
+  const finish = () => {
+    if (id === nativeSpeechId) onEnd?.();
+  };
+  // Logo depois de abrir o app o motor de TTS pode ainda não estar conectado
+  // e a fala é recusada: tenta de novo enquanto esta fala ainda for a atual.
+  const attempt = (retriesLeft: number) => {
+    TextToSpeech.speak({ text, lang, rate: 0.85, pitch: 1.3 }).then(finish, () => {
+      if (id !== nativeSpeechId) return;
+      if (retriesLeft <= 0) finish();
+      else setTimeout(() => id === nativeSpeechId && attempt(retriesLeft - 1), NATIVE_RETRY_MS);
+    });
+  };
+  attempt(2);
+}
+
+/** Interrompe a fala em andamento (voltar ao início, app em segundo plano). */
+export function stopSpeech() {
+  try {
+    if (isNative) {
+      nativeSpeechId++;
+      TextToSpeech.stop().catch(() => {});
+    } else if ("speechSynthesis" in window) {
+      window.speechSynthesis.cancel();
+    }
+  } catch {
+    // Fala indisponível: nada a interromper
+  }
+}
+
+/** Speak text using Web Speech API (system TTS in the native app) */
 export function speak(text: string, langOrCallback?: string | (() => void), onEnd?: () => void) {
+  if (isNative) {
+    speakNative(
+      text,
+      typeof langOrCallback === "string" ? langOrCallback : "pt-BR",
+      typeof langOrCallback === "function" ? langOrCallback : onEnd,
+    );
+    return;
+  }
   if (!("speechSynthesis" in window)) {
     if (typeof langOrCallback === "function") langOrCallback();
     else onEnd?.();
@@ -139,6 +187,11 @@ export function speak(text: string, langOrCallback?: string | (() => void), onEn
 
 /** Ensure voices are loaded (they load async in some browsers) */
 export function preloadVoices() {
+  // No app basta acordar o motor de TTS cedo, para já estar conectado na primeira fala.
+  if (isNative) {
+    TextToSpeech.getSupportedLanguages().catch(() => {});
+    return;
+  }
   if ("speechSynthesis" in window) {
     window.speechSynthesis.getVoices();
     window.speechSynthesis.onvoiceschanged = () => {

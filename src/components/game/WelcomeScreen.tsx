@@ -3,6 +3,8 @@ import { type AnimalMode } from "../AnimalEmoji";
 import LanguageSelector from "../LanguageSelector";
 import welcomeBg from "@/assets/welcome-bg.jpg";
 import { useI18n } from "@/i18n";
+import { Share } from "@capacitor/share";
+import { isNative, SITE_URL } from "@/lib/platform";
 
 interface WelcomeScreenProps {
   onStart: (mode: AnimalMode) => void;
@@ -42,7 +44,10 @@ const WelcomeScreen = ({ onStart }: WelcomeScreenProps) => {
       text: t.ui.shareText,
       url: window.location.href,
     };
-    if (navigator.share) {
+    if (isNative) {
+      // O WebView não tem `navigator.share` e a URL dele é https://localhost.
+      try { await Share.share({ ...shareData, url: SITE_URL }); } catch { /* user cancelled */ }
+    } else if (navigator.share) {
       try { await navigator.share(shareData); } catch { /* user cancelled */ }
     } else {
       await navigator.clipboard.writeText(`${shareData.text}\n${shareData.url}`);
@@ -51,7 +56,7 @@ const WelcomeScreen = ({ onStart }: WelcomeScreenProps) => {
 
   return (
     <div
-      className="min-h-screen flex flex-col items-center justify-center relative overflow-hidden"
+      className="min-h-screen pb-[env(safe-area-inset-bottom)] flex flex-col items-center justify-center relative overflow-hidden"
       style={{
         backgroundImage: `url(${welcomeBg})`,
         backgroundSize: "cover",
@@ -59,7 +64,7 @@ const WelcomeScreen = ({ onStart }: WelcomeScreenProps) => {
       }}
     >
       <div className="absolute inset-0 bg-foreground/30" />
-      <div className="absolute top-4 right-4 z-20 flex items-center gap-2">
+      <div className="absolute top-[calc(1rem+env(safe-area-inset-top))] right-4 z-20 flex items-center gap-2">
         <button
           onClick={handleShare}
           className="rounded-xl bg-card/80 backdrop-blur px-3 py-2 text-lg transition-transform hover:scale-105 active:scale-95 shadow"
